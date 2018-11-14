@@ -1,0 +1,14 @@
+
+
+Fri Nov  9 22:56:42 PST 2018
+
+Design decisions to be made 
+
+
+[ ] implment lssync and then load it, then do |  lssync.connect(document.location.href) ; lssync.mirror() 
+- this should save  all the local storage to the remote db 
+[ ] will implement menuX extension for lssync which triggers the above code using a user friendly button in menuX 
+
+-> once the LS is mirrored, it can be accessed via native programs using a request containing document.location.href and the data fields 
+- !!!! HMM !!  actually - > maybe I should be piping from lssync client to WS to a javascript object data base? can do this via MONGO or similar - CONSIDER -> how will i parse the data in R 
+-- SOLUTION MONGO DB
