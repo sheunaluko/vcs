@@ -1,14 +1,50 @@
+TODO: 
+
+[x] FINISHED TODOS are in nodejs/commands/dispatch_builder.js   ! 
+
+[  ] FIX OPTIONALS before and after space... e.g. "?(PLEASE )append to ..." 
 
 
-Fri Nov  9 22:56:42 PST 2018
-
-Design decisions to be made 
+[Sun Mar 10 22:31:24 PDT 2019] ----------------------------------------
 
 
-[ ] implment lssync and then load it, then do |  lssync.connect(document.location.href) ; lssync.mirror() 
-- this should save  all the local storage to the remote db 
-[ ] will implement menuX extension for lssync which triggers the above code using a user friendly button in menuX 
+- write command base class [each cmd has unique key trailing ID to allow multiple instances]
+- write dispatch builder (spoiler... its another vcs command :)  
 
--> once the LS is mirrored, it can be accessed via native programs using a request containing document.location.href and the data fields 
-- !!!! HMM !!  actually - > maybe I should be piping from lssync client to WS to a javascript object data base? can do this via MONGO or similar - CONSIDER -> how will i parse the data in R 
--- SOLUTION MONGO DB
+- When an input is read on vcs_core.input channel, one of two things happens
+1) if there are commands in the command stack, it is sent to the TOP command's channel 
+2) if there are no commands, a search is done for a matching command : 
+--- a) if one is found, then the DISPATCH BUILDER command is loaded onto the stack 
+--- b) if none, then ERROR 
+
+- WHEN any command returns {err  , result} it is popped off the stack and the return is 
+- piped into the NEXT command channel on the stack, if one exists. If not, is ?discarded  
+
+- Once dispatch builder has the required args, it will call the approprate command via this.vcs_.core (see below), thereby pushing it to the stack 
+
+- in this way, ALL commands return back to dispatch builder, and their results are essentially meaningless. THE MEANING IS IN THE SIDE EFFECT 
+
+- command base class should have state object which holds mutable state of command 
+- when a command calls another command it does so through VCS_core 
+-- the command does: let {err, result} = await this.vcs_core.call_command(id,config)
+-- behind the scenes vcs_core will INSTANTIATE the other command, and 
+-- push its CHANNEL onto the "channel stack"
+
+
+Command attributes: 
+- channel , which has attribute
+--- filter ~> key,value pairs for transforming the messages on the channel 
+
+MODULARITY
+- Filters are defined in modules 
+- commands are defined in modules 
+
+ ---------------------------------------- ----------------------------------------
+
+
+FUTURE 
+Move HTML/CSS content to NODEJS html server 
+Can have channels outside of of the channel stack, by duplicating the vcs_core.input channel
+-- these can ALSO listen in on the incoming text and respond to it arbitratily, allowing for 
+-- asynchronous/ simultanous running commands 
+
