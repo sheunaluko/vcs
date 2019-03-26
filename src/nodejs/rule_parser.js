@@ -23,7 +23,7 @@ function process_optionals(rule) {
     let matches = rule.match(opt_regex) 
     //console.log(matches)
     if (matches) { 
-	let optionals = matches[1].split("|")
+	let optionals = matches[1].split("|").concat([""])  //add the empty string as well 
 	return R.flatten( optionals.map( function(opt) { 
 	    let next = rule.replace(opt_regex, opt)
 	    //console.log(next)
@@ -31,7 +31,9 @@ function process_optionals(rule) {
 	    return process_optionals(next)
 	}))
     } else { 
-	return [rule] 
+	//normalize the spaces between tokens
+	//necessary because of the way optionals are processed
+	return [rule.replace(/\s+/g, " ").trim()]  
     }
 }
 

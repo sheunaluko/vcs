@@ -4,12 +4,15 @@ var   log     = require("./logger.js").get_logger("vcs_core")
 var command_stack = require("./command_stack.js") 
 var command_library   = require("./command_library.js") 
 let R          = require("./ramda.js") 
-
+let core_params = require("./vcs_core_params.js") 
+let tts        = require("./tts.js")
 
 var input = new channel.channel()  //define the input channel 
 var stack = new command_stack() //create a command stack 
 var command_lib   = new command_library() 
 var emissions  = new channel.channel() 
+
+
 
 var vcs_core_active = true 
 
@@ -33,8 +36,19 @@ async function input_loop() {
 
 async function emissions_loop() { 
     log.i("Starting emissions loop")
-    while ( result = await emissions.shift() ) { 
-	log.d("Emission: " + result) 
+    while ( emission = await emissions.shift() ) { 
+	let {id,data} = emission 
+	log.d("Emission:: " + id + " ::" + data)
+	switch (core_params.emit_mode) { 
+	case 'speech' : 
+	    log.d("Emiting speech")
+	    tts.speak(data)
+	    break 
+	    
+	default : 
+	    log.d("Emit mode not matched")
+	}
+	
     }
 }
 
@@ -43,6 +57,8 @@ function stop() { vcsc_core_active = false ; log.i("Stopped")  }
 //core message handler 
 async function handle_message(msg) { 
     //msg should be string 
+    msg = msg.trim().toLowerCase() //normalize all string inputs in this way
+    
     log.d("Handling msg: " + msg ) 
     
     if (stack.empty() ) { 
@@ -110,22 +126,6 @@ async function initialize_command(call_info) {
     //automatically call this.finish({}) which will pop it from the stack, etc..
     
 }
-
-// TODO ! 
-// need to initialize the command with config (really means instantiate it) 
-// once the command is initialized we will place it on the top of the command stack
-// perhaps the command can have an sink channel which it finally writes to 
-
-/// vcs_core_initialize_command -> instantiates it, puts it on stack, gives it the input 
-/// channel of the current highest command on the stack  TO RETURN TO 
-
-/// when a command is instantiated it either HAS a return port or it does not 
-/// this should be handled behind the scenese i.e.    this.finish({ result }) , which 
-/// if available will return the result on the proper channel 
-
-// the command base class has an async function call_command  , which behind the hood: 
-// -- does the same as above by using vcs_core to init a command 
-// -- listens on the calling commands INPUT port for the response then returns the result
 
 
 

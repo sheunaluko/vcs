@@ -48,9 +48,10 @@ class base_command {
 	
     }
     
-    emit(arg) { 
-	this.log.d("Emit> " +arg) 
-	this.output.push(arg)
+    emit(data) { 
+	this.log.d("Emit> " + data) 
+	let id = this.instance_id 
+	this.output.push({id, data }) 
     }
     
     async request(arg) { 

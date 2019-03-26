@@ -5,6 +5,27 @@ TODO:
 [  ] FIX OPTIONALS before and after space... e.g. "?(PLEASE )append to ..." 
 
 
+
+[Tue Mar 26 07:05:31 PDT 2019]
+// TODO (DONE)  ! 
+// need to initialize the command with config (really means instantiate it) 
+// once the command is initialized we will place it on the top of the command stack
+// perhaps the command can have an sink channel which it finally writes to 
+
+/// vcs_core_initialize_command -> instantiates it, puts it on stack, gives it the input 
+/// channel of the current highest command on the stack  TO RETURN TO 
+/// when a command is instantiated it either HAS a return port or it does not 
+/// this should be handled behind the scenese i.e.    this.finish({ result }) , which 
+/// if available will return the result on the proper channel 
+
+// the command base class has an async function call_command  , which behind the hood: 
+// -- does the same as above by using vcs_core to init a command 
+// -- listens on the calling commands INPUT port for the response then returns the result
+
+
+
+
+
 [Sun Mar 10 22:31:24 PDT 2019] ----------------------------------------
 
 
@@ -40,6 +61,7 @@ MODULARITY
 - commands are defined in modules 
 
  ---------------------------------------- ----------------------------------------
+
 
 
 FUTURE 
