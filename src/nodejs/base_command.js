@@ -22,6 +22,11 @@ class base_command {
 	this.input  = new channel.channel() //the input which the command will listen on 
 	//vcs_core will route speech information into this channel when appropriate 
 	
+	//we also will give the channel a reference of the command, so that it can modify the 
+	//command object when necessary 
+	this.input.set_command(this) 
+	this.input_counter = 0 //the input channel will increment this each time it gets input
+	
 	this.output = new channel.channel()  //channel for the command to do IO (eg. tts,print)
 	
 	//channel that will be written to when the command is finished

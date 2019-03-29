@@ -1,5 +1,5 @@
 
 
 module.exports = { 
-    emit_mode : "speech" ,
+    emit_mode : "default" ,
 }

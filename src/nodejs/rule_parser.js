@@ -31,8 +31,9 @@ function process_optionals(rule) {
 	    return process_optionals(next)
 	}))
     } else { 
-	//normalize the spaces between tokens
+	//normalize the spaces between tokens and trim 
 	//necessary because of the way optionals are processed
+	// for example with "foo ?(blah) bar" you end up with => "foo  bar" | "foo blah bar"
 	return [rule.replace(/\s+/g, " ").trim()]  
     }
 }

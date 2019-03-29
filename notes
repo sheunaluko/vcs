@@ -1,8 +1,26 @@
+Command Ideas 
+------------- 
+
+=> NIGHT REVIEW / SEQUENCE COMMANDS 
+---- 3 EVENTS / PEOPLE I AM GRATEFUL FOR THAT DAY 
+---- The BEST THING THAT HAPPENED THAT DAY
+---- REVIEW OF PREVIOUS DREAMS 
+---- REVIEW OF BEST THINGS / GRATITUDE 
+
+
+=> RECORD DREMS 
+
+IT IS SO IMPORTANT TO DREAM!!! "wouldnt that be nice" 
+WHAT DO I WANT TO DO
+WHAT WOULD IT BE LIKE IF I 
+
 TODO: 
 
-[x] FINISHED TODOS are in nodejs/commands/dispatch_builder.js   ! 
-
-[  ] FIX OPTIONALS before and after space... e.g. "?(PLEASE )append to ..." 
+[ ] Implement a vcs_repl for testing the commands 
+[ ] FIX OPTIONALS before and after space... e.g. "?(PLEASE )append to ..." 
+[ ] Implement command EXIT and ABORT methods --> when the user indicates to vcs_core that 
+----- she/he is finished with the commnand a keyword is spoken, which triggers the command channel 
+----- to call its EXIT method, which ?returns a value that is then piped to the stack ? 
 
 
 

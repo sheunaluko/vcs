@@ -6,6 +6,7 @@ var command_library   = require("./command_library.js")
 let R          = require("./ramda.js") 
 let core_params = require("./vcs_core_params.js") 
 let tts        = require("./tts.js")
+let out        = require("./main_output.js")
 
 var input = new channel.channel()  //define the input channel 
 var stack = new command_stack() //create a command stack 
@@ -40,9 +41,9 @@ async function emissions_loop() {
 	let {id,data} = emission 
 	log.d("Emission:: " + id + " ::" + data)
 	switch (core_params.emit_mode) { 
-	case 'speech' : 
-	    log.d("Emiting speech")
-	    tts.speak(data)
+	case 'default' : 
+	    log.d("Sending emission via main output.")
+	    out.send(data)
 	    break 
 	    
 	default : 
@@ -51,6 +52,9 @@ async function emissions_loop() {
 	
     }
 }
+
+//connect the stack sink with the output
+stack.set_sink(out.command_result)
 
 function stop() { vcsc_core_active = false ; log.i("Stopped")  } 
 
@@ -69,6 +73,7 @@ async function handle_message(msg) {
 	    initialize_dispatch(info)
 	} else { 
 	    log.d("No command was found: ignoring.") 
+	    out.unrecognized_input()
 	}
 	
     } else { 

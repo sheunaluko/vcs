@@ -4,6 +4,7 @@
 const WebSocket   = require('ws');
 var   vcs_core    = require("./vcs_core.js") 
 var   tts         = require("./tts.js") 
+var   output      = require("./main_output.js") 
 const log         = require("./logger.js").get_logger("vcs_server")
 
 
@@ -18,7 +19,8 @@ exports.start = function() {
     wss.on('connection', function connection(ws) {
 	log.i("Received ws connection.")
 	exports.client = ws 
-	tts.ws = ws
+	output.ws = ws
+	tts.ws    = ws
 	
 	ws.on('message', function incoming(message_string) {
 	    message = JSON.parse(message_string) 

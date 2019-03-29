@@ -10,6 +10,7 @@ class channel {
 	opts = opts || {} 
 	this.filter = new filters.Filter(opts.filters) 
 	this.channel = new Channel() 
+	this.cmd_ref = null 
     } 
 
     push(val) { 
@@ -21,7 +22,11 @@ class channel {
 	let val = await this.channel.shift() 
 	//filter here 
 	let ret = this.filter.filter(val) 
-	//and return 
+	//update the cmd_ref if it exists 
+	if (!this.cmd_ref == null ) { 
+	    this.cmd_ref.input_counter += 1 
+	} 
+	//and return (after which the command will actually process the value) 
 	return ret  
     } 
     
@@ -45,6 +50,10 @@ class channel {
 	
 	//and return the sink so we can chain channels together 
 	return sink 
+    }
+    
+    set_command(cmd_ref) { 
+	this.cmd_ref = cmd_ref 
     }
     
 

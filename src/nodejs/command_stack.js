@@ -10,8 +10,7 @@ class command_stack {
 	this.stack  = [] 
 	this.sink = new channel.channel() 
 	this.on_sink = function(i) { 
-	    this.log.i("Sink:")
-	    this.log.i(i)
+	    this.log("No sink function detected.")
 	}
 	
 	//start the sink loop (catches the last result handles it) !
@@ -31,7 +30,7 @@ class command_stack {
 	this.log.d("Popped cmd: " + cmd.instance_id)
     }	
     
-    on_sink(f) { 
+    set_sink(f) { 
 	this.on_sink = f
     }
     
@@ -46,6 +45,10 @@ class command_stack {
     async sink_loop() { 
 	let msg  ; 
 	while (msg = await this.sink.shift() ) { 
+	    
+	    this.log.i("Sink:")
+	    this.log.i(msg)
+
 	    this.on_sink(msg)    
 	}
     }

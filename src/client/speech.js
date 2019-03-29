@@ -17,9 +17,20 @@ export function connect_ws() {
 	let msg = JSON.parse(m.data) 
 	log.d("Got ws msg:") ;
 	log.d(msg)
-	if (msg.type == 'speak' ) { 
-	    tts.speak(msg.text) 
-	}
+	switch ( msg.type) { 
+	case  'output' : 
+	    tts.speak(msg.text) 	    
+	    break 
+	case 'unrecognized_input' : 
+	    tts.speak("oops")
+	    break 
+	case 'command_result'  
+	    log("Got command result:")
+	    console.log(msg.result) 
+	    break
+	default : 
+	    tts.speak("Received unrecognized message type " + msg.type + " from vcs server")
+	} 
     }) 
     send_text = function (text) { 
 	let type = 'vcs_text' 

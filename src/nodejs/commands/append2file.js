@@ -14,7 +14,7 @@ class append2file extends vcs.base_command {
     static get_info() { 
 	return {
 	    id    : id , 
-	    rules : [ "?(please) append to file [[fname]]" , 
+	    rules : [ "?(please) append to file ?([[fname]])" , 
 		      "?(please) start appending to file ?([[fname]])" , 
 		      "append"  ] , 
 	    vars     : { "fname" : { default_value : false , 
@@ -36,7 +36,7 @@ class append2file extends vcs.base_command {
 	this.finish({result : "OK"}) 
     } 
     
-    //convenice function for appending 
+    //convenice function for appending (used above) 
     append(text) { 
 	let fname = vcs.info.resource_dir + this.args.fname
 	this.log.i("Appending the following to file: " + fname) 
