@@ -46,7 +46,12 @@ client.on('open' , function() {
     log("Connected: " + url)
     repl_server.displayPrompt()
 })
-	  
+
+client.on('error' , function(e) { 
+    log("Error: ")
+    log(e) 
+})
+
 //2. Print messages that are received	  
 client.on('message', function incoming(data) {
     let msg = JSON.parse(data) 

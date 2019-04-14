@@ -15,7 +15,7 @@ class get_text_chunk extends vcs.base_command {
     static get_info() { 
 	return {
 	    id    : id , 
-	    rules : [ "create text chunk"],
+	    rules : [ "get text chunk"],
 	    vars     : null 
 	}
     } 
@@ -37,7 +37,7 @@ class get_text_chunk extends vcs.base_command {
 	    this.chunks.push(text) 
 	}
 	//input channel has been closed 
-	this.finish({result : chunks.join(this.args.joiner || "\n")})
+	this.finish({result : this.chunks.join(this.args.joiner || "\n")})
     } 
     
 
