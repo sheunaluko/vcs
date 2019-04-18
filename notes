@@ -1,3 +1,14 @@
+TODO: 
+[ ] multi language support through server API 
+[ ] built in database which isolates stored user data that is not meant to interact with the
+----- underlying system 
+
+[ ] Implement command EXIT and ABORT methods --> when the user indicates to vcs_core that 
+----- she/he is finished with the commnand a keyword is spoken, which triggers the command channel 
+----- to call its EXIT method, which ?returns a value that is then piped to the stack ? 
+
+
+
 Command Ideas 
 ------------- 
 
@@ -14,13 +25,6 @@ IT IS SO IMPORTANT TO DREAM!!! "wouldnt that be nice"
 WHAT DO I WANT TO DO
 WHAT WOULD IT BE LIKE IF I 
 
-TODO: 
-
-[ ] Implement a vcs_repl for testing the commands 
-[ ] FIX OPTIONALS before and after space... e.g. "?(PLEASE )append to ..." 
-[ ] Implement command EXIT and ABORT methods --> when the user indicates to vcs_core that 
------ she/he is finished with the commnand a keyword is spoken, which triggers the command channel 
------ to call its EXIT method, which ?returns a value that is then piped to the stack ? 
 
 
 
@@ -39,6 +43,9 @@ TODO:
 // the command base class has an async function call_command  , which behind the hood: 
 // -- does the same as above by using vcs_core to init a command 
 // -- listens on the calling commands INPUT port for the response then returns the result
+
+[x] Implement a vcs_repl for testing the commands 
+[x] FIX OPTIONALS before and after space... e.g. "?(PLEASE )append to ..." 
 
 
 

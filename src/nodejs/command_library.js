@@ -31,6 +31,8 @@ class command_lib {
 	}
     }
     
+    
+    
     /* searches through the regex dict for a match */
     find_command(msg) { 
 	for (var r=0;r<this.regex_dict.length;r++) { 

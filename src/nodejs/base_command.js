@@ -79,7 +79,6 @@ class base_command {
     } 
     
     
-    
     /* get missing vars */
     get_missing_vars(dict) {
 	
