@@ -17,21 +17,22 @@ class command_lib {
 	let commands = Object.keys(bundle) 
 	for (var i=0; i<commands.length;i++) { 
 	    let command = bundle[commands[i]]
-	    let {id, rules, vars } = command.get_info() 
-	    
-	    log.d("From module [" + module + "], adding cmd [" + id + "].")
-	    
-	    if (rules) { 
-		let regexes = rules.map(rule_parser.parse_rule).flat() 
-		for (var r=0;r<regexes.length;r++) { 
-		    this.regex_dict.push( [ regexes[r] , { module, id } ] ) 
-		}
-	    }
-	    
+	    this.add_command_to_module(command,module) 
 	}
     }
     
-    
+    add_command_to_module(cmd,module) { 
+	let {id, rules, vars } = cmd.get_info() 
+	
+	log.d("From module [" + module + "], adding cmd [" + id + "].")
+	
+	if (rules) { 
+	    let regexes = rules.map(rule_parser.parse_rule).flat() 
+	    for (var r=0;r<regexes.length;r++) { 
+		this.regex_dict.push( [ regexes[r] , { module, id } ] ) 
+	    }
+	}
+    }
     
     /* searches through the regex dict for a match */
     find_command(msg) { 

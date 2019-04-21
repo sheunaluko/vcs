@@ -4,7 +4,6 @@ var   vcs_core    = require("./vcs_core.js")
 const channel = require("./channel.js")
 
 /*
-  
   Wed Apr 17 08:09:50 PDT 2019
   Want to add ability to write vcs commands in any programming language
 
@@ -21,7 +20,6 @@ const channel = require("./channel.js")
      -- id
      -- rules (vector of rules for speech parsing)
      -- var (required vars) 
-
 */
 
 
@@ -35,14 +33,13 @@ function make_external_command(info,relay,receive) {
     class external_command extends vcs.base_command { 
 	
 	constructor(config) {
- 	    super({info['id']})
+ 	    super({id : info['id']})
 	    this.info = info  //store the info within the command 
 	}
 	
 	static get_info() { 
 	    return info 
 	}
-	
 	//loop read from the external receive channel and emit 
 	async listen() { 
 	    this.log.i("Starting listen loop")
@@ -112,12 +109,15 @@ function start_server() {
 	ws.on('message', function incoming(message_string) {
 	    message = JSON.parse(message_string) 
 	    
+	    console.log(message)
+	    
 	    switch(message.type) { 
 		
 	    case "register" : 
-		let id = message.data
+		let id = message.id
 		log.i("Received registration from: " + id) 
-		clients[ws] = {id}
+		ws.send("received registration from: " + id) 
+		clients[id] = ws
 		break 
 	
 	    case "create_command" : 
@@ -133,10 +133,8 @@ function start_server() {
 	})
     })
 
-    log.i("Websocket server waiting for connection on port: " + port ) 
-
+    log.i("CSI server waiting for connection on port: " + port ) 
 }
-
 
 /* 
    2) When a command creation message is received, the appropriate JSON info is parsed 
@@ -167,5 +165,10 @@ function handle_create_command(opts) {
     
     //the above is a reference to a custom made class 
     //now we have to load it 
-    
+    vcs.core.command_lib.add_command_to_module(cmd,client_id)
 }
+
+/*
+  Exports 
+*/   
+module.exports = {start_server, clients } 
