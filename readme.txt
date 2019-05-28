@@ -10,12 +10,4 @@
 - At this point voice detected by the browser should be forwarded to vcs, use the
 -- node repl to debug.
 
-
-
-
--- TODO 
-
-[ ] connect core emissions to client side via emissions loop 
-[ ] give feedback when command isnt recognized (either emitting text or via client side SOUND library) 
-
-
+Documentation is coming!
