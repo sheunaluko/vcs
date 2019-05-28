@@ -39,7 +39,7 @@ function get_logger(name) {
 
     let i = function(m) { l("info",m) } 
     let d = function(m) { l("debug", m) } 
-    
+
     return { i, d } 
 } 
 

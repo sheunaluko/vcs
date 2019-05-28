@@ -11,10 +11,13 @@ let state  = require("./vcs_state.js")
 let wss = require("./vcs_ws_server.js")
 let R   = require("./ramda.js")
 let command_library   = require("./command_library.js")
-let core_params = require("./vcs_core_params.js") 
 let out = require("./main_output.js")
+let db = require("./vcs_db.js")
+let aliases = require("./aliases.js")
+var params  = require("./vcs_params.js").params
+
 var debug = null
 
 
-module.exports = { info ,base_command , core, util, filters, state , wss ,debug ,R , 
-		   command_library, core_params, out } 
+module.exports = { info ,base_command , core, util, filters, state , wss ,debug ,R , db ,
+		   command_library, params, out , aliases } 

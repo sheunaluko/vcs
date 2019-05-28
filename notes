@@ -1,16 +1,33 @@
 TODO: 
+[ ] finish implementing aliases ... namely , loading the aliases at program start as well as reload them during runtime. .bashrc? what abstraction?
 [ ] multi language support through server API 
 [ ] built in database which isolates stored user data that is not meant to interact with the
 ----- underlying system 
 
-[ ] Implement command EXIT and ABORT methods --> when the user indicates to vcs_core that 
+[ ] Implement command EXIT and ABORT methods AND REPEAT cmd --> when the user indicates to vcs_core that 
 ----- she/he is finished with the commnand a keyword is spoken, which triggers the command channel 
 ----- to call its EXIT method, which ?returns a value that is then piped to the stack ? 
 
+-- wrapper around util.format BUILT into JS logger 
+
+- in future will WANT a way of SHARING parameters accross the various programming languages. One way to do this is for the csi_adapter to receive a response containing 
+- the current parameters when it registers. Then, whenever a parameter is changed a WEBSOCKET message is forwarded to all clients to notify them of the change 
+- finally, parameters are stored in the db and are loaded at init time 
+
+
+[ ] transcrypt to compile python commands to JS for producing a USER snapshot build JS file , create NPM tool with vcs.json file for compiling / project management etc , 
+-- for transpilation, figure out how to modify base_command.py so that when it is compiled it automatically will integrate with JS VCS - that way other python commands 
+-- can remain as they are
+[ ]  set variables like current mouse location as m1 - then can dynamically link commands like "go" to "click m1" 
+[ ]  the above "dynamic links" are like dynamic aliases which only are in memory and not stored to DB 
 
 
 Command Ideas 
 ------------- 
+=> command for VALIDATING input, which accepts as an argument a form of argument mapping 
+---- as well, which can be used as a sub cmd 
+
+=> youtube-dl  (uses statehub to upgrade youtube-dl etc) 
 
 => NIGHT REVIEW / SEQUENCE COMMANDS 
 ---- 3 EVENTS / PEOPLE I AM GRATEFUL FOR THAT DAY 
@@ -25,8 +42,14 @@ IT IS SO IMPORTANT TO DREAM!!! "wouldnt that be nice"
 WHAT DO I WANT TO DO
 WHAT WOULD IT BE LIKE IF I 
 
+[ ] command for dictating changes to source code in case should be review later 
+[ ] ENCRYPTED log, which can only be read with a password 
 
 
+
+
+TO THINK ABOUT : 
+SHould the alias be applied ONLY WHEN SEARCHING FOR COMMAND TO RUN ?
 
 [Tue Mar 26 07:05:31 PDT 2019]
 // TODO (DONE)  ! 

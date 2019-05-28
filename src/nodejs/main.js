@@ -12,6 +12,7 @@ var csi      = require("./core_server_interface.js")
 // add built in commands to vcs core
 vcs.core.command_lib.add_command_module(builtins) 
 
+
 // start vcs wss and core 
 vcs.wss.start() ; vcs.core.start()
 

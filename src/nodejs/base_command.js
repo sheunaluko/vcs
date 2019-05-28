@@ -4,6 +4,7 @@ var   state   = require("./vcs_state.js")
 var   log     = require("./logger.js") 
 var   core    = require("./vcs_core.js") 
 var   R       = require("./ramda.js")
+var   params  = require("./vcs_params.js").params 
 
 var debug  = null 
 
@@ -17,25 +18,21 @@ class base_command {
 	this.log = log.get_logger(this.instance_id)   //assign logger 
 	this.state = state.create_state(this.instance_id)  //create cmd state 
 	
-	this.run_command = core.run_command //allow the command to call others 
-	
-	this.input  = new channel.channel() //the input which the command will listen on 
+	this.input  = new channel.channel({type : "in" , cmd_ref : this})//the input which the command will listen on 
 	//vcs_core will route speech information into this channel when appropriate 
 	
 	//we also will give the channel a reference of the command, so that it can modify the 
 	//command object when necessary 
-	this.input.set_command(this) 
 	this.input_counter = 0 //the input channel will increment this each time it gets input
 	
-	this.output = new channel.channel()  //channel for the command to do IO (eg. tts,print)
+        this.output = new channel.channel({type : "out", cmd_ref : this})  //channel for the command to do IO (eg. tts,print)
 	
 	//channel that will be written to when the command is finished
-	this.sink   = new channel.channel() 
+	this.sink   = new channel.channel({type : "sink" , cmd_ref: this })
 	
     } 
     
     /* methods ----------------------------------------  */
-    
     finish(opts) {
 	let {result , error } = opts 
 
@@ -48,9 +45,21 @@ class base_command {
 	core.stack.pop()
 	
 	//and then wrte write the result to the sink channel 
-	this.log.d("Writing result to sink channel") 
+	this.log.d("Writing result to sink channel")
+	if (false) { //for debug 
+	    this.log.d("Connected sink is:" ) 
+	    console.log(this.sink.connected_sink)
+	}
 	this.sink.push(result) 
+	this.sink.close()
 	
+	if (false) { //for debug (can skip the sink and go directly to receiver)
+	    this.log.d("Writing result directly to connected_sink")
+	    this.sink.connected_sink.push(result)
+	} 
+	
+	this.log.d("Deleting object")
+	delete this 
     }
     
     emit(data) { 
@@ -59,54 +68,61 @@ class base_command {
 	this.output.push({id, data }) 
     }
     
+    feedback(data) { 
+	this.emit(params.feedback_indicator + data) 
+    }
+    
+    async get_input() { 
+	//commands will call this fn to get their input
+	this.log.i("Awaiting input...")
+	//console.trace("INPUT TRACE"); for debugging 
+	let result = await this.input.shift() 
+	this.log.i("Got input...")	
+	console.log(result)
+	if (result ==  params.user_abort ) { 
+	    this.log.i("Received user abort \(o_o)/") 	    
+	    let error = false 
+	    this.finish( {result , error  } ) 
+	    throw "user_abort" 
+	} else { 
+	    this.log.i("returning result")
+	    return result 
+	}
+    } 
+    
     async request(arg) { 
 	this.log.d("Request> " +arg) 
 	this.emit(arg) 
-	let res = await this.input.shift() 
-	this.log.d("Got> " + res ) 
+	let res = await this.get_input() 
+	this.log.d("Got> " + res )
 	return res
     }
+    
+ 
     
 
     //interface to vcs_core
     async call_command(call_info) { 
 	core.initialize_command(call_info)  //this will add command to the stack 
 	//now we listen on the input channel for when the above command returns 
-	let result = await this.input.shift() 
+	let result = await this.get_input()
 	//and then return that result 
 	return result
 	
     } 
     
-    
-    /* get missing vars */
-    get_missing_vars(dict) {
-	
-	let vars = this.constructor.get_info().vars
-	
-	
-	//if no vars then return 
-	if (! vars ) { return []  } 
-	//use ramda.js custom library :) 
-	let required_vars = R.thread_f( vars , 
-					R.filter(R.propEq("default_value", false)) , 
-					R.keys ) 
-	//if there are no required vars then return 
-	if (R.isEmpty(required_vars)) { return [] } 
-	//there are required vars, so we check if each of them is satisfied 
-	let missing = R.thread_f( required_vars , 
-				  R.map(x=> [dict[x],x]) , 
-				  R.reject( R.first ) , 
-				  R.map(R.second) ) 
-	this.log.d("Missing vars: " + JSON.stringify(missing)) 
-	return missing //note this is an array of the missing vars or [] 
+    //interface to vcs_core FOR CSI adapter 
+    //because of the CSI architecture -- it needs to be able to launch a command 
+    //without launching ANOTHER listener on the input port (since there is a continuous 
+    //listener already to allow relaying to the client 
+    launch_command(call_info) { 
+	this.log.i("'Launching' command w/o extra listener")
+	core.initialize_command(call_info)
     }
-    
-   
-    
     
 }
 
 
 
 module.exports = { base_command }
+

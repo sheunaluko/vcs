@@ -27,8 +27,8 @@ class append2file extends vcs.base_command {
     async run() { 
 	//loop read from the input channel 
 	while(true ) {
-	    this.emit("Waiting for input...")
-	    let text = await this.input.shift() 
+	    this.feedback("continue")
+	    let text = await this.get_input() 
 	    if (text == undefined || text == "finished") { break }
 	    this.append(text) 
 	}

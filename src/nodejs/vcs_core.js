@@ -4,9 +4,10 @@ var   log     = require("./logger.js").get_logger("vcs_core")
 var command_stack = require("./command_stack.js") 
 var command_library   = require("./command_library.js") 
 let R          = require("./ramda.js") 
-let core_params = require("./vcs_core_params.js") 
+let params     = require("./vcs_params.js").params
 let tts        = require("./tts.js")
 let out        = require("./main_output.js")
+let aliases    = require("./aliases.js") 
 
 var input = new channel.channel()  //define the input channel 
 var stack = new command_stack() //create a command stack 
@@ -20,6 +21,7 @@ var vcs_core_active = true
 function start() { 
     input_loop() 
     emissions_loop() 
+    aliases.load_aliases() // load aliases from db 
 }
 
 //vcs_core will loop on inputs to the channel 
@@ -31,8 +33,6 @@ async function input_loop() {
 	log.d("Got message " + message) 
 	handle_message(message) 
     }
-    
-    
 } 
 
 async function emissions_loop() { 
@@ -40,7 +40,7 @@ async function emissions_loop() {
     while ( emission = await emissions.shift() ) { 
 	let {id,data} = emission 
 	log.d("Emission:: " + id + " ::" + data)
-	switch (core_params.emit_mode) { 
+	switch (params.emit_mode) { 
 	case 'default' : 
 	    log.d("Sending emission via main output.")
 	    out.send(data)
@@ -63,11 +63,17 @@ async function handle_message(msg) {
     //msg should be string 
     msg = msg.trim().toLowerCase() //normalize all string inputs in this way
     
+    
     log.d("Handling msg: " + msg ) 
     
     if (stack.empty() ) { 
 	//no commands on the stack 
 	log.d("Command stack empty, searching for matching rule") 
+	msg = aliases.translate(msg)   //apply the appropriate alias if it exists 
+	/* TO THINK ABOUT : 
+	   SHould the alias be applied ONLY WHEN SEARCHING FOR COMMAND TO RUN ?
+	*/ 
+	
 	if (info = command_lib.find_command(msg)) { 
 	    log.d("Found matching command: " + info.command_info.id + ", dispatching...")
 	    initialize_dispatch(info)
@@ -113,20 +119,35 @@ async function initialize_command(call_info) {
     /* if it does we keep going... */ 
     //instantiate the command and pass optional config, then give it the args
     let command = command_lib.get_command(command_info) 
-    let cmd = new command({}) ; cmd.args = args 
+    let cmd = new command({}) ; cmd.args = args || {} 
 
     //figure out what the sink channel will be -> 
     //if there is a command on the stack now then its input channel will be the sink
     //if not the the command_stack.sink will be the sink 
-    let sink = stack.empty() ? stack.sink : stack.current().input
+
+    var sink  = null 
+    if (stack.empty()) {
+	sink = stack.sink 
+    } else { 
+	log.d("Will be assigning sink from current stack: " + stack.current().instance_id)
+	sink = stack.current().input
+    }
+    //let sink = stack.empty() ? stack.sink : stack.current().input    
+
     //now we connect the cmds sink channel with the sink 
     cmd.sink.connect(sink) 
     //and connect the cmds output channel with vcs core's emissions channel 
     cmd.output.connect(emissions)
     //push the cmd onto the stack 
     stack.push(cmd) 
-    //and run the command asynchronously 
-    cmd.run() 
+    //and run the command asynchronously , catching any errors: 
+    try { 
+	log.i("Running cmd: " + cmd.instance_id ) 
+	await cmd.run() 
+	log.i("Done running cmd: " + cmd.instance_id) 
+    } catch (e) { 
+	cmd.log.i("Caught error: " + e )
+    }
     //note, there is no need to wait for command to run.. when it is finished it will
     //automatically call this.finish({}) which will pop it from the stack, etc..
     

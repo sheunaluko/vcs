@@ -1,6 +1,7 @@
 // utils for node 
 // Mon Feb 18 16:29:57 PST 2019
 const { exec } = require('child_process');
+var nutil = require("util") 
 
 var log = console.log
 
@@ -169,6 +170,9 @@ function write_json_to_xlsx(d,fname) {
     return "OK" 
 }
 
+var format = nutil.format 
 
-module.exports = {identity, play_success_1, apply , define, first_upper_case, loop_until_true, set_difference, first, second, delay , vec_and , is_val_or_undefined, is_string_of_length, is_non_empty_string, keys, vec_or ,write_json_to_xlsx, delete_file } 
+
+
+module.exports = {identity, play_success_1, apply , define, first_upper_case, loop_until_true, set_difference, first, second, delay , vec_and , is_val_or_undefined, is_string_of_length, is_non_empty_string, keys, vec_or ,write_json_to_xlsx, delete_file , format } 
 

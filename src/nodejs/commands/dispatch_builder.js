@@ -32,24 +32,32 @@ class dispatch_builder extends vcs.base_command {
 
 	/* de structure and assign args */
 	let {regex_info,match_info} = this.args 
-	this.argument_dictionary = this.args.argument_dictionary || {} 
+	//this.argument_dictionary = this.args.argument_dictionary || {}   //PATCHED 5/3/19
+	this.argument_dictionary =  {} 	
 	this.command_info = this.args.command_info
 	this.command = clib.get_command(this.command_info) 
 	this.vars    = this.command.get_info().vars 
 	this.filter  = this.command.get_info().filter 
 
 	
-	// TODO TODO TODO !!! ----------------------------------------
 	/* First step is to register the vars that are already matched */ 
-	
+	this.log.i("Building argument dictionary:") 
+	var k = null 
+	var v = null 
+	let order = regex_info.order
+	for (var i = 0 ; i < order.length ; i ++ ) { 
+	    k = order[i] 
+	    v = match_info[1+i]
+	    this.log.i("Adding k,v pair: " + k + "," + v)
+	    this.argument_dictionary[k] = v 
+	} 
+	this.log.i("Done.")
 
-	
-	
-	// --- [ ]   -------------------------- > 
-	
+	// ----------------------------- > 
 	/* ok here we go with the main loop */ 
 	let missing_vars = null 
 	while (!R.isEmpty ( missing_vars = clib.get_missing_vars(this.current_call_info() ))) {
+	    this.log.i("Found missing vars: " + JSON.stringify(missing_vars))
 	    let next_var = missing_vars.pop() 
 	    let query    = this.vars[next_var].query
 	    let filter   = this.filter 

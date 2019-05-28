@@ -28,11 +28,11 @@ class get_text_chunk extends vcs.base_command {
 		let msg = this.args.init_msg || "Ready for text" 
 		this.emit(msg) 
 	    } else { 
-		let msg = this.args.continue_msg || "OK"
-		this.emit(msg) 
+		//let msg = this.args.continue_msg || "OK"
+		this.feedback("continue")
 	    }
 
-	    let text = await this.input.shift() 
+	    let text = await this.get_input() 
 	    if (text == undefined || text == "finished") { break }
 	    this.chunks.push(text) 
 	}

@@ -24,14 +24,25 @@ class command_lib {
     add_command_to_module(cmd,module) { 
 	let {id, rules, vars } = cmd.get_info() 
 	
-	log.d("From module [" + module + "], adding cmd [" + id + "].")
-	
+	var num = 0 
 	if (rules) { 
 	    let regexes = rules.map(rule_parser.parse_rule).flat() 
 	    for (var r=0;r<regexes.length;r++) { 
 		this.regex_dict.push( [ regexes[r] , { module, id } ] ) 
 	    }
+	    num = regexes.length 
+	    
 	}
+	
+	if (! this.lib[module] ) { 
+	    this.lib[module] = {} 
+	}
+	
+	this.lib[module][id] = cmd 
+
+	log.d("From module [" + module + "], added cmd [" + id + "] - (" + num + " regxs)")	
+	
+	
     }
     
     /* searches through the regex dict for a match */
@@ -55,6 +66,7 @@ class command_lib {
     
     get_command(command_info) {
 	let {module,id} = command_info 
+	//throw "Unable to find command " + module + " || " + id 
 	return this.lib[module][id]
     }
     

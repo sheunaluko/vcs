@@ -16,5 +16,8 @@
     "setimmediate": "^1.0.5",
     "winston": "^3.2.1",
     "ws": "^6.1.4"
+  },
+  "dependencies": {
+    "mongodb": "^3.2.3"
   }
 }

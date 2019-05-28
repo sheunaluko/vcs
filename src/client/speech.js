@@ -1,16 +1,60 @@
 import * as ad from "./audio_detector.js" 
 import {get_logger} from "./utils.js" 
 import * as tts from "./tts.js" 
+import {sounds} from "./sounds.js" 
+
 
 let log = get_logger("speech") 
 
 /* params  */ 
 let ws_port = 9001
 var send_text = null 
+let feedback_indicator = "::@" 
+
+// MOVE INTO HANDLER FILE ------------------------------ 
+
+//feedback handler 
+function handle_feedback(text) { 
+    switch (text) {
+    case 'success' :
+	sounds.success() 
+	break 
+    case 'continue' : 
+	sounds.continue() 
+	break 
+    case 'unrecognized' : 
+	sounds.unrecognized() 
+	break 
+    case 'error' : 
+	sounds.error() 
+	break
+    case 'ready-for-input' :
+	sounds['ready-for-input']()
+	break
+    default : 
+	log.i("Unrecognized feedback text") 
+    }
+}
+
+// message output handler 
+function handle_text(text) { 
+    log.i("handling text: " + text) 
+    // check the first part
+    if (text.slice(0,3) == feedback_indicator) { 
+	log.i("Got feedback:") 
+	handle_feedback(text.slice(3))
+    } else { 
+	log.i("Got regular message") 
+	tts.speak(text)
+    }
+}
+
+// ----------------------------------------	
 
 /* create websocket for relaying speech info */
 export function connect_ws() { 
-    log.i("Connecting ws on port: " + ws_port) 
+
+    log.i("Connecting ws on port number: " + ws_port) 
     var ws = new WebSocket("ws://localhost:"+ws_port) 
     ws.addEventListener('open' , ()=> log.i("WS connection opened") ) 
     ws.addEventListener('message', (m)=> {
@@ -19,15 +63,21 @@ export function connect_ws() {
 	log.d(msg)
 	switch ( msg.type) { 
 	case  'output' : 
-	    tts.speak(msg.text) 	    
+	    handle_text(msg.text)
+
 	    break 
 	case 'unrecognized_input' : 
-	    tts.speak("oops")
+	    //tts.speak("what")
+	    sounds.unrecognized() 
 	    break 
-	case 'command_result'  
-	    log("Got command result:")
+	    
+	case 'command_result'   : 
+	    log.d("Got command result:")
+	    sounds.success() 
+	    //tts.speak(msg.result)
 	    console.log(msg.result) 
 	    break
+	    
 	default : 
 	    tts.speak("Received unrecognized message type " + msg.type + " from vcs server")
 	} 
@@ -53,9 +103,9 @@ recognition.onsoundstart = function() {
 }
 
 recognition.onresult = function(event) { 
-    log.d("Got recognition result") 
     log.d(event) 
     let text = event.results[event.resultIndex][0].transcript
+    log.d("Got recognition result: " + text)     
     send_text(text) 
 }
 recognition.onerror = function(event) { 

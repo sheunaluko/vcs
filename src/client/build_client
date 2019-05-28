@@ -1,0 +1,1 @@
+parcel build index.js -o vcs_client.js

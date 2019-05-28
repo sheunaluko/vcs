@@ -17,6 +17,7 @@ export async function finished_speaking() {
 }
 
 export async function speak(text) { 
+    log.d("Request to speak: " + text) 
     if (! tts.speaking) { 
 	speech.stop_recognition()
 	var utterance  = new SpeechSynthesisUtterance(text);
