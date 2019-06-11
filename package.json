@@ -18,6 +18,7 @@
     "ws": "^6.1.4"
   },
   "dependencies": {
-    "mongodb": "^3.2.3"
+    "mongodb": "^3.2.3",
+    "nodemailer": "^6.2.1"
   }
 }

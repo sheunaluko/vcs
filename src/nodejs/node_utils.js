@@ -174,5 +174,46 @@ var format = nutil.format
 
 
 
-module.exports = {identity, play_success_1, apply , define, first_upper_case, loop_until_true, set_difference, first, second, delay , vec_and , is_val_or_undefined, is_string_of_length, is_non_empty_string, keys, vec_or ,write_json_to_xlsx, delete_file , format } 
+
+function send_thing(txt, subject = ":)" , address = "9016525382@txt.att.net") { 
+    let user = process.env.gmail_user
+    let pass = process.env.gmail_pass
+    
+    var nodemailer = require('nodemailer');
+
+    var transporter = nodemailer.createTransport({
+	service: 'gmail',
+	auth: {
+	    user: user , 
+	    pass: pass , 
+	}
+    });
+
+    var mailOptions = {
+	from: user,
+	to: address ,
+	subject: subject , 
+	text: txt 
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+	if (error) {
+	    console.log(error);
+	} else {
+	    console.log('Email sent to: ' + address + ":: " + info.response);
+	}
+    });
+    
+}
+
+function send_text(txt) { 
+    return send_thing(txt,"autotext") 
+}
+
+function send_email(txt, subject = "automail" ) { 
+    return send_thing(txt,subject,  "alukosheun@gmail.com")
+}
+
+
+module.exports = {identity, play_success_1, apply , define, first_upper_case, loop_until_true, set_difference, first, second, delay , vec_and , is_val_or_undefined, is_string_of_length, is_non_empty_string, keys, vec_or ,write_json_to_xlsx, delete_file , format , send_email, send_text } 
 
