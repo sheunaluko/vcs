@@ -1,1 +1,1 @@
-../../../js_compile/sounds/dist/sounds.js
+../../../global_files/js_compile/sounds/dist/sounds.js
