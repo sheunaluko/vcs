@@ -2,6 +2,7 @@
 //web socket server for vcs
 
 const WebSocket   = require('ws');
+var   params      = require("./vcs_params.js").params
 var   vcs_core    = require("./vcs_core.js") 
 var   tts         = require("./tts.js") 
 var   output      = require("./main_output.js") 
@@ -21,6 +22,15 @@ exports.start = function() {
 	exports.client = ws 
 	output.ws = ws
 	tts.ws    = ws
+	
+	//send the client the current params 
+	ws.send(JSON.stringify( { type : "params" , 
+				  data : params } ) ) 
+	
+	//send ackowledgement of load 
+	ws.send(JSON.stringify( { type : "output" , 
+				  text : params.feedback_indicator + "continue" } ) ) 
+	
 	
 	ws.on('message', function incoming(message_string) {
 	    message = JSON.parse(message_string) 

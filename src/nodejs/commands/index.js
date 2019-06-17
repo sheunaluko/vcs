@@ -1,18 +1,14 @@
-//Sun Mar 10 15:36:37 PDT 2019
+// Sun Mar 10 15:36:37 PDT 2019
 
-//BUILT IN COMMANDS
-let dispatch_builder = require("./dispatch_builder.js")
-let append2file = require("./append2file.js") 
-let get_text_chunk = require("./get_text_chunk.js")
-let reload_alias = require("./reload_alias.js")
+/* create command bundle  */ 
+bundle = [ 
+    require("./dispatch_builder.js"),
+    require("./append2file.js") ,
+    require("./get_text_chunk.js"),
+    require("./reload_alias.js"), 
+]
 
-bundle = { 
-    dispatch_builder,
-    append2file, 
-    get_text_chunk, 
-    reload_alias, 
-} 
-
+/* make module export */
 module.exports = { 
     module  : "builtins" , 
     bundle : bundle 

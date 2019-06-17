@@ -21,8 +21,12 @@ class command(base_command) :
         while True : 
             # wait for next message 
             # can write blocking code b/c will be run inside thread
-            text = self.call_command({'args' : {} , 'command_info' : { 'id' : 'get_text_chunk' ,
-                                                                       'module' : 'builtins'}})
+            
+            text = self.get_input() 
+            
+            # - for getting get chunk 
+            # text = self.call_command({'args' : {} , 'command_info' : { 'id' : 'get_text_chunk' ,
+            #                                                            'module' : 'builtins'}})
             
             #text =self.get_input() 
             self.log.i("Received msg: {}".format(text))          

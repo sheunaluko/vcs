@@ -9,6 +9,8 @@ let log = get_logger("speech")
 /* params  */ 
 let ws_port = 9001
 var send_text = null 
+
+export var vcs_params = {} // should get set by vcs server 
 let feedback_indicator = "::@" 
 
 // MOVE INTO HANDLER FILE ------------------------------ 
@@ -71,11 +73,22 @@ export function connect_ws() {
 	    sounds.unrecognized() 
 	    break 
 	    
+	case 'params' : 
+	    log.i("Received params") 
+	    vcs_params = msg.data 
+	    log.i("Params updated") 
+	    break
+	    
 	case 'command_result'   : 
 	    log.d("Got command result:")
-	    sounds.success() 
-	    //tts.speak(msg.result)
 	    console.log(msg.result) 
+	    
+	    //check the result  
+	    if (msg.result == vcs_params.escape_indicator + "quiet") { 
+		log.i("Command suppressed output") 
+	    } else { 
+		sounds.success() 
+	    } 
 	    break
 	    
 	default : 

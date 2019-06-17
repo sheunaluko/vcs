@@ -9,18 +9,27 @@ class command_lib {
 	this.lib = {} 
 	this.regex_dict = [ ] //actually an array 
     }
-    
- 
+
+    // commented  June 16, 2019 to upgrade to array based bundles (see below) 
+    // add_command_module(mod) { 
+    // 	let {module, bundle} = mod 
+    // 	this.lib[module] = bundle  
+    // 	let commands = Object.keys(bundle) 
+    // 	for (var i=0; i<commands.length;i++) { 
+    // 	    let command = bundle[commands[i]]
+    // 	    this.add_command_to_module(command,module) 
+    // 	}
+    // }
+
+    // updated for array based bundles 
     add_command_module(mod) { 
-	let {module, bundle} = mod 
-	this.lib[module] = bundle  
-	let commands = Object.keys(bundle) 
-	for (var i=0; i<commands.length;i++) { 
-	    let command = bundle[commands[i]]
-	    this.add_command_to_module(command,module) 
-	}
+    	let {module, bundle} = mod 
+    	for (var i=0; i<bundle.length;i++) { 
+    	    let command = bundle[i] 
+    	    this.add_command_to_module(command,module) 
+    	}
     }
-    
+
     add_command_to_module(cmd,module) { 
 	let {id, rules, vars } = cmd.get_info() 
 	
@@ -41,7 +50,6 @@ class command_lib {
 	this.lib[module][id] = cmd 
 
 	log.d("From module [" + module + "], added cmd [" + id + "] - (" + num + " regxs)")	
-	
 	
     }
     

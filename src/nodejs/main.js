@@ -6,12 +6,15 @@ var vcs      = require("./vcs.js")
 // load built in commands 
 var builtins = require("./commands/index.js")
 
+// load builtins.minimal commands 
+var minimals = require("./commands/minimal/index.js") 
+
 // load csi 
 var csi      = require("./core_server_interface.js") 
 
 // add built in commands to vcs core
 vcs.core.command_lib.add_command_module(builtins) 
-
+vcs.core.command_lib.add_command_module(minimals) 
 
 // start vcs wss and core 
 vcs.wss.start() ; vcs.core.start()

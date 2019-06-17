@@ -4,6 +4,7 @@ var params = {
     emit_mode : "default" ,
     user_abort : 'abort'  , 
     feedback_indicator : "::@" , 
+    escape_indicator  : "::^" , 
 }
 
 
