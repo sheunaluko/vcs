@@ -1,0 +1,13 @@
+{
+    "prevenentive medicine"  : [ "DASH" , "WHI" , "ERSPC" , "NLST" ] , 
+    "endocrinology" : [ "UKPDS" , "ACCORD" , "DCCT" , "ACCORD-BP" ], 
+    "hematology oncology" : [ "CLOT" , "STI571" ] , 
+    "musculoskeletal" : [ "TICORA" ] , 
+    "nephrology"    : [ "ASTRAL"  , "CHOIR" , "IDEAL" ] , 
+    "gasteroenterology" : [ "NA-ACCORD" ] , 
+    "cardiology" : [ "JUPITER" , "ALLHAT" , "AFFIRM" , "COURAGE" , "RITA 3" , "MADIT II" , "SAVE" , "RALES" , "A-HeFT", "IABP-SHOCK II"] , 
+    "pulmonology and critical care" : [ "NICE-SUGAR" , "TRICC" , "ARDSNet" ] , 
+    "geriatrics" : ["HYVET" ] 
+} 
+	
+    

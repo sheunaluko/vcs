@@ -1,1 +1,3 @@
 /node_modules/*
+src/python/__pycache__/*
+src/client/.cache/*

@@ -8,6 +8,7 @@ let params     = require("./vcs_params.js").params
 let tts        = require("./tts.js")
 let out        = require("./main_output.js")
 let aliases    = require("./aliases.js") 
+let utils      = require("./node_utils.js") 
 
 var input = new channel.channel()  //define the input channel 
 var stack = new command_stack() //create a command stack 
@@ -22,6 +23,7 @@ function start() {
     input_loop() 
     emissions_loop() 
     aliases.load_aliases() // load aliases from db 
+    utils.make_diff_server(params.sync_port)  //start the sync server (used for exposing command state to external actors like UI, etc ) 
 }
 
 //vcs_core will loop on inputs to the channel 

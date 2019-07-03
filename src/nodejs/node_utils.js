@@ -3,7 +3,10 @@
 const { exec } = require('child_process');
 var nutil = require("util") 
 
-var log = console.log
+var log = function(msg) { 
+    let header = "[utils] \t\t ~ " 	    
+    console.log(header + msg ) 
+}
 
 var execute = function(cmd_str) { 
     exec(cmd_str , (err,stdout, stderr) => { 
@@ -28,6 +31,8 @@ function first(d) {
     return d[0]
 } 
 
+
+
 function second(d) { 
     return d[1]
 } 
@@ -36,7 +41,13 @@ function nth(coll,num) {
     return coll[num] 
 }
 
+
+
 function rest(d) {  d.slice(1) }    
+
+function last(d) { 
+    return d.slice(-1)[0] 
+} 
 
 
 function range(n) { 
@@ -97,6 +108,8 @@ async function define(_var_name,f) {
     eval(var_name + " = tmp_define_result")
     log("Defined: " + var_name) 
 }
+
+function get_ms () { return new Date().getTime() } 
 
 function loop_until_true(f,rate ,timeout) { 
     var t_start = get_ms() 
@@ -170,9 +183,11 @@ function write_json_to_xlsx(d,fname) {
     return "OK" 
 }
 
+function read_json(file) { 
+    return require(file) 
+}
+
 var format = nutil.format 
-
-
 
 
 function send_thing(txt, subject = ":)" , address = "9016525382@txt.att.net") { 
@@ -215,5 +230,63 @@ function send_email(txt, subject = "automail" ) {
 }
 
 
-module.exports = {identity, play_success_1, apply , define, first_upper_case, loop_until_true, set_difference, first, second, delay , vec_and , is_val_or_undefined, is_string_of_length, is_non_empty_string, keys, vec_or ,write_json_to_xlsx, delete_file , format , send_email, send_text } 
+function make_diff_server(port=4000) { 
+    // provide utility function for CREATING DIFF SERVER (https://janmonschke.com/projects/diffsync.html) 
+    // allows synchronization of javascript objects over ws 
+    
+    // setting up express and socket.io
+    var app = require('express')();
+    var http = require('http').Server(app);
+    var io = require('socket.io')(http);
+    var path = require('path');
+
+    // setting up diffsync's DataAdapter
+    var diffsync = require('diffsync');
+    var dataAdapter = new diffsync.InMemoryDataAdapter();
+
+    // setting up the diffsync server
+    var diffSyncServer = new diffsync.Server(dataAdapter, io);
+    
+    // startinginde the http server
+    http.listen(port, function() {
+	log("Starting diff sync server on port: " + port ) 
+    });
+    
+}
+
+async function make_diff_sync_client(url, id) { 
+    var ds  = require('diffsync');
+    const io = require('socket.io-client');
+
+    // pass the connection and the id of the data you want to synchronize
+    var client = new ds.Client(io(url), id);
+    
+    var state ; 
+    
+    var connected = false 
+    client.on('connected', function() {
+	// the initial data has been loaded,
+	// you can initialize your application
+	state = client.getData();
+	// console.log("connected") 
+	// console.log(state) 
+	connected = true 
+    });
+    
+    client.on('synced', function() {
+	// an update from the server has been applied
+	// you can perform the updates in your application now
+	log("State updated: " + id ) 
+    });
+
+    client.initialize();
+
+    let _ = await loop_until_true( ()=> connected , 50 , 10000 )
+    log("Diff sync client initalized: " + id )     
+
+    return { state, client } 	    
+} 
+
+
+module.exports = {identity, play_success_1, apply , define, first_upper_case, loop_until_true, set_difference, first, second, rest, last ,delay , vec_and , is_val_or_undefined, is_string_of_length, is_non_empty_string, keys, vec_or ,write_json_to_xlsx, delete_file , format , send_email, send_text, make_diff_server , make_diff_sync_client  } 
 

@@ -12,15 +12,27 @@ var minimals = require("./commands/minimal/index.js")
 // load csi 
 var csi      = require("./core_server_interface.js") 
 
+let dev = false
+
 // add built in commands to vcs core
-vcs.core.command_lib.add_command_module(builtins) 
-vcs.core.command_lib.add_command_module(minimals) 
+if (!dev) { 
+    
+    vcs.core.command_lib.add_command_module(builtins) 
+    vcs.core.command_lib.add_command_module(minimals) 
+    
+    // start vcs wss ,ui ws and core 
+    vcs.wss.start() 
+    vcs.uis.start()  
+    vcs.core.start()
 
-// start vcs wss and core 
-vcs.wss.start() ; vcs.core.start()
+    // start csi (for external commands over websockets) 
+    csi.start_server() 
+} 
 
-// start csi (for external commands over websockets) 
-csi.start_server() 
+if (dev) {
+    vcs.util.make_diff_server(vcs.params.sync_port) 
+    vcs.uis.start()  
+}
 
 // export file 
 module.exports = {vcs , csi } 

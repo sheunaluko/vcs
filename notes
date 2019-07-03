@@ -1,7 +1,49 @@
 TODO: 
+
+DECOUPLE THE MICROPHONE ENDPOINT (for textual input into VCS) FROM: 
+THE UI ENDPOINT (which interacts through a separate http port) 
+    - this can received a stream of websocket messages which have TYPES and which can be used to update the UI  
+    - for example.. showing the command stack 
+    - Or when interacting with a command and showing feedback for that command 
+    
+[ ] Will need to think about how to INTELLIGENTLY write commands that use VOICE AND A UI but...
+  --- can work if the USER decides to only use voice, only use the UI, or to use a combination of both 
+  ----- one may would be to have CORE shared data model, just like vue does. When the command does something it
+  ----- simply modifies a datastructure via this.set_state( obj ) OR this.update_state( [path..] , val) OR it does this.state = {} AND has a listener 
+  ----- and any of these modifications trigger the STATE on UI side to update as well 
+  ----- will need an API for maintaining synchronization of (objA <-- ws:// --> objB) , called jsync => 
+  	     - when the command_ui launches it does so with a context  (the context contains the ws:: endpoint to connect to for jsync)
+	     - in vcs_core, when a command is launched, FIRST IT IS DETECTED IF there is a UI_CLIENT connected to the UI_PORT, and if so:
+	       	  - then it will TELL base_command to BUILD a UI_LAUNCH_CONTEXT, which will be sent over the UI_PORT 
+		  - before it is sent, however, base_command will create a COMMAND STATE OBJECT and jsync server instance connected to it 
+		  
+		  jsync: should have a timeout method to ensure that local changes to an object complete prior to remote changes 
+		  	 - could have builtin hashing so that when remote sends a diff it also sends a hash 
+			 - interesting -- brings up a ton of interesting challenges that I will not delve into at this time 
+			 
+	          WOW ... if there is a TOOL that you need for building want you want to build -- the more likely it is a separable and contained tool the MORE LIKELY 
+		  YOU are to find it online !! I had to look through 3 different libraries but then I found diffsync which does exactly what I want and even more ! I am 
+		  learning to be more efficient :) 
+
+	     - use diffsync and vue watch  --> DIFFSYNC , see diff_server and diff.js in ~/dev/playground 
+
+
+[ ] google search command with multiple IFRAMES loading (with previews) and the ability to choose one via voice
+[ ] youtube-dl command with multiple iframes and ability to 
+[ ] EDIT log -- nurses -> nuns
+[ ] screen shot viewer app --> on hover the picture gets bigger , when mouse is on the right side of the screen the pictures move right, etc... 
+
+----
+
+
+
 [ ] finish implementing aliases ... namely , loading the aliases at program start as well as reload them during runtime. .bashrc? what abstraction?
 [ ] multi language support through server API 
 [ ] built in database which isolates stored user data that is not meant to interact with the
+
+
+
+
 ----- underlying system 
 
 [ ] Implement command EXIT and ABORT methods AND REPEAT cmd --> when the user indicates to vcs_core that 
@@ -24,16 +66,17 @@ TODO:
 
 Command Ideas 
 ------------- 
-=> command for VALIDATING input, which accepts as an argument a form of argument mapping 
----- as well, which can be used as a sub cmd 
 
-=> youtube-dl  (uses statehub to upgrade youtube-dl etc) 
-
-=> NIGHT REVIEW / SEQUENCE COMMANDS 
+[ ] => NIGHT REVIEW / SEQUENCE COMMANDS 
 ---- 3 EVENTS / PEOPLE I AM GRATEFUL FOR THAT DAY 
 ---- The BEST THING THAT HAPPENED THAT DAY
 ---- REVIEW OF PREVIOUS DREAMS 
 ---- REVIEW OF BEST THINGS / GRATITUDE 
+
+=> command for VALIDATING input, which accepts as an argument a form of argument mapping 
+---- as well, which can be used as a sub cmd 
+
+=> youtube-dl  (uses statehub to upgrade youtube-dl etc) 
 
 
 => RECORD DREMS 
@@ -113,8 +156,7 @@ MODULARITY
 
 
 FUTURE 
-Move HTML/CSS content to NODEJS html server 
-Can have channels outside of of the channel stack, by duplicating the vcs_core.input channel
+[ ] Can have channels outside of of the channel stack, by duplicating the vcs_core.input channel
 -- these can ALSO listen in on the incoming text and respond to it arbitratily, allowing for 
 -- asynchronous/ simultanous running commands 
 

@@ -1,19 +1,23 @@
-//Sun Mar  3 10:54:37 PST 2019
-//web socket server for vcs
+/* 
+  Sun Mar  3 10:54:37 PST 2019
+  web socket server for vcs  
+  
+  This file is sort of an adapter -- it creates a websocet server 
+  Upon a connection , it gives the connection to the OUTPUT file 
+  and whenever it receives a message it forwards the message to vcs_core
+  
+ */ 
 
 const WebSocket   = require('ws');
 var   params      = require("./vcs_params.js").params
 var   vcs_core    = require("./vcs_core.js") 
 var   tts         = require("./tts.js") 
 var   output      = require("./main_output.js") 
-const log         = require("./logger.js").get_logger("vcs_server")
-
-
-
+const log         = require("./logger.js").get_logger("vcs_text_server")
 
 exports.start = function() { 
     
-    var port  = 9001
+    var port  = params.text_port 
     const wss = new WebSocket.Server({ port: port });
     var client = null 
     

@@ -6,6 +6,7 @@ bundle = [
     require("./append2file.js") ,
     require("./get_text_chunk.js"),
     require("./reload_alias.js"), 
+    require("./javascript_echo.js") ,
 ]
 
 /* make module export */

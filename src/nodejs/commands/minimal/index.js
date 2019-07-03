@@ -114,6 +114,6 @@ function transform_minimal(min) {
    
 /* and finally will create the bundle buy mapping the transform accross the cmds */ 
 module.exports = { 
-    module : "builins.minimal"  , 
+    module : "builtins.minimal"  , 
     bundle : commands.map(transform_minimal) 
 }

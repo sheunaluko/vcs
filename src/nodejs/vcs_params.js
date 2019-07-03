@@ -5,6 +5,9 @@ var params = {
     user_abort : 'abort'  , 
     feedback_indicator : "::@" , 
     escape_indicator  : "::^" , 
+    text_port : 9001 , 
+    ui_port   : 9003 , 
+    sync_port : 9004 , 
 }
 
 

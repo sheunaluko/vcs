@@ -1,22 +1,24 @@
 //Sun Mar 10 11:44:54 PDT 2019
 const channel = require("./channel.js");
-var   state   = require("./vcs_state.js")  
+var   vcs_state   = require("./vcs_state.js")  
 var   log     = require("./logger.js") 
+var   vcs     = require("./vcs.js") 
 var   core    = require("./vcs_core.js") 
 var   R       = require("./ramda.js")
 var   params  = require("./vcs_params.js").params 
+var   ui      = require("./vcs_ui_server.js") 
 
 var debug  = null 
 
 class base_command { 
  
     constructor(opts) { 
-	let {id} = opts
+	let {id , initial_state} = opts
 	
 	this.cmd_id = id 
-	this.instance_id  =  this.cmd_id + "_" + state.unique_id() //assing unique instance id 
+	this.initial_state = initial_state
+	this.instance_id  =  this.cmd_id + "_" + vcs_state.unique_id() //assing unique instance id 
 	this.log = log.get_logger(this.instance_id)   //assign logger 
-	this.state = state.create_state(this.instance_id)  //create cmd state 
 	
 	this.input  = new channel.channel({type : "in" , cmd_ref : this})//the input which the command will listen on 
 	//vcs_core will route speech information into this channel when appropriate 
@@ -30,6 +32,39 @@ class base_command {
 	//channel that will be written to when the command is finished
 	this.sink   = new channel.channel({type : "sink" , cmd_ref: this })
 	
+	/* 
+	   Sat Jun 29 17:09:26 PDT 2019
+	   Each command has a special "state" object which it can read and write from 
+	   Encapsulation of the state is helpful because under the hood vcs is running a 
+	   diffsync server (https://github.com/janmonschke/diffsync). 
+	   The server allows any websocket clients to connect and subscibe to the IDs 
+	   of any command, thus retriving that commands STATE, as well as having a synchronized JSON 
+	   object of that state. This feature was implmented when designing the UI for vcs. I wanted  
+	   a way for a command to communicate with a UI without having to couple the command workings with 
+	   an external ui interface. Instead, it seemed natural for a command to modify a STATE variable, which 
+	   the UI could subscribe too (as in vue.js). 
+	   Theoretically, the best UI should simply be a function of some state
+	 */ 
+	
+	async function make_state() { 
+	    var {state, update_state, set_initial_state} = await vcs_state.create_state(this.instance_id) 
+	    this.state = state ; this.update_state = update_state 
+	    
+	    console.log(this.initial_state) 
+	    
+	    if(this.initial_state) { console.log("!") ; set_initial_state(this.initial_state) } 
+	    
+	    this.log.i("Created state") 
+	    
+	    //after we create the state we will notify the ui (if connected) that the command has launched 
+	    ui.command_launched(this.instance_id) 
+	    
+	} 
+	
+	(make_state).bind(this)() 
+	
+
+	
     } 
     
     /* methods ----------------------------------------  */
@@ -38,7 +73,7 @@ class base_command {
 
 	//can we clean up the commands state here 
 	this.log.d("Cleaning up command state") 
-	delete(state.command_states[this.instance_id])
+	delete(vcs_state.command_states[this.instance_id])
 	
 	//and then we have to pop the stack 
 	this.log.d("Removing command from stack")
@@ -99,8 +134,6 @@ class base_command {
     }
     
  
-    
-
     //interface to vcs_core
     async call_command(call_info) { 
 	core.initialize_command(call_info)  //this will add command to the stack 
@@ -114,11 +147,14 @@ class base_command {
     //interface to vcs_core FOR CSI adapter 
     //because of the CSI architecture -- it needs to be able to launch a command 
     //without launching ANOTHER listener on the input port (since there is a continuous 
-    //listener already to allow relaying to the client 
+    //listener already to allow relaying to the client (not difference from call_command above) 
     launch_command(call_info) { 
 	this.log.i("'Launching' command w/o extra listener")
 	core.initialize_command(call_info)
     }
+    
+    
+    
     
 }
 
