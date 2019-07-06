@@ -35,6 +35,7 @@ THE UI ENDPOINT (which interacts through a separate http port)
 
 ----
 
+[ ] binary linux tools in folder for controlling computer (screen off, volume u/down etc.. ) 
 
 
 [ ] finish implementing aliases ... namely , loading the aliases at program start as well as reload them during runtime. .bashrc? what abstraction?
