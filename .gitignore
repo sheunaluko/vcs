@@ -1,3 +1,4 @@
 /node_modules/*
 src/python/__pycache__/*
 src/client/.cache/*
+src/client/vue/node_modules/*
