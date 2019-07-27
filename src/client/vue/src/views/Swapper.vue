@@ -5,30 +5,37 @@
 </template>
 
 <script>
-import javascript_echo from "../components/vcs_ui/javascript_echo";
-import home from "./Home"
+ 
+ /* eslint-disable */ 
+ 
+ import javascript_echo from "../components/vcs_ui/javascript_echo";
+ import review_logs     from "../components/vcs_ui/review_logs";
+ 
+ import home from "./Home"
+ 
 
 
-var swapper_interfaces = {
-    javascript_echo , home  
+ var swapper_interfaces = {
+     home, javascript_echo , review_logs
 
-};
+ };
 
-if ( ! window.vcs ) { 
-  window.vcs = { swapper_interfaces }
-} else { 
-  window.vcs.swapper_interfaces = swapper_interfaces 
-}
+ if ( ! window.vcs ) { 
+     window.vcs = { swapper_interfaces }
+ } else { 
+     window.vcs.swapper_interfaces = swapper_interfaces 
+ }
 
 
-export default {
-  data() {
-    return { current: "home" };
-  },
-  computed: {
-    routedComponent() {
-      return window.vcs.swapper_interfaces[this.current];
-    }
-  }
-};
+ export default {
+     data() {
+	 return { current: "home" };
+     },
+     
+     computed: {
+	 routedComponent() {
+	     return window.vcs.swapper_interfaces[this.current];
+	 }
+     }
+ };
 </script>

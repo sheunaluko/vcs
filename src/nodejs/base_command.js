@@ -46,28 +46,27 @@ class base_command {
 	   Theoretically, the best UI should simply be a function of some state
 	 */ 
 	
-	async function make_state() { 
-	    var {state, update_state, set_initial_state} = await vcs_state.create_state(this.instance_id) 
-	    this.state = state ; this.update_state = update_state 
-	    
-	    console.log(this.initial_state) 
-	    
-	    if(this.initial_state) { console.log("!") ; set_initial_state(this.initial_state) } 
-	    
-	    this.log.i("Created state") 
-	    
-	    //after we create the state we will notify the ui (if connected) that the command has launched 
-	    ui.command_launched(this.instance_id) 
-	    
-	} 
 	
-	(make_state).bind(this)() 
-	
-
 	
     } 
     
     /* methods ----------------------------------------  */
+    
+    async  init_state() { 
+	this.state = await vcs_state.create_state(this) 
+	
+	if(this.initial_state) { 
+	    this.log.i("+ init state"); 
+	    this.state.set_initial_state(this.initial_state) 
+	}
+	
+	this.log.i("Created state") 
+	
+	//after we create the state we will notify the ui (if connected) that the command has launched 
+	ui.command_launched(this.instance_id) 
+    } 
+    
+    
     finish(opts) {
 	let {result , error } = opts 
 

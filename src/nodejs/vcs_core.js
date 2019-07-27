@@ -145,10 +145,13 @@ async function initialize_command(call_info) {
     //and run the command asynchronously , catching any errors: 
     try { 
 	log.i("Running cmd: " + cmd.instance_id ) 
+	await cmd.init_state() 
+	if (cmd.init) { await cmd.init() } 
 	await cmd.run() 
 	log.i("Done running cmd: " + cmd.instance_id) 
     } catch (e) { 
 	cmd.log.i("Caught error: " + e )
+	console.trace() 
     }
     //note, there is no need to wait for command to run.. when it is finished it will
     //automatically call this.finish({}) which will pop it from the stack, etc..

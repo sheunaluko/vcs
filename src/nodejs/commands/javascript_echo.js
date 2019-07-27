@@ -34,7 +34,7 @@ class javascript_echo extends vcs.base_command {
 	    this.emit("You said " + text ) 
 	    
 	    //update the command state 
-	    this.update_state(['items'], function(items) {
+	    this.state.update(['items'], function(items) {
 		var time = new Date().toISOString()  
 		items.push({time, text })
 		return items 

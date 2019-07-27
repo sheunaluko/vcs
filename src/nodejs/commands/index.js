@@ -7,6 +7,8 @@ bundle = [
     require("./get_text_chunk.js"),
     require("./reload_alias.js"), 
     require("./javascript_echo.js") ,
+    require("./review_logs.js") ,    
+    require("./continuous_timer.js") ,    
 ]
 
 /* make module export */

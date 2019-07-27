@@ -2,7 +2,7 @@
   <div id="home" class="home white--text ">
 
     <span class="display-3 font-italic font-weight-thin">Go Big,</span> 
-    <span class='display-3 font-italic font-weight-thin'> Don't Go Home.</span>
+    <span class='display-3 font-italic font-weight-thin'> Don't Go Home</span>
 
     <v-container grid-list-lg fluid class="mx-0"> 
       <v-layout row wrap  >

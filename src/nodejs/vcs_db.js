@@ -40,6 +40,10 @@ async function ensure_connected() {
     }
 }
 
+async function get_collections() { 
+    return await client.db().listCollections().toArray()
+}
+
 
 async function find(coll,query,cursor=false) { 
     await ensure_connected() 
@@ -80,5 +84,6 @@ module.exports = {
     client  , 
     find , 
     update_one , 
-    delete_one 
+    delete_one , 
+    get_collections , 
 }

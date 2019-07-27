@@ -59,6 +59,14 @@ export function connect_ws() {
     log.i("Connecting ws on port number: " + ws_port) 
     var ws = new WebSocket("ws://localhost:"+ws_port) 
     ws.addEventListener('open' , ()=> log.i("WS connection opened") ) 
+    ws.onclose = function () { 
+	log.i("Websocket disconnected! attempting reconnect")
+	setTimeout(connect_ws , 500) 
+    }
+    
+
+    
+
     ws.addEventListener('message', (m)=> {
 	let msg = JSON.parse(m.data) 
 	log.d("Got ws msg:") ;
