@@ -22,7 +22,7 @@ var client = new MongoClient(get_url(), { useNewUrlParser: true });
 async function connect() { 
     if (connected()) { log.i("Already connected") ; return } 
     try {
-	log.i("Connecting: " + get_url())
+	log.i("Connecting: ***" ) //+ get_url())
 	await client.connect();
 	log.i("Connected") 
     } catch (err) {

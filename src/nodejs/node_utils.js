@@ -31,8 +31,6 @@ function first(d) {
     return d[0]
 } 
 
-
-
 function second(d) { 
     return d[1]
 } 
@@ -69,6 +67,7 @@ function keys(x) {
     return Object.keys(x) 
 }
 
+
 function vec_and(v) { 
     let ret = true 
     for (let i of v) { 
@@ -76,6 +75,7 @@ function vec_and(v) {
     }
     if (ret) { return true } else {return false } 
 }
+
 
 function vec_or(v) { 
     let ret = false
@@ -89,6 +89,22 @@ function vec_or(v) {
 function first_upper_case(s) { 
     return s.charAt(0).toUpperCase() + s.slice(1);
 }
+
+function string_contains_any(val,arr) { 
+    let ret = false
+    for (let i of arr) { 
+	res = (val.indexOf(i) > -1 ) 
+	ret = ret || res
+    }
+    if (ret) { return true } else {return false } 
+}
+
+let arithmetic_ops = ['+' , '-' , '/' , '*' ]
+
+function has_arithmetic(text) { 
+    return string_contains_any(text,arithmetic_ops) 
+}
+
 
 function identity(x) { return x } 
 
@@ -109,6 +125,12 @@ async function define(_var_name,f) {
     eval(var_name + " = tmp_define_result")
     log("Defined: " + var_name) 
 }
+
+function safe_eval(t) { 
+    // ! ! Not actually safe yet lol 
+    return eval(t) 
+}
+
 
 function get_ms () { return new Date().getTime() } 
 
@@ -289,5 +311,5 @@ async function make_diff_sync_client(url, id) {
 } 
 
 
-module.exports = {identity, play_success_1, apply , define, first_upper_case, loop_until_true, set_difference, first, second, rest, last ,delay , vec_and , is_val_or_undefined, is_string_of_length, is_non_empty_string, keys, vec_or ,write_json_to_xlsx, delete_file , format , send_email, send_text, make_diff_server , make_diff_sync_client  } 
+module.exports = {identity, play_success_1, apply , define, first_upper_case, loop_until_true, set_difference, first, second, rest, last ,delay , vec_and , is_val_or_undefined, is_string_of_length, is_non_empty_string, keys, vec_or ,write_json_to_xlsx, delete_file , format , send_email, send_text, make_diff_server , make_diff_sync_client , string_contains_any, arithmetic_ops , has_arithmetic , safe_eval} 
 

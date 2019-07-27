@@ -25,7 +25,7 @@ class dispatch_builder extends vcs.base_command {
     /* all commands must implement an async run method 
        automagically have access to arguments in this.args */
     async run() { 
-	vcs.debug = [ this.args, this ] // for debug 
+	//vcs.debug = [ this.args, this ] // for debug 
 	
 	this.log.i("Dispatch builder activated with args:")
 	this.log.i(JSON.stringify(this.args))

@@ -9,6 +9,7 @@ bundle = [
     require("./javascript_echo.js") ,
     require("./review_logs.js") ,    
     require("./continuous_timer.js") ,    
+    require("./interpreter.js") ,    
 ]
 
 /* make module export */

@@ -6,7 +6,8 @@ const R = require("./ramda.js")
 let r1 =  "remind me to [[message-on-alarm]] in [[minutes-till-alarm]] minutes ?(from now|please)"  
 
 let var_regex = /\[\[(.+?)\]\]/
-let opt_regex = /\?\((.+?)\)/
+let opt_regex = /\?\((.+?)\)/   //optional includes empty string
+let OR_regex = /@or\((.+?)\)/    //OR       does not include empty string 
 
 function process_vars(rule,order) { 
     let result = rule.match(var_regex)
@@ -38,8 +39,40 @@ function process_optionals(rule) {
     }
 }
 
+function process_ORs(rule) { 
+    let matches = rule.match(OR_regex) 
+    //console.log(matches)
+    if (matches) { 
+	let ORS = matches[1].split("|")
+	return R.flatten( ORS.map( function(OR) { 
+	    let next = rule.replace(OR_regex, OR)
+	    return process_ORs(next)
+	}))
+    } else { 
+	//normalize the spaces between tokens and trim 
+	// for example with "foo ?(blah) bar" you end up with => "foo  bar" | "foo blah bar"
+	return [rule.replace(/\s+/g, " ").trim()]  
+    }
+}
+
+
 function parse_rule(rule) { 
-    return process_optionals(rule).map(x=>process_vars(x,[]))
+    return process_optionals(rule).map(process_ORs).flat().map(x=>process_vars(x,[]))
 }
 
 module.exports  = { var_regex, opt_regex, r1, process_optionals, process_vars, parse_rule } 
+
+
+/* 
+   TO UNDERSTAND USAGE: 
+   
+   parse_rule(r1)  PRODUCES THE FOLLOWING: 
+   
+   [ { regex: '^remind me to (.+?) in (.+?) minutes from now$',
+       order: [ 'message-on-alarm', 'minutes-till-alarm' ] },
+     { regex: '^remind me to (.+?) in (.+?) minutes please$',
+       order: [ 'message-on-alarm', 'minutes-till-alarm' ] },
+     { regex: '^remind me to (.+?) in (.+?) minutes$',
+       order: [ 'message-on-alarm', 'minutes-till-alarm' ] } ] 
+       
+*/
