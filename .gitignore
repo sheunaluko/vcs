@@ -2,5 +2,5 @@
 src/python/__pycache__/*
 src/client/.cache/*
 src/client/vue/node_modules/*
-src/nodejs/resources/*
+
 
