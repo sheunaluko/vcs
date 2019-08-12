@@ -11,12 +11,12 @@ const log = require("../logger.js").get_logger("interpreter")
    
    The rules are expanded into regexes using the rule parser 
    The regexes are matched against the text until one matches 
-   If one matches, the arguments are extracted from the text 
-   And then the named capture groups are parsed by the correspondeding parsers 
+   If one matches, the arguments (capure groups) are extracted from the text 
+   And then the named capture groups are parsed by the correspondeding named parsers 
    Then an object is built with the capture group names as fields and the 
    parsed values as values 
    And finally the object is passed as an argument to the 'target' function 
-   
+   The target functions are stored in interpreter_targets.js 
  */
 
 
@@ -120,11 +120,6 @@ function handle_text(txt) {
     return target_fn(args)
 //    return {args,target} 
 }
-
-
-// keep mutation functions below ---------------------------------------- > 
-    
-
 
 
 module.exports = { 

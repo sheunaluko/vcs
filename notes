@@ -1,5 +1,9 @@
 TODO: 
 
+[ ] interpreter 
+  - say "interpreter" 
+  - look at interpreter_rules.js for clues on how to use (remember that arithmetic expressions can be parsed) 
+
 DECOUPLE THE MICROPHONE ENDPOINT (for textual input into VCS) FROM: 
 THE UI ENDPOINT (which interacts through a separate http port) 
     - this can received a stream of websocket messages which have TYPES and which can be used to update the UI  
@@ -26,28 +30,36 @@ THE UI ENDPOINT (which interacts through a separate http port)
 		  learning to be more efficient :) 
 
 	     - use diffsync and vue watch  --> DIFFSYNC , see diff_server and diff.js in ~/dev/playground 
+	     
+--> DOCUMENTATION - > dont forget that I added the capability to have LISTENERS attached to state chagnes 
 
 
 [ ] google search command with multiple IFRAMES loading (with previews) and the ability to choose one via voice
-[ ] youtube-dl command with multiple iframes and ability to 
+[ ] youtube-dl command with multiple iframes and ability to choose which video to download 
+       -- this is intersting because it brings up the FUNCTIONALITY of checking that binaries are available on the system path 
+[ ] binary linux tools in folder for controlling computer (screen off, volume u/down etc.. ) 
+
+
 [ ] EDIT log -- nurses -> nuns
 [ ] screen shot viewer app --> on hover the picture gets bigger , when mouse is on the right side of the screen the pictures move right, etc... 
 
 ----
 
-[ ] binary linux tools in folder for controlling computer (screen off, volume u/down etc.. ) 
+
+WARNINGS -- > 
+	 - unsafe eval in node_utils.js 
 
 
-[ ] finish implementing aliases ... namely , loading the aliases at program start as well as reload them during runtime. .bashrc? what abstraction?
-[ ] multi language support through server API 
-[ ] built in database which isolates stored user data that is not meant to interact with the
+[x] finish implementing aliases ... namely , loading the aliases at program start as well as reload them during runtime. .bashrc? what abstraction?
+[x] multi language support through server API 
+[x] built in database which isolates stored user data that is not meant to interact with the
 
 
 
 
 ----- underlying system 
 
-[ ] Implement command EXIT and ABORT methods AND REPEAT cmd --> when the user indicates to vcs_core that 
+[x] Implement command EXIT and ABORT methods AND REPEAT cmd --> when the user indicates to vcs_core that 
 ----- she/he is finished with the commnand a keyword is spoken, which triggers the command channel 
 ----- to call its EXIT method, which ?returns a value that is then piped to the stack ? 
 
