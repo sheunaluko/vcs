@@ -7,50 +7,37 @@ Javascript and python are the built into VCS and can be readily started with. Ot
 
 To get started, follow the instructions below. 
 
-1) Clone the repo 
+```
+git clone https://github.io/sheunaluko/vcs.git  #clone repo
+cd vcs; npm install                             #install node dependencies
+node src/nodejs/main.js --no-db                 #launch VCS core server (a) 
+``` 
+
+In order to begin speaking with VCS, you need to serve the VCS front end which actually connects 
+your microphone using the web browser. The current speech backend is google web speech api. In a new terminal, run:
 
 ```
-git clone https://github.io/sheunaluko/vcs.git 
-``` 
-
-2) Install the necessary node modules in the root directory 
-
-``` 
-cd vcs; npm install 
-``` 
-
-3) Launch VCS ! From the project root, run the following 
-
-``` 
-node src/nodejs/main.js --no-db 
-``` 
-
-4) In order to begin voice programing, there is one last step. You need to serve the VCS front end which actually connects 
-your microphone using the web browser. Currently, a google speech to text server is used and the text is forwarded to VCS. 
-VCS itself does not track your audio input, though we want to be transparent about the current use of google's (free) api. 
-
-```
-cd src/client 
+cd vcs/src/client 
 python -m SimpleHTTPServer 8000
 ```
 
-5) Open google chrome browser to the url, "localhost:8000" and accept the microphone access. Now, try asking **"ARE YOU THERE?"**
-What about trying **"HOW ARE YOU?"**
+Open google chrome browser to the url, "localhost:8000" and accept the microphone access. Now, try asking **"ARE YOU THERE?"**, or **"HOW ARE YOU?"**
 
 That should get you up and running, and the full world of javascript voice commands is now at your disposal. If you prefer
 programming in python however, you can follow the instructions below to enable python voice command writing 
 
-6a) Install the python environment using a virtualenv (ensure that python3.7 and virtualenv are installed first) 
+---
+
+Install the python environment using a virtualenv (ensure that python3.7 and virtualenv are installed first) as follows: 
 
 ``` 
 cd src/python/ 
 virtualenv --python=python3.7 . 
-source bin/activate 
+source bin/activate # (b) 
 pip install -r requirements.txt 
 ``` 
 
-6b) After VCS is already running (step 3 above) and you are within the activated python virtual environment as outlined above (6a), 
-you can connect the python modules by running the following: 
+After VCS server is already running (labeled 'a' above in the comments) and you are within the activated python virtual environment (labeled 'b'), you can connect the python modules by running the following: 
 
 ```
 python csi_adapter.py
