@@ -1,6 +1,13 @@
-/node_modules/*
-src/python/__pycache__/*
-src/client/.cache/*
-src/client/vue/node_modules/*
-src/nodejs/resources/*
+/node_modules/
+
+src/client/.cache/
+src/client/vue/node_modules/
+
+src/nodejs/resources/
+
+src/python/__pycache__/
+src/python/bin/
+src/python/include/
+src/python/lib/
+src/python/.Python 
 
