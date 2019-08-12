@@ -33,11 +33,11 @@ Install the python environment using a virtualenv (ensure that python3.7 and vir
 ``` 
 cd src/python/ 
 virtualenv --python=python3.7 . 
-source bin/activate # (b) 
+source bin/activate #(b) 
 pip install -r requirements.txt 
 ``` 
 
-After VCS server is already running (labeled 'a' above in the comments) and you are within the activated python virtual environment (labeled 'b'), you can connect the python modules by running the following: 
+After VCS server is already running (a) and you are within the activated python virtual environment (b), you can connect the python modules by running the following: 
 
 ```
 python csi_adapter.py
@@ -45,4 +45,4 @@ python csi_adapter.py
 
 Now, you are all set to write python commands voice commands too! Both javascript and python commands can call eachother. 
 
-Contact: oluwa@stanford.edu 
+Contact: oluwa@stanford.edu or alukosheun@gmail.com
