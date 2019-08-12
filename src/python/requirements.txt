@@ -1,1 +1,5 @@
-websockets aiochan requests numpy pymongo
+websockets
+aiochan
+requests
+numpy
+pymongo
