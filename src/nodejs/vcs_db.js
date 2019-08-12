@@ -4,7 +4,7 @@
 var util = require("./node_utils.js") 
 const MongoClient = require('mongodb').MongoClient;
 var log = require("./logger").get_logger("vcs_db") 
-
+const params = require("./vcs_params.js").params 
 
 
 // configure connection url using env vars 
@@ -12,11 +12,23 @@ function get_url() {
     let db_user = process.env.vcs_db_user
     let db_pass = process.env.vcs_db_pass
     let db_host = process.env.vcs_db_host 
-    let url =  util.format("mongodb://%s:%s@%s/vcs?authSource=admin",db_user,db_pass,db_host)
-    return url 
+    if ( db_user && db_pass && db_host ) { 
+	let url =  util.format("mongodb://%s:%s@%s/vcs?authSource=admin",db_user,db_pass,db_host)
+	return url 
+    } else { 
+	log.i("Could not detect database configuration in the environment")
+	log.i("Please make sure the following variables are exported in the current environment by editing the appropriate environement file: \n\tvcs_db_user\n\tvcs_db_pass\n\tvcs_db_host")
+	log.i("If you wish to run vcs without connecting to a database please use the --no-db option on the command line: i.e. node main.js --no-db")
+	process.exit(1) 
+    }
 }
 
-var client = new MongoClient(get_url(), { useNewUrlParser: true });
+if (params.using_db) { 
+    var client = new MongoClient(get_url(), { useNewUrlParser: true });
+} else { 
+    log.i("Deferring database connection") 
+    var client = null 
+} 
 
 
 async function connect() { 

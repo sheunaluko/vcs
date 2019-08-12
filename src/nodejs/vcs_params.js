@@ -5,9 +5,10 @@ var params = {
     user_abort : 'abort'  , 
     feedback_indicator : "::@" , 
     escape_indicator  : "::^" , 
-    text_port : 9001 , 
-    ui_port   : 9003 , 
-    sync_port : 9004 , 
+    text_port : 9001 ,  //web socket connects here to relay voice msgs 
+    ui_port   : 9003 ,  //user interface connects here 
+    sync_port : 9004 ,  //diffserver for UI connects here  
+    using_db : true , 
 }
 
 

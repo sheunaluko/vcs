@@ -1,7 +1,61 @@
 //Sun Mar 10 17:20:01 PDT 2019
 
-// load vcs 
+/* Parse command line args ------------------------------  */ 
+
+const log = require('./logger.js').get_logger("init")
+const commandLineArgs = require('command-line-args')
+const commandLineUsage = require('command-line-usage')
+
+const optionDefinitions = [
+  {
+    name: 'help',
+    alias: 'h',
+    type: Boolean,
+    description: 'Display this usage guide.'
+  },
+  {
+    name: 'no-db',
+    type: String,
+      type: Boolean,
+    description: 'Run vcs without connecting to remote database.',
+    },
+]
+
+const options = commandLineArgs(optionDefinitions)
+
+if (options.help) {
+  const usage = commandLineUsage([
+    {
+      header: 'VCS Usage',
+      content: 'VCS is an Open Source, Cross Platform Virtual Assistant'
+    },
+    {
+      header: 'Options',
+      optionList: optionDefinitions
+    },
+    {
+      content: 'Project home: {underline https://github.com/sheunaluko/vcs}'
+    }
+  ])
+  console.log(usage)
+  return 
+} 
+
+/* Done with command line parsing ------------------------------  */ 
+
+log.i("Beginning program initialization") 
+
+
+
+if (options['no-db'] ) { 
+    log.i("Detected 'no-db' flag, will defer database connection") 
+    var params = require("./vcs_params.js").params 
+    params.using_db = false 
+}
+
+// load vcs  (will load the updated params now) 
 var vcs      = require("./vcs.js") 
+
 
 // load built in commands 
 var builtins = require("./commands/index.js")

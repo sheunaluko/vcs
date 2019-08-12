@@ -9,19 +9,21 @@
   "author": "Sheun Aluko",
   "license": "MIT",
   "devDependencies": {
-    "@nodeguy/channel": "^0.6.4",
     "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.7.0",
-    "ramda": "^0.26.1",
-    "setimmediate": "^1.0.5",
-    "winston": "^3.2.1",
-    "ws": "^6.1.4"
+    "babel-preset-env": "^1.7.0"
   },
   "dependencies": {
+    "@nodeguy/channel": "^0.6.4",
+    "command-line-args": "^5.1.1",
+    "command-line-usage": "^6.0.2",
     "diffsync": "^2.1.2",
     "express": "^4.17.1",
     "mongodb": "^3.2.3",
     "nodemailer": "^6.2.1",
-    "socket.io": "^2.2.0"
+    "ramda": "^0.26.1",
+    "setimmediate": "^1.0.5",
+    "socket.io": "^2.2.0",
+    "winston": "^3.2.1",
+    "ws": "^6.1.4"
   }
 }
