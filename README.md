@@ -7,7 +7,7 @@ Javascript and python are the built into VCS and can be readily started with. Ot
 To get started, follow the instructions below. 
 
 ```
-git clone https://github.io/sheunaluko/vcs.git;  #clone repo
+git clone https://github.com/sheunaluko/vcs.git; #clone repo
 cd vcs; npm install;                             #install node dependencies
 node src/nodejs/main.js --no-db;                 #launch VCS core server (a) 
 ``` 
