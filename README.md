@@ -1,9 +1,8 @@
-
-More documentation and/or video demonstration is coming!
-
 VCS (Voice Control System) allows you to use your voice to control your computer in arbitrary ways (by writing your own voice
 commands)... interacting both with information from the web or with programs running locally on your computer.
 Javascript and python are the built into VCS and can be readily started with. Other languages are possible as well. 
+
+---
 
 To get started, follow the instructions below. 
 
@@ -45,5 +44,7 @@ python csi_adapter.py;
 
 Now, you are all set to write python commands voice commands too! Both javascript and python commands can call eachother. Instructions on how to actually write and incude your own voice commands are in the works -- though the source code is the 
 ultimate guide...
+
+More documentation and/or video demonstration is coming!
 
 Contact: oluwa@stanford.edu or alukosheun@gmail.com
