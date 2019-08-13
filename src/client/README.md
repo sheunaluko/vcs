@@ -1,6 +1,7 @@
-For the simpler client, serve the current /client directory using python like so: 
+For the simpler client, serve the current directory index.html file in a new terminal using python like so: 
 
 ```
+cd vcs/src/client;
 python -m SimpleHTTPServer #python2
 python -m http.server      #python3 
 ```
