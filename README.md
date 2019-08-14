@@ -2,14 +2,15 @@ VCS (Voice Control System) allows you to use your voice to control your computer
 commands)... interacting both with information from the web or with programs running locally on your computer.
 Javascript and python are the built into VCS and can be readily started with. Other languages are possible as well. 
 
----
-
 VCS is installed via npm. To get started, follow the instructions below. 
+
+---
 
 First create a new npm project and install vcs
 
 ```
-npm init; #answer the questions 
+mkdir 'vcs_test' ; cd vcs_test; 
+npm init; #this command will prompt you with several questions, the defaults are OK 
 npm install @sheunaluko/vcs; 
 ``` 
 
@@ -79,7 +80,7 @@ node test.js #now navigate your web browser to "localhost:8001" and say, "Are yo
 ```
 
 Please note, this is just the tip of the iceberg. The above commands are known as "simple" commands, and most notably,
-they not note store stateful information and thus it is not possible to write interactive voice commands with them. 
+they do not note store stateful information and thus it is not possible to write interactive voice commands with them. 
 VCS was built for interactivity however, and thus ships with the **vcs.base_command** class which allows for the 
 creation of arbitrary commands which maintain state. Here is an example of an echo command in **echo.js** 
 
@@ -122,7 +123,7 @@ class echo extends vcs.base_command {
 	    
 	}
 	
-	//this will execute when the progra breaks out of the above while loop 
+	//this will execute when the program breaks out of the above while loop 
 	this.finish({result : "OK" } )
     } 
     
@@ -143,7 +144,7 @@ vcs_server = vcs.server( {db_enabled : false ,
 			  csi_enabled : false } )
 
 
-custom_module = { module : "my_commands" , //can name the module however your want 
+custom_module = { module : "my_commands" , //can name the module however you want 
                   bundle : [ require("./path_to_command_like_echo.js_above") , 
 	                     require("./path_to_command_like_echo.js_above")  ] } 
 			  
