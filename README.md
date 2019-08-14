@@ -4,47 +4,78 @@ Javascript and python are the built into VCS and can be readily started with. Ot
 
 ---
 
-To get started, follow the instructions below. 
+VCS is installed via npm. To get started, follow the instructions below. 
+
+First create a new npm project and install vcs
 
 ```
-git clone https://github.com/sheunaluko/vcs.git; #clone repo
-cd vcs; npm install;                             #install node dependencies
-node src/nodejs/main.js --no-db;                 #launch VCS core server (a) 
+npm init; #answer the questions 
+npm install @sheunaluko/vcs; 
 ``` 
 
-In order to begin speaking with VCS, you need to serve the VCS front end which actually connects 
-your microphone using the web browser. The current speech backend is google web speech api. In a new terminal, run:
+Now, put the following into a file named **test.js**: 
 
-```
-cd vcs/src/client; 
-python -m SimpleHTTPServer 8000;
-```
+```javascript 
+// require vcs
+vcs = require("@sheunaluko/vcs")
 
-Open google chrome browser to the url, "localhost:8000" and accept the microphone access. Now, try asking "Are you there?", or "How are you?".
+vcs_server = vcs.server( {db_enabled : false ,
+			  ui_server_enabled : false,
+			  csi_enabled : false } )
 
-That should get you up and running, and the full world of javascript voice commands is now at your disposal. If you prefer
-programming in python however, you can follow the instructions below to enable python voice command writing 
 
----
+// create some commands now
+let minimal_commands = [
 
-Install the python environment using a virtualenv (ensure that python3.7 and virtualenv are installed first) as follows: 
+    { id : "are you there" ,
+      rules : [ "are you ?(there|listening|here)" ,
+		"hello"  ] ,
+      fn : (args) => {
+	  return "yes"
+      }
+    },
+
+    { id : "request time" ,
+      rules : [ "what time is it ?(please)" ,
+		"?(please) tell me the time ?(please)" ,
+		"what's the time",
+		"time ?(please)" ]  ,
+      fn : (args) => {
+	  let d = new Date()
+	  return (d.getHours() % 12) + ":" + ( d.getMinutes() )
+      }
+    },
+
+    { query : "how are you" ,
+      response : [ "pretty good" ,
+		   "fantastic" ,
+		   "been better",
+		   "ask me in 5 minutes",
+		   "well lets just say today was a bit rough",
+		   "come on, you know computers dont have emotions" ,
+		   "you should know you made me",
+		   "why do you care" ,
+		   "why dont you write a program to find out smart ass"
+		 ] }
+]
+
+//and add them
+vcs_server.add_command_module( {module : "minimals", bundle: minimal_commands })
+
+
+// initialize the server
+vcs_server.initialize()
+
+// initialize the client (for browser based microphone access)
+vcs_client = vcs.client({port : 8001})
+vcs_client.start()
 
 ``` 
-cd src/python/ ;
-virtualenv --python=python3.7 . ;
-source bin/activate; #(b) 
-pip install -r requirements.txt;
-``` 
 
-After VCS server is already running (a) and you are within the activated python virtual environment (b), you can connect the python modules by running the following: 
+Finally, get started by running: 
 
 ```
-python csi_adapter.py;
+node test.js #now navigate your web browser to "localhost:8001" and say, "Are you there?" 
 ```
-
-Now, you are all set to write python commands voice commands too! Both javascript and python commands can call eachother. Instructions on how to actually write and incude your own voice commands are in the works -- though the source code is the 
-ultimate guide...
-
-More documentation and/or video demonstration is coming!
 
 Contact: oluwa@stanford.edu or alukosheun@gmail.com
