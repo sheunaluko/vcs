@@ -12,6 +12,10 @@ var port  = params.ui_port
 
 exports.start = function() { 
     
+    if (! params.ui_server_enabled) { 
+	log.i("ui server  disabled, will not launch") 
+	return 
+    }
 	
     const wss = new WebSocket.Server({ port: port });
     exports.client = null 
@@ -36,7 +40,7 @@ exports.start = function() {
 exports.command_launched = function(id) { 
 
     if (exports.client == null) { 
-	log.i("No UI connected, will ignore command launch") 
+	log.i("No UI connected")
 	return 
     }  
     

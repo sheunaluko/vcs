@@ -9,6 +9,7 @@ let log = get_logger("speech")
 /* params  */ 
 let ws_port = 9001
 var send_text = null 
+var shutting_down = false 
 
 export var vcs_params = {} // should get set by vcs server 
 let feedback_indicator = "::@" 
@@ -33,6 +34,8 @@ function handle_feedback(text) {
     case 'ready-for-input' :
 	sounds['ready-for-input']()
 	break
+    case 'shutdown' : 
+	window.location = "https://github.com/sheunaluko/vcs" 
     default : 
 	log.i("Unrecognized feedback text") 
     }

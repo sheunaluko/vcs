@@ -16,9 +16,24 @@ let out = require("./main_output.js")
 let db = require("./vcs_db.js")
 let aliases = require("./aliases.js")
 var params  = require("./vcs_params.js").params
-
+var csi      = require("./core_server_interface.js") 
 var debug = null
 
 
-module.exports = { info ,base_command , core, util, filters, state , wss, uis ,debug ,R , db ,
-		   command_library, params, out , aliases } 
+// define user friendly methods 
+var add_command_module = core.command_lib.add_command_module.bind(core.command_lib)
+var add_command_to_module = core.command_lib.add_command_to_module.bind(core.command_lib)
+var add_command_modules = function(ms) { ms.map( m=> add_command_module(m)) }
+var initialize  = function() { 
+    wss.start();uis.start();core.start();csi.start_server() 
+}
+
+
+
+
+module.exports = { info ,base_command , core, util, filters, state , wss, uis ,debug , db , R ,
+		   command_library, params, out , aliases, csi, add_command_module, initialize } 
+
+
+
+

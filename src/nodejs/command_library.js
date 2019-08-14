@@ -2,6 +2,7 @@
 let rule_parser = require("./rule_parser.js") 
 let log = require("./logger.js").get_logger("command_lib")
 let R   = require("./ramda.js")
+let params = require("./vcs_params.js").params
 
 class command_lib { 
     
@@ -25,12 +26,18 @@ class command_lib {
     add_command_module(mod) { 
     	let {module, bundle} = mod 
     	for (var i=0; i<bundle.length;i++) { 
-    	    let command = bundle[i] 
+    	    var command = bundle[i] 
     	    this.add_command_to_module(command,module) 
     	}
     }
 
-    add_command_to_module(cmd,module) { 
+    add_command_to_module(_cmd,module) { 
+	
+	//ensure the command is converted to vcs.base_command 
+	//the below method supports providing commands in multiple formats
+	//see below in file for definition 
+	var cmd = transform_command(_cmd) 
+	
 	let {id, rules, vars } = cmd.get_info() 
 	
 	var num = 0 
@@ -115,4 +122,57 @@ module.exports = command_lib
 
 
 
+/* Define some utilities for working with commands  */ 
+// wraps a *simple* command into a base_cmd instance  
+function transform_simple_command(min) { 
+    var {id, rules, fn, vars , query, response  } = min 
+    
+    if (query && response ) { 
+	id = query 
+	rules  = [ query ] 
+	
+	if (typeof(response) == 'object') { 
+	    //an array  (return rand nth) 
+	    fn = ()=> { return response[Math.floor(Math.random() * response.length)] }
+	} else { 
+	    //assume a string 
+	    fn = () => { return response }
+	}
+    }
+    
+    /* dynamically create the cmd class */
+    class cmd extends require("./base_command.js").base_command { 
+	constructor(config) {
+	    super({id}) 
+	}
+	
+	static get_info() { 
+	    return { 
+		id , rules , vars 
+	    }
+	}
+	
+	async run() { 
+	    this.log.i("Running simple command") 
+	    this.emit( fn() ) 
+	    this.finish( { result : params.escape_indicator + "quiet" } ) 
+	}
+    }
+    
+    /* return the class */ 
+    return cmd 
+}
 
+function transform_command(cmd) { 
+    //in future can do multiple dispatch based on command analysis, but for now will assume
+    //that if cmd is a function (i.e. class object) it is already transformed, 
+    //else it is some data structure 
+    
+    if (typeof cmd == 'function' ) { return cmd } else { 
+	
+	// given that now (Tue Aug 13 18:07:22 PDT 2019) only simple commands supported 
+	return transform_simple_command(cmd) 
+	
+    }
+    
+}

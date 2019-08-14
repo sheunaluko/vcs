@@ -23,10 +23,10 @@ function get_url() {
     }
 }
 
-if (params.using_db) { 
+if (params.db_enabled) { 
     var client = new MongoClient(get_url(), { useNewUrlParser: true });
 } else { 
-    log.i("Deferring database connection") 
+    log.i("Deferring database connection (db is disabled by user)") 
     var client = null 
 } 
 

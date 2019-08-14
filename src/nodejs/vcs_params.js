@@ -6,9 +6,12 @@ var params = {
     feedback_indicator : "::@" , 
     escape_indicator  : "::^" , 
     text_port : 9001 ,  //web socket connects here to relay voice msgs 
+    csi_port  : 9002 ,  //csi port 
     ui_port   : 9003 ,  //user interface connects here 
     sync_port : 9004 ,  //diffserver for UI connects here  
-    using_db : true , 
+    db_enabled : true , 
+    csi_enabled : true ,
+    ui_server_enabled : true , 
 }
 
 

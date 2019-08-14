@@ -2,6 +2,7 @@ const log         = require("./logger.js").get_logger("csi")
 const WebSocket   = require('ws')
 var vcs           = require("./vcs.js") 
 const channel     = require("./channel.js")
+var params        = require("./vcs_params.js").params
 
 /*
   Wed Apr 17 08:09:50 PDT 2019
@@ -145,7 +146,13 @@ var debug_messages = false
 var debug = [] 
 
 function start_server() { 
-    var port  = 9002
+    
+    if (!params.csi_enabled) { 
+	log.i("csi disabled, will not launch") 
+	return 
+    }
+    
+    var port  = params.csi_port 
     const wss = new WebSocket.Server({ port: port });
     
     wss.on('connection', function connection(ws) {

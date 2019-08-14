@@ -272,7 +272,7 @@ function make_diff_server(port=4000) {
     
     // startinginde the http server
     http.listen(port, function() {
-	log("Starting diff sync server on port: " + port ) 
+	//log("Starting diff sync server on port: " + port ) 
     });
     
 }

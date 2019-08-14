@@ -22,7 +22,7 @@ var vcs_core_active = true
 function start() { 
     input_loop() 
     emissions_loop() 
-    if (params.using_db) {
+    if (params.db_enabled) {
 	aliases.load_aliases() // load aliases from db 
     } 
     utils.make_diff_server(params.sync_port)  //start the sync server (used for exposing command state to external actors like UI, etc ) 

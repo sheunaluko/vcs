@@ -24,13 +24,8 @@ class get_text_chunk extends vcs.base_command {
     async run() { 
 	//loop read from the input channel 
 	while(true ) {
-	    if (this.input_counter == 1) {
-		let msg = this.args.init_msg || "Ready for text" 
-		this.emit(msg) 
-	    } else { 
-		//let msg = this.args.continue_msg || "OK"
-		this.feedback("continue")
-	    }
+
+	    this.feedback("continue")
 
 	    let text = await this.get_input() 
 	    if (text == undefined || text == "finished") { break }
