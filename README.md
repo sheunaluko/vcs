@@ -82,7 +82,8 @@ node test.js #now navigate your web browser to "localhost:8001" and say, "Are yo
 Please note, this is just the tip of the iceberg. The above commands are known as "simple" commands, and most notably,
 they do not note store stateful information and thus it is not possible to write interactive voice commands with them. 
 VCS was built for interactivity however, and thus ships with the **vcs.base_command** class which allows for the 
-creation of arbitrary commands which maintain state. Here is an example of an echo command in **echo.js** 
+creation of arbitrary commands which maintain state and which can **call and await on results from other defined commands**.
+Here is an example of an echo command in **echo.js** 
 
 ```javascript
 let vcs = require("@sheunaluko/vcs")
