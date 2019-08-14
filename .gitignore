@@ -1,6 +1,7 @@
 /node_modules/
 
 notes
+sync_readme
 
 src/client/.cache/
 src/client/vue/node_modules/

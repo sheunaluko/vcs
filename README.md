@@ -9,7 +9,7 @@ VCS is installed via npm. To get started, follow the instructions below.
 First create a new npm project and install vcs
 
 ```
-mkdir 'vcs_test' ; cd vcs_test; 
+mkdir vcs_test ; cd vcs_test; 
 npm init; #this command will prompt you with several questions, the defaults are OK 
 npm install @sheunaluko/vcs; 
 ``` 
