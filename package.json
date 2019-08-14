@@ -1,10 +1,10 @@
 {
-  "name": "vcs",
+  "name": "@sheunaluko/vcs",
   "version": "1.0.0",
   "description": "voice control system",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\""
   },
   "author": "Sheun Aluko",
   "license": "MIT",
