@@ -16,35 +16,39 @@ function get_url() {
 	let url =  util.format("mongodb://%s:%s@%s/vcs?authSource=admin",db_user,db_pass,db_host)
 	return url 
     } else { 
+	log.i("\n\n ***ERROR ***")
 	log.i("Could not detect database configuration in the environment")
 	log.i("Please make sure the following variables are exported in the current environment by editing the appropriate environement file: \n\tvcs_db_user\n\tvcs_db_pass\n\tvcs_db_host")
-	log.i("If you wish to run vcs without connecting to a database please use the --no-db option on the command line: i.e. node main.js --no-db")
+	log.i("If you wish to run vcs without connecting to a database, please pass the vcs_server = vcs.server( {db_enabled : false ... }) option when creating the vcs server") 
 	process.exit(1) 
     }
 }
 
-if (params.db_enabled) { 
-    var client = new MongoClient(get_url(), { useNewUrlParser: true });
-} else { 
-    log.i("Deferring database connection (db is disabled by user)") 
-    var client = null 
-} 
+var client = null 
 
 
 async function connect() { 
     if (connected()) { log.i("Already connected") ; return } 
     try {
 	log.i("Connecting: ***" ) //+ get_url())
+	if (params.db_enabled) { 
+	    client = new MongoClient(get_url(), { useNewUrlParser: true });
+	} else { 
+	    log.i("Database connection was disabled by user, though VCS attempted to connect. Please enable database by  passing the  vcs_server = vcs.server( {db_enabled : true ... }) option when creating the vcs server ")
+	    process.exit(1) 
+	    var client = null 
+	}
+
 	await client.connect();
 	log.i("Connected") 
     } catch (err) {
-	log.i("Error connecting") 
-	log.i(err.stack) 
+	log.i("Error connecting")
+	log.i(err.stack)
     }
 }
 
 
-function connected() { if (client.s.options.servers) { return true } else { return false } } 
+function connected() { if (client && client.s.options.servers) { return true } else { return false } } 
 
 async function ensure_connected() { 
     if (! connected() ) { 

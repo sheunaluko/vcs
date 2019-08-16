@@ -2,7 +2,6 @@
 const channel = require("./channel.js");
 var   vcs_state   = require("./vcs_state.js")  
 var   log     = require("./logger.js") 
-var   vcs     = require("./vcs.js") 
 var   core    = require("./vcs_core.js") 
 var   R       = require("./ramda.js")
 var   params  = require("./vcs_params.js").params 
