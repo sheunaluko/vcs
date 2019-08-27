@@ -1,6 +1,7 @@
 const log         = require("./logger.js").get_logger("csi")
 const WebSocket   = require('ws')
-var vcs           = require("./vcs.js") 
+let core          = require("./vcs_core.js")
+var base_command  = require("./base_command.js").base_command
 const channel     = require("./channel.js")
 var params        = require("./vcs_params.js").params
 
@@ -31,7 +32,7 @@ var params        = require("./vcs_params.js").params
 function make_external_command({command_info,client_id,ws}) {  
 
     //dynamically create the command class here 
-    class external_command extends vcs.base_command { 
+    class external_command extends base_command { 
 	
 	constructor(config) {
  	    super({id :  command_info['id']})
@@ -229,7 +230,7 @@ function handle_create_command(opts) {
     //return 
     //the above is a reference to a custom made class 
     //now we have to load it 
-    vcs.core.command_lib.add_command_to_module(cmd,client_id)
+    core.command_lib.add_command_to_module(cmd,client_id)
 }
 
 /*

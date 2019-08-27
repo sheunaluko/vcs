@@ -23,6 +23,7 @@
     "ramda": "^0.26.1",
     "setimmediate": "^1.0.5",
     "socket.io": "^2.2.0",
+    "wikijs": "^6.0.0",
     "winston": "^3.2.1",
     "ws": "^6.1.4"
   }

@@ -33,10 +33,11 @@ async function connect() {
 	log.i("Connecting: ***" ) //+ get_url())
 	if (params.db_enabled) { 
 	    client = new MongoClient(get_url(), { useNewUrlParser: true });
+	    log.i("Initiated client object")
 	} else { 
 	    log.i("Database connection was disabled by user, though VCS attempted to connect. Please enable database by  passing the  vcs_server = vcs.server( {db_enabled : true ... }) option when creating the vcs server ")
 	    process.exit(1) 
-	    var client = null 
+	    client = null 
 	}
 
 	await client.connect();
@@ -51,6 +52,7 @@ async function connect() {
 function connected() { if (client && client.s.options.servers) { return true } else { return false } } 
 
 async function ensure_connected() { 
+    log.i("Ensuring connection")
     if (! connected() ) { 
 	await connect() 
     }
