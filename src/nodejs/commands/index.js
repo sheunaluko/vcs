@@ -11,6 +11,8 @@ bundle = [
     require("./review_logs.js") ,    
     require("./continuous_timer.js") ,    
     require("./interpreter.js") ,    
+    require("./typer.js"), 
+    require("./shutdown.js")
 ]
 
 /* make module export */

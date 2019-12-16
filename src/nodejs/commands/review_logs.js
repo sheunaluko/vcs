@@ -13,7 +13,7 @@ class cmd extends vcs.base_command {
 
 	super({id, initial_state})
 	
-	this.batch_num = 15
+	this.batch_num = 200
 
     }
     

@@ -12,14 +12,14 @@ var debug  = null
 class base_command { 
  
     constructor(opts) { 
-	let {id , initial_state} = opts
+	let {id , initial_state, filters} = opts
 	
 	this.cmd_id = id 
 	this.initial_state = initial_state
 	this.instance_id  =  this.cmd_id + "_" + vcs_state.unique_id() //assing unique instance id 
 	this.log = log.get_logger(this.instance_id)   //assign logger 
 	
-	this.input  = new channel.channel({type : "in" , cmd_ref : this})//the input which the command will listen on 
+	this.input  = new channel.channel({type : "in" , cmd_ref : this, filters: filters})//the input which the command will listen on 
 	//vcs_core will route speech information into this channel when appropriate 
 	
 	//we also will give the channel a reference of the command, so that it can modify the 

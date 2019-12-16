@@ -1,3 +1,4 @@
+
 //Sun Mar 10 17:20:01 PDT 2019
 
 /* Parse command line args ------------------------------  */ 
@@ -66,7 +67,7 @@ var minimals = require("./commands/minimal/index.js")
 // load csi 
 var csi      = require("./core_server_interface.js") 
 
-let dev = false
+let dev = false 
 
 // add built in commands to vcs core
 if (!dev) { 

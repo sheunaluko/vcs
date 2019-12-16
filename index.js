@@ -28,6 +28,7 @@ var server = function(opts) {
     
     var vcs = require("./src/nodejs/vcs.js") ;  
 
+    log.i("Detected operating system: " + params.os) 
     vcs.add_command_module(builtins) 
     
     // and return the instance 

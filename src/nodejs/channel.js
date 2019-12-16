@@ -26,6 +26,7 @@ class channel {
 	this.log = { 'i' : function(msg) { 
 	    if (this.debug) { 
 		this.logger.i(msg)
+		
 	    }
 	}}
 

@@ -12,6 +12,7 @@ var params = {
     db_enabled : true , 
     csi_enabled : true ,
     ui_server_enabled : true , 
+    os : require("os").platform() 
 }
 
 

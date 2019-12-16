@@ -7,6 +7,7 @@ bundle = [
     require("./get_text_chunk.js"),
     require("./javascript_echo.js") ,
     require("./shutdown.js") ,    
+    require("./typer.js")
 ]
 
 /* make module export */

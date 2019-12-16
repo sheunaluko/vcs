@@ -1,0 +1,27 @@
+
+
+var _map  = { 
+    
+    press_enter : function() { 
+	return "hs.eventtap.event.newKeyEvent({}, 'return', true):post();" +   
+	       "hs.eventtap.event.newKeyEvent({}, 'return', false):post()" 
+    }
+    
+    type_chars  : function(chars) { 
+	return "hs.eventtap.keyStrokes(\"" + chars + "\")"
+    }
+
+    
+    
+} 
+
+
+//add the generic hs -c string to all functions 
+map = {} 
+for (f of Object.keys(_map)) { 
+    map[f] = function() { 
+	return "hs -c " +  _map[f].apply(null,arguments)
+    }
+}
+
+module.exports =  map 
