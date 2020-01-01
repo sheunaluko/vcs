@@ -58,11 +58,18 @@ if (options['no-db'] ) {
 var vcs      = require("./vcs.js") 
 
 
-// load built in commands 
-var builtins = require("./commands/index.js")
+// load command modules
+var cmd_parser = require("./utilities/command_parser.js")
+let {modules,ui} = cmd_parser.parse_command_dir()
 
-// load builtins.minimal commands 
-var minimals = require("./commands/minimal/index.js") 
+// migrate the ui files 
+cmd_parser.migrate_ui_files() 
+// also start the file watcher 
+if (true) { 
+    var watcher = cmd_parser.watch_command_dir() 
+}
+
+
 
 // load csi 
 var csi      = require("./core_server_interface.js") 
@@ -72,22 +79,23 @@ let dev = false
 // add built in commands to vcs core
 if (!dev) { 
     
-    vcs.core.command_lib.add_command_module(builtins) 
-    vcs.core.command_lib.add_command_module(minimals) 
+    // add command modules 
+    for ( mod of Object.keys(modules) ) { 
+	vcs.core.command_lib.add_command_module(modules[mod])	
+    }
     
     // start vcs wss ,ui ws and core 
     vcs.wss.start() 
     vcs.uis.start()  
     vcs.core.start()
-
     // start csi (for external commands over websockets) 
-    csi.start_server() 
+    // csi.start_server() 
 } 
 
-if (dev) {
+if (false) {
     vcs.util.make_diff_server(vcs.params.sync_port) 
     vcs.uis.start()  
 }
 
 // export file 
-module.exports = {vcs , csi } 
+module.exports = {vcs , csi , watcher } 

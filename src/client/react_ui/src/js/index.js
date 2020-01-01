@@ -1,9 +1,15 @@
-import store from "../js/store/index";
+import store from "./store/index";
+import vcs_ui from "./vcs_ui.js"
+import command_manifest from "./command_manifest.js" 
+
 
 //configure global env here
 window.store = store
+window.command_manifest = command_manifest 
 
-window.globals = {} 
+window.globals = {subscriptions : {}  , 
+		  
+		 }
 window.Dispatch = store.dispatch 
 
 /* configure global dispatch fns */ 

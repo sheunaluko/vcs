@@ -39,7 +39,7 @@ exports.start = function() {
 exports.command_launched = function(id) { 
 
     if (exports.client == null) { 
-	log.i("No UI connected")
+	log.i("No UI connected (won't init)")
 	return 
     }  
     
@@ -51,3 +51,17 @@ exports.command_launched = function(id) {
 }
 
 
+
+
+exports.command_finished = function(id) { 
+
+    if (exports.client == null) { 
+	log.i("No UI connected (won't send finish)")
+	return 
+    }  
+    
+    // if here then we are connected, so will send a message to the ui client 
+    let type = "command_finish" 
+    exports.client.send(JSON.stringify({type,id}))
+    log.i("Notified UI of command finish: " + id ) 
+}

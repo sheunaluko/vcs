@@ -1,14 +1,17 @@
 /* 
     UI interface to vcs 
+    FIRST PASS 
     Sat Jun 29 22:08:22 PDT 2019
+    adapted from vue to react on Tue Dec 17 17:13:28 EST 2019
+
 */ 
 
 import {start_sync} from './diffsyncer.js'
+import cmd_manifest from './command_manifest.js' 
 
-if (! window.vcs ) { 
-    window.vcs = {} 
+if (! window.vcs_ui ) { 
+    window.vcs_ui = {} 
 }
-var vcs = window.vcs 
 
 var log = function(msg) {
     console.log("[vcs_ui] \t\t ~ " + msg);
@@ -16,7 +19,7 @@ var log = function(msg) {
 
 function init() { 
     log("Initializing")
-    vcs.log = log 
+    window.vcs_ui.log = log 
 }
 
 init() 
@@ -38,54 +41,28 @@ vcs_ui_connection.onmessage = function(event) {
     case "command_initialization":
       var id = msg.id;
       log("Received command initialization for: " + id);
-      var cmd = id.split("_").slice(0,-1).join("_");
-      log("Retrieving UI for: " + cmd);
-      init_cmd_ui({cmd,id}) 
+      
+      window.Dispatch({type : "ADD_ACTIVE_ID" , payload : {id} })
+      
+      //init the sync a
+      var {client}  = start_sync(id)   //returns the sync client  
+      window.Dispatch({type : "ADD_SYNC_INFO" , payload : {  client,  id } }) 
+      
+	  
       break;
+      
+  case "command_finish":
+      var id = msg.id;
+      log("Received command finish for: " + id);
+      
+      window.Dispatch({type : "REMOVE_ACTIVE_ID" , payload : {id} })
+      window.Dispatch({type : "REMOVE_SUBSCRIPTION" , payload : {id} })      
+      break;      
+      
+      
+      
     default:
       log("Unrecognized message type:" + msg.type);
   }
 };
 
-
-
-function init_cmd_ui(opts) { 
-    var {cmd,id }  = opts
-    /* 
-        Two things need to happen
-        1. The template for the command is found and rendered 
-        2. The data for the ui is LINKED to the data for the vcs command 
-    */  
-
-    if ( Object.keys(vcs.swapper_interfaces).indexOf(cmd) < 0 ) { 
-        log("Could not find matching interface for cmd: " + cmd)
-        return 
-    } else { 
-        //1 
-        log("Found matching command interface for: " + cmd) 
-        set_swapper_ui(cmd) 
-
-        //2 
-        var checkExist = setInterval(function() {
-            log("Checking for interface mount:")
-            var el = document.getElementById(cmd)
-            if (el) {
-               clearInterval(checkExist);
-               start_sync(id,el)
-            }
-         }, 500);
-
-    }
-
-}
-
-
-
-function set_swapper_ui(id) { 
-    var sw = document.getElementById("swapper")
-    sw.__vue__._data.current = id 
-    log("Set swapper ui to: " + id)
-}
-
-
-vcs.fns =  { set_swapper_ui }

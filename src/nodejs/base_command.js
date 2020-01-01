@@ -91,6 +91,9 @@ class base_command {
 	    this.sink.connected_sink.push(result)
 	} 
 	
+	//ui 
+	ui.command_finished(this.instance_id)
+
 	this.log.d("Deleting object")
 	delete this 
     }
@@ -145,7 +148,7 @@ class base_command {
     //interface to vcs_core FOR CSI adapter 
     //because of the CSI architecture -- it needs to be able to launch a command 
     //without launching ANOTHER listener on the input port (since there is a continuous 
-    //listener already to allow relaying to the client (not difference from call_command above) 
+    //listener already to allow relaying to the client (note difference from call_command above) 
     launch_command(call_info) { 
 	this.log.i("'Launching' command w/o extra listener")
 	core.initialize_command(call_info)

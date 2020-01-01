@@ -1,5 +1,6 @@
 fs = require("fs") 
 resolve = require('path').resolve
+var watch = require('node-watch');
 let vcs = require(process.env.VCS_DEV_LOC) 
 
 
@@ -11,11 +12,10 @@ var ui_dir  = resolve(__dirname + "/../../client/react_ui/src/components/command
 var command_dir = resolve(__dirname +  "/../commands2/") 
 
 function copy_to_ui_dest(f) { 
-    //handle fname + loc 
-    //fs.copyFile(f, 
+    fs.copyFile(f, ui_dir + fdelim + f.split(fdelim).slice(-1)[0], (err) => { 
+	if (err) { throw(err) } 
+    })
 }
-
-
 
 //code modified from: 
 //https://stackoverflow.com/questions/5827612/node-js-fs-readdir-recursive-directory-search
@@ -172,13 +172,36 @@ function parse_command_dir() {
 	}
     }
     
-    // now we deal with the UI files 
     let ui  = parsed.filter( x => x.type == "JSX") 
     
     return { modules, ui } 
-    
-    
 }
+
+function migrate_ui_files() { 
+    let parsed = get_command_files().map( get_command_info ).filter( x=> x !== null )     
+    let ui  = parsed.filter( x => x.type == "JSX")     
+    
+    for (f of ui ) { 
+	log("Migrating:: " + f.name) 
+	copy_to_ui_dest(f.file_path) 
+    }
+}
+
+var watcher ; 
+
+function watch_command_dir() { 
+    log("Starting watcher") 
+    watcher = watch(command_dir, { recursive: true, filter: /\.jsx$/ }, function(evt, name) {
+	if (name.indexOf("/.#") > 0 ) { 
+	    return  //ignore temp files 
+	}
+	
+	log("Migrating: " + name) 
+	copy_to_ui_dest(name)
+    });
+}
+
+
 
 module.exports =  {
     ui_dir, 
@@ -186,6 +209,9 @@ module.exports =  {
     walk, 
     get_command_files, 
     parse_command_dir, 
+    migrate_ui_files,
+    watch_command_dir , 
+    watcher,
     
 }
 
