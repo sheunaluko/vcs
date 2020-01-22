@@ -1,0 +1,5 @@
+
+gpg --decrypt config.sh.gpg
+source config.sh
+rm config.sh
+
