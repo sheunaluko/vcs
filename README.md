@@ -1,6 +1,6 @@
 VCS (Voice Control System) allows you to use your voice to control your computer in arbitrary ways (by writing your own voice
 commands)... interacting both with information from the web or with programs running locally on your computer.
-Javascript and python are the built into VCS and can be readily started with. Other languages are possible as well. 
+Javascript and python are built into VCS and can be readily started with. Other languages are possible as well. 
 
 VCS is installed via npm. To get started, follow the instructions below. 
 
