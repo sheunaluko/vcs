@@ -1,10 +1,14 @@
 /node_modules/
 
+
+
 notes
 sync_readme
 
 src/client/.cache/
 src/client/vue/node_modules/
+src/client/react_ui/node_modules/
+src/client/react_ui/yarn.lock 
 
 src/nodejs/resources/
 
