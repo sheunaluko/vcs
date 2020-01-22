@@ -1,0 +1,10 @@
+{:source-paths ["src"]
+ :dependencies []
+ :dev-http {8080 "sounds/"}
+ :builds {:sounds {:output-dir "sounds/"
+                   :asset-path "."
+                   :target :browser
+                   :modules {:sounds {:entries [sounds.core]}}
+                   :devtools {
+                              :http-root "sounds"
+                              :http-port 8080}}}}

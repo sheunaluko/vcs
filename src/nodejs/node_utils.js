@@ -261,6 +261,8 @@ function make_diff_server(port=4000) {
     // allows synchronization of javascript objects over ws 
     
     // setting up express and socket.io
+    log("Making diff sync server on port: " + port ) 
+    
     var app = require('express')();
     var http = require('http').Server(app);
     var io = require('socket.io')(http);

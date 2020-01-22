@@ -8,6 +8,7 @@ var log    = require("../logger.js").get_logger("ui_map")
 var _map = null 
 
 switch (params.os) {
+    
 case 'darwin' : 
     _map = require("./osx/ui_map.js").map 
     log.i("Using macosx ui map") 

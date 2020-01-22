@@ -2,11 +2,14 @@ fs = require("fs")
 resolve = require('path').resolve
 var watch = require('node-watch');
 let vcs = require(process.env.VCS_DEV_LOC) 
-
+const logger = require('../logger.js').get_logger("cmd_parser")
 
 fdelim = "/" ; 
 
-var log = (x) => console.log("[cparse]:: " + x ) 
+
+var log = (x) => logger.i(x) 
+
+
 
 var ui_dir  = resolve(__dirname + "/../../client/react_ui/src/components/commands/")
 var command_dir = resolve(__dirname +  "/../commands2/") 

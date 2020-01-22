@@ -1,0 +1,23 @@
+let dev = false 
+
+// add built in commands to vcs core
+if (!dev) { 
+    
+    // add command modules 
+    for ( mod of Object.keys(modules) ) { 
+	vcs.core.command_lib.add_command_module(modules[mod])	
+    }
+    
+    // start vcs wss ,ui ws and core 
+    vcs.wss.start() 
+    vcs.uis.start()  
+    vcs.core.start()
+    // start csi (for external commands over websockets) 
+    // csi.start_server() 
+} 
+
+if (false) {
+    vcs.util.make_diff_server(vcs.params.sync_port) 
+    vcs.uis.start()  
+}
+

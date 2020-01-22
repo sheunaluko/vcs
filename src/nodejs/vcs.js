@@ -11,7 +11,7 @@ let state  = require("./vcs_state.js")
 let wss = require("./vcs_ws_server.js")
 let uis = require("./vcs_ui_server.js")
 let R   = require("./ramda.js")
-let command_library   = require("./command_library.js")
+let command_library = require("./command_library.js")
 let out = require("./main_output.js")
 let db = require("./vcs_db.js")
 let aliases = require("./aliases.js")
@@ -30,8 +30,25 @@ let ui_maps = { mac : require("./utilities/osx/ui_map.js") }
 var add_command_module = core.command_lib.add_command_module.bind(core.command_lib)
 var add_command_to_module = core.command_lib.add_command_to_module.bind(core.command_lib)
 var add_command_modules = function(ms) { ms.map( m=> add_command_module(m)) }
+
+
+
+/* main interface from parameters in main.js to actual program configuration */
 var initialize  = function() { 
-    wss.start();uis.start();core.start();csi.start_server() 
+        
+    
+    if (params.db_enabled)          { aliases.load_aliases() }  // load aliases from db 
+    if (params.csi_enabled)         { csi.start_server()     }  // start csi 
+    if (params.ui_server_enabled)   { uis.start()            }  // start ui server 
+    
+    //start the sync server (used for exposing command state to external actors like UI, etc )     
+    if (params.diff_server_enabled) { util.make_diff_server(params.sync_port) } 
+    
+    //start the vcs web socket server (listens for incoming TEXT INPUT MESSAGES FOR PROCESSING) 
+    wss.start();
+    
+    //start vcs core 
+    core.start();
 }
 
 

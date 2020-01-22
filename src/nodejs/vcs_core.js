@@ -19,13 +19,10 @@ var emissions  = new channel.channel()
 
 var vcs_core_active = true 
 
+//vcs core is event based loop architecture using channels -- start the loops here 
 function start() { 
     input_loop() 
-    emissions_loop() 
-    if (params.db_enabled) {
-	aliases.load_aliases() // load aliases from db 
-    } 
-    utils.make_diff_server(params.sync_port)  //start the sync server (used for exposing command state to external actors like UI, etc ) 
+    emissions_loop()         
 }
 
 //vcs_core will loop on inputs to the channel 

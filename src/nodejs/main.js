@@ -1,4 +1,3 @@
-
 //Sun Mar 10 17:20:01 PDT 2019
 
 /* Parse command line args ------------------------------  */ 
@@ -6,6 +5,7 @@
 const log = require('./logger.js').get_logger("init")
 const commandLineArgs = require('command-line-args')
 const commandLineUsage = require('command-line-usage')
+var params = require("./vcs_params.js").params 
 
 const optionDefinitions = [
   {
@@ -16,11 +16,34 @@ const optionDefinitions = [
   },
   {
     name: 'no-db',
-    type: String,
-      type: Boolean,
+    type: Boolean,
     description: 'Run vcs without connecting to remote database.',
     },
+  {
+    name: 'no-csi',
+    type: Boolean,
+    description: 'Run vcs without running client server interface for external commands.',
+    },
+  {
+    name: 'no-ui',
+    type: Boolean,
+    description: 'Run vcs without running ui server to enable external UI.',
+    },
+
+  {
+    name: 'no-diff-server',
+    type: Boolean,
+    description: 'Run vcs without starting the diff server, which creates a web socket endpoint of all command states (this is REQUIRED by UI for state updates)' 
+    },
+
+  {
+    name: 'only-core',
+    type: Boolean,
+    description: 'Run vcs with ONLY core functionality (no db, csi, etc..)' 
+    },
+    
 ]
+
 
 const options = commandLineArgs(optionDefinitions)
 
@@ -47,55 +70,57 @@ if (options.help) {
 log.i("Beginning program initialization") 
 
 
-
 if (options['no-db'] ) { 
     log.i("Detected 'no-db' flag, will defer database connection") 
-    var params = require("./vcs_params.js").params 
-    params.using_db = false 
+    params.db_enabled = false 
 }
+
+if (options['no-csi'] ) { 
+    log.i("Detected 'no-csi' flag, will defer server launch") 
+    params.csi_enabled = false 
+}
+
+if (options['no-ui'] ) { 
+    log.i("Detected 'no-ui' flag, will defer ui server launch") 
+    params.ui_server_enabled = false 
+}
+
+if (options['no-diff-server'] ) { 
+    log.i("Detected 'no-diff-server' flag, will defer diff server launch\nNote that this will break UI interface") 
+    params.diff_server_enabled = false 
+}
+
+if (options['only-core'] ) { 
+    log.i("Detected 'only-core' flag, the following will NOT be launched:\ndb, csi, ui, diff-server")
+    params.using_db = false     
+    params.csi_enabled = false     
+    params.ui_server_enabled = false     
+    params.diff_server_enabled = false 
+}
+
+
 
 // load vcs  (will load the updated params now) 
 var vcs      = require("./vcs.js") 
-
 
 // load command modules
 var cmd_parser = require("./utilities/command_parser.js")
 let {modules,ui} = cmd_parser.parse_command_dir()
 
-// migrate the ui files 
+// migrate the ui files  and start file watcher 
 cmd_parser.migrate_ui_files() 
-// also start the file watcher 
 if (true) { 
     var watcher = cmd_parser.watch_command_dir() 
 }
 
 
 
-// load csi 
-var csi      = require("./core_server_interface.js") 
+//start vcs 
+console.log("\n") 
+log.i("Will initialize vcs core with the following parameters:") 
+console.log(params) 
+console.log("\n") 
 
-let dev = false 
+vcs.initialize() 
 
-// add built in commands to vcs core
-if (!dev) { 
-    
-    // add command modules 
-    for ( mod of Object.keys(modules) ) { 
-	vcs.core.command_lib.add_command_module(modules[mod])	
-    }
-    
-    // start vcs wss ,ui ws and core 
-    vcs.wss.start() 
-    vcs.uis.start()  
-    vcs.core.start()
-    // start csi (for external commands over websockets) 
-    // csi.start_server() 
-} 
-
-if (false) {
-    vcs.util.make_diff_server(vcs.params.sync_port) 
-    vcs.uis.start()  
-}
-
-// export file 
-module.exports = {vcs , csi , watcher } 
+console.log("\n -- \n") 

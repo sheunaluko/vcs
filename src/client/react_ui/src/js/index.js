@@ -1,5 +1,6 @@
 import store from "./store/index";
 import vcs_ui from "./vcs_ui.js"
+import vcs_client from "./vcs_client/index.js" 
 import command_manifest from "./command_manifest.js" 
 
 
