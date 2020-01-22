@@ -1,0 +1,6 @@
+export vcs_db_pass="Opensesame92!"
+export vcs_db_user="oluwa"
+export vcs_db_host="34.83.133.74"
+alias ccn="mongo 34.83.133.74/vcs  -u oluwa -p Opensesame92! --authenticationDatabase admin"
+export VCS_DEV_LOC="/Users/oluwa/dev/vcs/src/nodejs/vcs.js"
+export VCS_DEV_DIR="/Users/oluwa/dev/vcs/src/nodejs/"
