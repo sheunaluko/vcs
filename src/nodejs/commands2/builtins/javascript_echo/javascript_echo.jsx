@@ -8,7 +8,8 @@ function UI(props) {
   return (
     <div>
       <h1>Javascript Echo</h1>
-      <p> {items[items.length - 1].text}</p>
+      <p> {items[items.length - 1].time}</p>
+      <p> You said => {items[items.length - 1].text}</p>
     </div>
   );
 }

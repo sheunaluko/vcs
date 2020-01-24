@@ -15,6 +15,8 @@ var   tts         = require("./tts.js")
 var   output      = require("./main_output.js") 
 const log         = require("./logger.js").get_logger("vcs_text_server")
 
+
+
 exports.start = function() { 
     
     var port  = params.text_port 

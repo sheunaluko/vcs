@@ -29,14 +29,13 @@ let ui_maps = { mac : require("./utilities/osx/ui_map.js") }
 // define user friendly methods 
 var add_command_module = core.command_lib.add_command_module.bind(core.command_lib)
 var add_command_to_module = core.command_lib.add_command_to_module.bind(core.command_lib)
-var add_command_modules = function(ms) { ms.map( m=> add_command_module(m)) }
+var add_command_modules = function(ms) { Object.keys(ms).map( mk=> add_command_module(ms[mk])) } //called in main.js 
 
-
+    
 
 /* main interface from parameters in main.js to actual program configuration */
 var initialize  = function() { 
         
-    
     if (params.db_enabled)          { aliases.load_aliases() }  // load aliases from db 
     if (params.csi_enabled)         { csi.start_server()     }  // start csi 
     if (params.ui_server_enabled)   { uis.start()            }  // start ui server 
@@ -55,8 +54,8 @@ var initialize  = function() {
 
 
 module.exports = { info ,base_command , core, util, filters, state , wss, uis ,debug , db , R ,
-		   command_library, params, out , aliases, csi, add_command_module, initialize, 
-		   ui_map, ui_maps } 
+		   command_library, params, out , aliases, csi, add_command_module, add_command_modules, 
+		   initialize, ui_map, ui_maps } 
 		 
 
 

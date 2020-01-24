@@ -8,7 +8,7 @@ let log = get_logger("speech")
 
 /* params  */ 
 let ws_port = 9001
-var send_text = null 
+export var send_text = null 
 var shutting_down = false 
 
 export var vcs_params = {} // should get set by vcs server 

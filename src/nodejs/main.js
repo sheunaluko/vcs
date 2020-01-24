@@ -106,6 +106,9 @@ var vcs      = require("./vcs.js")
 // load command modules
 var cmd_parser = require("./utilities/command_parser.js")
 let {modules,ui} = cmd_parser.parse_command_dir()
+// add command modules 
+vcs.add_command_modules(modules) 
+
 
 // migrate the ui files  and start file watcher 
 cmd_parser.migrate_ui_files() 
