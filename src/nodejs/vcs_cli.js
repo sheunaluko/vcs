@@ -1,53 +1,37 @@
-
 //Sun Mar 10 17:20:01 PDT 2019
+//Thu Jan 23 22:24:31 PST 2020  
 
-/* Parse command line args ------------------------------  */ 
+//to use simply start repl then do | var vcs = require("./vcs_cli.js") 
 
 const log = require('./logger.js').get_logger("init")
+var params = require("./vcs_params.js").params 
 
 
 // load vcs  (will load the updated params now) 
 var vcs      = require("./vcs.js") 
 
-
 // load command modules
 var cmd_parser = require("./utilities/command_parser.js")
 let {modules,ui} = cmd_parser.parse_command_dir()
+// add command modules 
+vcs.add_command_modules(modules) 
 
-// migrate the ui files 
+
+// migrate the ui files  and start file watcher 
 cmd_parser.migrate_ui_files() 
-// also start the file watcher 
 if (true) { 
     var watcher = cmd_parser.watch_command_dir() 
 }
 
 
+//start vcs 
+console.log("\n") 
+log.i("Will initialize vcs core with the following parameters:") 
+console.log(params) 
+console.log("\n") 
+vcs.initialize() 
+console.log("\n -- \n") 
 
-// load csi 
-var csi      = require("./core_server_interface.js") 
-
-let dev = false 
-
-// add built in commands to vcs core
-if (!dev) { 
-    
-    // add command modules 
-    for ( mod of Object.keys(modules) ) { 
-	vcs.core.command_lib.add_command_module(modules[mod])	
-    }
-    
-    // start vcs wss ,ui ws and core 
-    vcs.wss.start() 
-    vcs.uis.start()  
-    vcs.core.start()
-    // start csi (for external commands over websockets) 
-    // csi.start_server() 
-} 
-
-if (false) {
-    vcs.util.make_diff_server(vcs.params.sync_port) 
-    vcs.uis.start()  
-}
 
 // export file 
-module.exports = {vcs , csi , watcher } 
+module.exports = vcs 

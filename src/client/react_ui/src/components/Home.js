@@ -6,7 +6,7 @@ function Home() {
 
   return (
     <div>
-      <h1>VCS UI HOMEPAGE</h1>
+      <h1>VCS UI</h1>
 
       <p>{msg}</p>
     </div>
