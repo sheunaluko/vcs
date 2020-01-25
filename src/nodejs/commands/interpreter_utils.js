@@ -1,6 +1,6 @@
 //Fri Jul 26 18:41:47 PDT 2019
 let nato = require("./nato.js").nato 
-let util = require("../node_utils.js") 
+let util = require("@sheunaluko/node_utils")
 let log  = require("../logger.js").get_logger("interpreter_utils") 
 
 function tokenized_dictionary_replacer(opts) { 

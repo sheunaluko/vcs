@@ -8,7 +8,7 @@ let params     = require("./vcs_params.js").params
 let tts        = require("./tts.js")
 let out        = require("./main_output.js")
 let aliases    = require("./aliases.js") 
-let utils      = require("./node_utils.js") 
+let utils      = require("@sheunaluko/node_utils") 
 
 var input = new channel.channel()  //define the input channel 
 var stack = new command_stack() //create a command stack 

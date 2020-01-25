@@ -1,4 +1,4 @@
-var util   = require("../../node_utils.js") 
+var util   = require("@sheunaluko/node_utils") 
 var log    = require("../../logger.js").get_logger("osx_ui")
 
 var map  = { 

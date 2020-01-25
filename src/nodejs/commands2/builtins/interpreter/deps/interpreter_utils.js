@@ -1,6 +1,6 @@
 //Fri Jul 26 18:41:47 PDT 2019
 let nato = require("./nato.js").nato 
-let util = require(process.env.NODE_UTILS_LOC)
+let util = require("@sheunaluko/node_utils")
 const log = require(process.env.VCS_DEV_DIR + "/logger.js").get_logger("interpreter_utils")
 
 function tokenized_dictionary_replacer(opts) { 

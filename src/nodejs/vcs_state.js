@@ -1,6 +1,6 @@
 //Sat Jun 29 17:22:50 PDT 2019
 
-var util = require("./node_utils.js") 
+var util = require("@sheunaluko/node_utils") 
 var params = require("./vcs_params.js").params 
 var   log     = require("./logger.js")
 

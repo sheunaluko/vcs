@@ -68,8 +68,6 @@ if (options.help) {
 
 /* Done with command line parsing ------------------------------  */ 
 
-log.i("Beginning program initialization") 
-
 
 if (options['no-db'] ) { 
     log.i("Detected 'no-db' flag, will defer database connection") 
@@ -100,6 +98,10 @@ if (options['only-core'] ) {
 }
 
 
+
+// init 
+
+log.i("Beginning program initialization") 
 
 // load vcs  (will load the updated params now) 
 var vcs      = require("./vcs.js") 

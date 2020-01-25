@@ -1,7 +1,7 @@
 
 //Sat May  4 01:09:44 PDT 2019
 //interface to mongo 
-var util = require("./node_utils.js") 
+var util = require("@sheunaluko/node_utils") 
 const MongoClient = require('mongodb').MongoClient;
 var log = require("./logger").get_logger("vcs_db") 
 const params = require("./vcs_params.js").params 

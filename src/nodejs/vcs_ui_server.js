@@ -3,7 +3,7 @@
 
 const WebSocket   = require('ws');
 var   params      = require("./vcs_params.js").params
-var   utils       = require("./node_utils.js") 
+var   utils       = require("@sheunaluko/node_utils") 
 const log         = require("./logger.js").get_logger("vcs_ui_server")
 
 

@@ -13,8 +13,21 @@ var params = {
     csi_enabled : true ,
     ui_server_enabled : true , 
     diff_server_enabled : true , 
-    os : require("os").platform() 
+    os : { platform : require("os").platform() } , 
 }
+
+//platform specific parameter definitions 
+var os_params  =  { 
+    file_delimiter : { 
+	'darwin' : "/" , 
+	'linux'  : "/" , 
+    } , 
+}
+
+//load the platform specific parameter definitions 
+Object.keys(os_params).map(function(k){ 
+    params.os[k] = os_params[k][params.os.platform] 
+}) 
 
 
 module.exports = {

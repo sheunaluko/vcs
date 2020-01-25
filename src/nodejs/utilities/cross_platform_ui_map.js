@@ -7,7 +7,7 @@ var log    = require("../logger.js").get_logger("ui_map")
 //determine which ui map to export based on the operating system (which is in the params) 
 var _map = null 
 
-switch (params.os) {
+switch (params.os.platform) {
     
 case 'darwin' : 
     _map = require("./osx/ui_map.js").map 

@@ -1,6 +1,6 @@
 //Fri Jul 26 19:36:36 PDT 2019
 
-var util = require("../node_utils.js") 
+var util = require("@sheunaluko/node_utils")
 var iu  = require("./interpreter_utils.js") 
 var it  = require("./interpreter_targets.js") 
 var mem = require("../memory.js").memory 
