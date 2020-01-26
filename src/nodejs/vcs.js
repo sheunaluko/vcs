@@ -48,6 +48,10 @@ var initialize  = function() {
     
     //start vcs core 
     core.start();
+    
+    //start python subprocess if appropriate 
+    if (params.autostart_python)   { console.log("AUTOSTARTING PYTHON PROCESS") } 
+    
 }
 
 

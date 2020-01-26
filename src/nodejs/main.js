@@ -6,7 +6,7 @@
 const log = require('./logger.js').get_logger("init")
 const commandLineArgs = require('command-line-args')
 const commandLineUsage = require('command-line-usage')
-var params = require("./vcs_params.js").params 
+var params = {} 
 
 const optionDefinitions = [
   {
@@ -42,6 +42,13 @@ const optionDefinitions = [
     type: Boolean,
     description: 'Run vcs with ONLY core functionality (no db, csi, etc..)' 
     },
+    
+  {
+    name: 'autostart-python',
+    type: Boolean,
+    description: 'Launch python extension functionality at startup' 
+    },
+    
     
 ]
 
@@ -97,36 +104,15 @@ if (options['only-core'] ) {
     params.diff_server_enabled = false 
 }
 
-
-
-// init 
-
-log.i("Beginning program initialization") 
-
-// load vcs  (will load the updated params now) 
-var vcs      = require("./vcs.js") 
-
-// load command modules
-var cmd_parser = require("./utilities/command_parser.js")
-let {modules,ui} = cmd_parser.parse_command_dir()
-// add command modules 
-vcs.add_command_modules(modules) 
-
-
-// migrate the ui files  and start file watcher 
-cmd_parser.migrate_ui_files() 
-if (true) { 
-    var watcher = cmd_parser.watch_command_dir() 
+if (options['autostart-python'] ) { 
+    log.i("Detected 'autostart-python' flag") 
+    params.autostart_python = true 
 }
 
 
+// require vcs_cli here  
+var cli = require("./vcs_cli") 
+cli.init({params})
 
-//start vcs 
-console.log("\n") 
-log.i("Will initialize vcs core with the following parameters:") 
-console.log(params) 
-console.log("\n") 
 
-vcs.initialize() 
 
-console.log("\n -- \n") 

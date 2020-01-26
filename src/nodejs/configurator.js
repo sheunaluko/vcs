@@ -111,21 +111,6 @@ async function create_configuration() {
     let db_config = await create_database_config() 
     let python_config = await create_python_config() 
     
-    /* 
-
-       
-       
-       THen take union (main.js and cli.js) > entry.js 
-       and have entry.js first require the PROCESS_CONFIG FILE , then the CONFIGURATOR 
-       
-       main.js should package arguments then simply pass them to require("vcs_cli")(args) 
-       
-       vcs_cli should FIRST call entry.js | all of config happens and a configuration object is returned 
-       vcs_cli VALIDATES configuration object against the passed in parameters  
-       
-       Then it launches vcs and exports it 
-       
-       */ 
     
     return {db_config, python_config} 
 }
@@ -273,9 +258,8 @@ async function complete_python_config(python_config) {
     }    
         
 }
-																				
-																									
-
+																			
+													
 
 
 //https://stackoverflow.com/questions/18193953/waiting-for-user-to-enter-input-in-node-js
@@ -291,4 +275,4 @@ function prompt(query) {
     }))
 }
 
-init_config()
+module.exports = { init_config  } 

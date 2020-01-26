@@ -13,6 +13,7 @@ var params = {
     csi_enabled : true ,
     ui_server_enabled : true , 
     diff_server_enabled : true , 
+    autostart_python : false , //will automatically start a python subprocess
     os : { platform : require("os").platform() } , 
 }
 
