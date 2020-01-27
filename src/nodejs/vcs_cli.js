@@ -37,10 +37,14 @@ exports.init = async function(params) {
     }
 
     /* then we loop through and set them, while also notify if debug */ 
-    log.i("Congiguring process") 
-    Object.keys(env_to_set).map(k => { 
-	let copy = (k == 'vcs_db_pass') ? "***" : env_to_set[k]  
-	verbose ? log.i(`Setting process.env['${k}'] =\t${copy}`)  : null     
+    log.i("Congiguring process")
+    var to_hide = new Set(["vcs_db_pass"])     
+    Object.keys(env_to_set).map(k => {
+	if (to_hide.has(k))  {
+	    log.i(`Setting process.env['${k}'] =\t${"***"}`)   	    
+	} else {
+	    log.i(`Setting process.env['${k}'] =\t${env_to_set[k]}`)
+	}
 	process.env[k] = env_to_set[k] 
     })
 

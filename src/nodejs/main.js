@@ -112,7 +112,7 @@ if (options['autostart-python'] ) {
 
 // require vcs_cli here  
 var cli = require("./vcs_cli") 
-cli.init({params})
+cli.init(params)
 
 
 

@@ -79,7 +79,7 @@ async function init_config() {
     log.i("Handing off program with the following configuration: \n\n") 
     
     //obfuscate password 
-    let copy = {...config} ; copy.db_config.pass = "***" 
+    var copy = JSON.parse(JSON.stringify(config)) ; copy.db_config.pass = "***" ; 
     console.log(copy) 
     
     console.log("\n\n")

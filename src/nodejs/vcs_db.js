@@ -12,7 +12,8 @@ function get_url() {
     let db_user = process.env.vcs_db_user
     let db_pass = process.env.vcs_db_pass
     let db_host = process.env.vcs_db_host 
-    if ( db_user && db_pass && db_host ) { 
+    if ( db_user && db_pass && db_host ) {
+	log.i(`Connecting to db @ ${db_host} with user ${db_user}`)
 	let url =  util.format("mongodb://%s:%s@%s/vcs?authSource=admin",db_user,db_pass,db_host)
 	return url 
     } else { 
