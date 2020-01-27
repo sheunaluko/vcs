@@ -53,7 +53,13 @@ const optionDefinitions = [
     name: 'autostart-ui',
     type: Boolean,
     description: 'Launch react UI at startup' 
+    },   
+    {
+	name: 'autostart-all',
+	type: Boolean,
+	description: 'Launch python extensions and  react UI at startup' 
     },    
+    
     
 ]
 
@@ -116,6 +122,12 @@ if (options['autostart-python'] ) {
 
 if (options['autostart-ui'] ) { 
     log.i("Detected 'autostart-ui' flag") 
+    params.autostart_ui_client = true 
+}
+
+if (options['autostart-all'] ) { 
+    log.i("Detected 'autostart-all' flag") 
+    params.autostart_python = true 
     params.autostart_ui_client = true 
 }
 
