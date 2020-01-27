@@ -26,7 +26,7 @@ let ddur = 0.1 //default duration
 export var sound_map = { 
     "success" :  [ {f : 554 , l : ddur }  ,  {f : 440 , l : ddur } ] , 
     "continue" : [ {f : 440 , l : ddur*0.6  },  {f : 659 , l : ddur , d :300  }  ]  , 
-    "unrecognized" :  [ {f : 420 , l : ddur }  ,  {f : 311 , l : ddur } ] , 
+    "unrecognized" :  [ {f : 420 , l : ddur }  ,  {f : 440 , l : ddur } ] , 
     "error" :  [ {f : 440 , l : ddur }  ,  {f : 523 , l : ddur } ] , 
     "ready" :   [ {f : 440, l : ddur } ] , 
 }

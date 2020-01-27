@@ -33,6 +33,7 @@ export const  rootReducer = produce((state, action) => {
 	
     case "UPDATE_SUBSCRIPTION" : 
 	log("Updating subscription for: " + action.payload.id)
+	console.log(action)
 	state.subscriptions[action.payload.id] = action.payload.data
 	state.message = "Updated subscription for: " + action.payload.id + " @" +  new Date().toString()
 	return state 

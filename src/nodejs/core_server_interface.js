@@ -164,7 +164,7 @@ function start_server() {
 	
 	//ensure only localhost can connect!  
 	//can update in the future to provide a whitelist 
-	if (ip != "::1") { 
+	if (!(ip == "::1" || ip == "::ffff:127.0.0.1")) { 
 	    log.i("Terminating ws connection from ip: " + ip + " !" ) 	    
 	    let msg = {type : 'ERROR' , data : "You cannot connect, sorry!"}
 	    ws.send(JSON.stringify(msg))
