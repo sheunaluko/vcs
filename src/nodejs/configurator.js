@@ -127,9 +127,9 @@ async function create_database_config() {
 	return (await create_database_config()) 
     }
     
-    let ip   = (await prompt(`Input ip:`)).toLowerCase()     
-    let user = (await prompt(`Input user:`)).toLowerCase()     
-    let pass = (await prompt(`Input pass:`)).toLowerCase()     
+    let ip   = (await prompt(`Input ip:`))
+    let user = (await prompt(`Input user:`))
+    let pass = (await prompt(`Input pass:`))
     
     db_config = {ip,user,pass} 
     log.i("The following database configuration will be created:\n") 

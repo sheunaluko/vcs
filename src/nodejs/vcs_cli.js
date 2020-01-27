@@ -28,6 +28,22 @@ exports.init = async function(params) {
     //get the configuration object 
     //if not created will initiate the appropriate workflow 
     let config = await require("./configurator.js").init_config()  
+
+    //the config has some environment variables that need to be set 
+    var env_to_set = { 
+	'vcs_db_pass' : config.db_config.pass,
+	'vcs_db_user' : config.db_config.user, 
+	'vcs_db_host' : config.db_config.ip, 
+    }
+
+    /* then we loop through and set them, while also notify if debug */ 
+    log.i("Congiguring process") 
+    Object.keys(env_to_set).map(k => { 
+	let copy = (k == 'vcs_db_pass') ? "***" : env_to_set[k]  
+	verbose ? log.i(`Setting process.env['${k}'] =\t${copy}`)  : null     
+	process.env[k] = env_to_set[k] 
+    })
+
     
     //set the params 
     Object.keys(params).map(k=>{

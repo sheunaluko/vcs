@@ -11,12 +11,18 @@ const log = console.log
 
 
 function run_cmd(c) { 
-  try { 
-      let result = execSync(c).toString() 
-      return { success : true  , result} 
-  } catch (e)  { 
-      return { success : false , error : e }  
-  }    
+    
+    //on linux and darwin (osx)  we use /bin/bash and 
+    //for windows we dont change 
+    let os = process.env.VCS_OS_PLATFORM ; 
+    var shell = ( os == 'darwin' || os == 'linux' ) ? "/bin/bash" : process.env.ComSpec //last one for windows see execSync DOCS
+    
+    try { 
+	let result = execSync(c, {shell}).toString() 
+	return { success : true  , result} 
+    } catch (e)  { 
+	return { success : false , error : e }  
+    }    
 }
 
 
@@ -51,12 +57,12 @@ function exec_python_binary_with_text(binary,text) { return run_cmd(`${binary} -
 //checks if a given python binary is 1) working and 2) of version greater than maj.min
 function check_python_binary_version(binary,maj,min) {
     try { 
-	let result = exec_python_binary_with_text(binary,python_version_check_string(maj,min)).result
-	//log("got result: " + result)
-	if (result == 'True\n') { 
+	let result = exec_python_binary_with_text(binary,python_version_check_string(maj,min)) 
+
+	if (result.success) { 
 	    return { success : true  } 
 	} else { 
-	    return { success : false , error : "Version incorrect" }  
+	    return { success : false , error : result.error }  
 	}
 	
     } catch (e)  { 
