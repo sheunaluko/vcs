@@ -76,7 +76,7 @@ async function init_config() {
 	}
     }
 			    
-    log.i("Handing off program with the following configuration: \n\n") 
+    log.i("Configuraring  program with the following configuration: \n\n") 
     
     //obfuscate password 
     var copy = JSON.parse(JSON.stringify(config)) ; copy.db_config.pass = "***" ; 
@@ -84,9 +84,31 @@ async function init_config() {
     
     console.log("\n\n")
     
-    // at this point the 'configuration' object should contain critical config information 
-    // note that this file is imported by main.js / vcs_cli.js and run prior to program initialization 
-    // they can validate the configuration object against the passed in launch parameters  
+    var env_to_set = { 
+	'VCS_DB_PASS' : config.db_config.pass,
+	'VCS_DB_USER' : config.db_config.user, 
+	'VCS_DB_HOST' : config.db_config.ip, 
+	'VCS_PYTHON_BINARY'  : config.python_config.binary , 
+	'VCS_PYENV_DIR'  : config.python_config.env_dir , 
+	'VCS_PYENV_LIBS_INSTALLED'  : config.python_config.libs_installed , 	
+    }
+
+    /* then we loop through and set them, while also notifying  */ 
+    log.i("Congiguring process")
+    var to_hide = new Set(["VCS_DB_PASS"])     
+    Object.keys(env_to_set).map(k => {
+	if (to_hide.has(k))  {
+	    log.i(`Setting process.env['${k}'] =\t${"***"}`)   	    
+	} else {
+	    log.i(`Setting process.env['${k}'] =\t${env_to_set[k]}`)
+	}
+	process.env[k] = env_to_set[k] 
+    })
+
+    
+    //at this point the process should be fully configured, and we can return 
+    //note that there still must be reconciliation with the process config and 
+    //the passed in parameters to the program, which occurs in vcs_cli > reconcile 
     return config 
     
 }
@@ -210,11 +232,13 @@ async function create_python_config() {
 
     /* at this point the virtual env is created, and now we just have to install the requirements */ 
     // can read the requirements.txt location from process.VCS_PYTHON_REQ
-
-    let winPath = path.join(env_dir,"\Scripts\activate")
-    let linPath = path.join(env_dir,"/bin/activate") 
-
-    let step1 = "source " +  (process.VCS_OS_PLATFORM == 'win32' ? winPath : linPath)  //activate the env 
+    
+    var step1 = null   //activate the env 
+    if (process.VCS_OS_PLATFORM == 'win32') { 
+	step1 =  path.join(env_dir,"\Scripts\activate") 
+    } else { 
+	step1 =  "source " + path.join(env_dir,"/bin/activate") 	
+    }
     let step2 = `pip install -r ${process.env.VCS_PYTHON_REQ}`              //install the deps
     var cmd   = [step1,step2].join("; ") 
 	

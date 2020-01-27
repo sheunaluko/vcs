@@ -49,6 +49,11 @@ const optionDefinitions = [
     description: 'Launch python extension functionality at startup' 
     },
     
+ {
+    name: 'autostart-ui',
+    type: Boolean,
+    description: 'Launch react UI at startup' 
+    },    
     
 ]
 
@@ -59,7 +64,7 @@ if (options.help) {
   const usage = commandLineUsage([
     {
       header: 'VCS Usage',
-      content: 'VCS is an Open Source, Cross Platform Virtual Assistant'
+      content: 'VCS is an Open Source, Cross Platform, and Programmable Virtual Assistant'
     },
     {
       header: 'Options',
@@ -107,6 +112,11 @@ if (options['only-core'] ) {
 if (options['autostart-python'] ) { 
     log.i("Detected 'autostart-python' flag") 
     params.autostart_python = true 
+}
+
+if (options['autostart-ui'] ) { 
+    log.i("Detected 'autostart-ui' flag") 
+    params.autostart_ui_client = true 
 }
 
 

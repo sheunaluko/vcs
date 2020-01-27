@@ -156,9 +156,24 @@ function start_server() {
     var port  = params.csi_port 
     const wss = new WebSocket.Server({ port: port });
     
-    wss.on('connection', function connection(ws) {
-	log.i("Received ws connection.")
+    wss.on('connection', function connection(ws,req) {
+	let ip = req.connection.remoteAddress ;
+	log.i("Received ws connection from ip: " + ip) 
 	
+	debug.push({req, con : req.connection, ws})
+	
+	//ensure only localhost can connect!  
+	//can update in the future to provide a whitelist 
+	if (ip != "::1") { 
+	    log.i("Terminating ws connection from ip: " + ip + " !" ) 	    
+	    let msg = {type : 'ERROR' , data : "You cannot connect, sorry!"}
+	    ws.send(JSON.stringify(msg))
+	    ws.close() 
+	    return 
+	}
+	
+	
+	log.i("Allowing ws connection from ip: " + ip) 
 	
 	ws.on('message', function incoming(message_string) {
 	    message = JSON.parse(message_string) 
@@ -180,6 +195,18 @@ function start_server() {
 		let ws_addr = ws._socket.remoteAddress
 		clients[id] = {ws, ws_addr}
 		client_map[ws_addr] = id 
+		
+		//after receiving registration we will send the client the current 
+		//process and parameter configuration 
+		//it should have keys params and process 
+		let msg =  { 
+		    type : 'config' , 
+		    process : process.env , 
+		    params  : params  
+		}
+		//send it 
+		ws.send(JSON.stringify(msg)) 
+		log.i("Sent configuration parameters (including process.env) to client") 
 		break 
 	
 	    case "create_command" : 

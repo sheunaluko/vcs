@@ -23,31 +23,15 @@ const log = require('./logger.js').get_logger("cli")
 var PARAMS = require("./vcs_params.js").params  //actually vcs params 
 
 exports.vcs = null 
-exports.init = async function(params) { 
+exports.init = async function(params={}) { 
     
-    //get the configuration object 
-    //if not created will initiate the appropriate workflow 
+    
+    
+    //configure the node process 
+    //if configuration dir not created will initiate the appropriate workflow 
+    //return val is unimportant as process should be configured directly  
+    //it is passed below to reconcile just so it can be printed upon an error
     let config = await require("./configurator.js").init_config()  
-
-    //the config has some environment variables that need to be set 
-    var env_to_set = { 
-	'vcs_db_pass' : config.db_config.pass,
-	'vcs_db_user' : config.db_config.user, 
-	'vcs_db_host' : config.db_config.ip, 
-    }
-
-    /* then we loop through and set them, while also notify if debug */ 
-    log.i("Congiguring process")
-    var to_hide = new Set(["vcs_db_pass"])     
-    Object.keys(env_to_set).map(k => {
-	if (to_hide.has(k))  {
-	    log.i(`Setting process.env['${k}'] =\t${"***"}`)   	    
-	} else {
-	    log.i(`Setting process.env['${k}'] =\t${env_to_set[k]}`)
-	}
-	process.env[k] = env_to_set[k] 
-    })
-
     
     //set the params 
     Object.keys(params).map(k=>{
@@ -55,9 +39,9 @@ exports.init = async function(params) {
 	PARAMS[k] = params[k]
     })
     
-    //reconcile the params and the config object
+    //reconcile the params and the process configuration 
     //will ABORT the process if there is an ERROR     
-    reconcile({config,params : PARAMS})
+    reconcile({config,params : PARAMS}) 
     
 
     log.i("Proceeding with program initialization\n\n") 
@@ -97,10 +81,10 @@ function reconcile({config,params}) {
     var inconsistencies = [] 
     
     //determine capabilities 
-    let db_ready = (config.db_config.ip && config.db_config.user && config.db_config.pass) 
+    let db_ready = (process.env.VCS_DB_PASS && process.env.VCS_DB_USER &&  process.env.VCS_DB_HOST) 
     
-    let python_ready  = (config.python_config.binary && config.python_config.env_dir && 
-			 (config.python_config.libs_installed == true ) ) 
+    let python_ready  = (process.env.VCS_PYTHON_BINARY && process.env.VCS_PYENV_DIR && 
+			 process.env.VCS_PYENV_LIBS_INSTALLED )
 	
     //check database
     if ( params.db_enabled && !db_ready ) { 
@@ -113,6 +97,11 @@ function reconcile({config,params}) {
 	inconsistencies.push("Autostart python is enabled but installation is incomplete:")
 	inconsistencies.push(JSON.stringify(config.python_config)) 
     }
+    
+   //check csi  
+    if ( params.autostart_python && !params.csi_enabled ) { 
+	inconsistencies.push("Autostart python REQUIRES that csi_enabled == true !")
+    }    
     
     
     //report 

@@ -12,6 +12,7 @@ import command_library as clib
 import log as  l 
 import queue 
 from  params import params 
+import vcs
 
 # - init
 port = 9002 
@@ -22,10 +23,18 @@ module = 'python' #the vcs module name that will be registered
 
 log = l.get_logger("csi")
 
+
+# - define on config callback (for setting configuration) 
+def on_config(msg) : 
+    # should receive both process config and param config  
+    log.i("Retrieved config message") 
+    vcs.set_params(msg['params']) 
+    vcs.set_process(msg['process']) 
+    register_all()    
+    
 # - define connect callback 
 async def on_connect(ws) : 
     await ws.send(json.dumps({'type' : 'register' , 'id' : module }))
-    register_all()
 
 
 # define some message handlers 
@@ -114,6 +123,9 @@ def on_msg(message) :
     if (msg['type'] == 'init_command') : 
         # handle init
         handle_init(msg)
+    elif (msg['type'] == 'config' ) :         
+        # handle parameter configuration
+        on_config(msg) 
     elif (msg['type'] == 'text' ) : 
         # - forward text to the appropriate command 
         handle_text(msg) 

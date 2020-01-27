@@ -1,4 +1,4 @@
-import os 
+import vcs
 from pymongo import MongoClient
 import log as l 
 import utils as u 
@@ -8,10 +8,6 @@ import json
 log = l.get_logger("vcs_db") 
 u.register("vcs_db")
 
-# get db info and credentials from environment vars
-db_user = os.getenv("vcs_db_user")
-db_pass = os.getenv("vcs_db_pass") 
-db_host = os.getenv("vcs_db_host") 
 
 # global db structures
 client = None 
@@ -28,9 +24,17 @@ def is_connected() :
             return False 
             
 def connect() : 
+    
     if is_connected() : 
         log.i("Already connected to db") 
         return 
+    
+    # get db info and credentials from process vars 
+    # will need to think about how to handle python db availability 
+    db_user = vcs.process["VCS_DB_USER"]
+    db_pass = vcs.process["VCS_DB_PASS"]
+    db_host = vcs.process["VCS_DB_HOST"]
+    log.i("Detected user: {} , host: {}".format(db_user,db_host) )    
 
     global client , db 
     uri = "mongodb://{}:{}@{}/vcs?authSource=admin".format(db_user,db_pass,db_host) 
@@ -90,7 +94,7 @@ def new_alias(opts) :
     
 
 # - connect to db when loaded 
-connect()    
+# connect()    
 
 
 

@@ -19,7 +19,8 @@ log.i("Running in dir: " + dir )
 var env_to_set = { 
     'VCS_DEV_DIR' : dir , 
     'VCS_DEV_LOC' : path.join(dir,"vcs.js" )  , 
-    'VCS_PYTHON_LOC' : path.resolve(path.join(dir,"../python")) , 
+    'VCS_PYTHON_DIR' : path.resolve(path.join(dir,"../python")) , 
+    'VCS_UI_CLIENT_DIR' : path.resolve(path.join(dir,"../client/react_ui/")) , 
     'VCS_PYTHON_REQ' : path.resolve(path.join(dir,"../python/requirements.txt")) ,     
     'VCS_OS_PLATFORM'  : os.platform() , 
 }

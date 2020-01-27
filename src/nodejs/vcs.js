@@ -31,6 +31,7 @@ var add_command_module = core.command_lib.add_command_module.bind(core.command_l
 var add_command_to_module = core.command_lib.add_command_to_module.bind(core.command_lib)
 var add_command_modules = function(ms) { Object.keys(ms).map( mk=> add_command_module(ms[mk])) } //called in main.js 
 
+
     
 
 /* main interface from parameters in main.js to actual program configuration */
@@ -50,7 +51,21 @@ var initialize  = function() {
     core.start();
     
     //start python subprocess if appropriate 
-    if (params.autostart_python)   { console.log("AUTOSTARTING PYTHON PROCESS") } 
+    if (params.autostart_python)   { 
+	var {process_reference, promise}  = require("./python_launcher.js").launch() 
+	//export the result 
+	exports.python_process = { reference : process_reference , 
+				   promise   } 
+    }
+    
+    //start ui subprocess if appropriate 
+    if (params.autostart_ui_client)   { 
+	var {process_reference, promise}  = require("./ui_launcher.js").launch() 
+	//export the result 
+	exports.ui_client_process = { reference : process_reference , 
+				      promise   } 
+    }
+
     
 }
 

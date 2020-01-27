@@ -7,7 +7,8 @@
 
 const spawn = require("child_process").spawn
 const execSync  = require("child_process").execSync
-const log = console.log 
+const exec      = require("child_process").exec 
+const log  = require("./logger.js").get_logger("subproc")
 
 
 function run_cmd(c) { 
@@ -24,6 +25,44 @@ function run_cmd(c) {
 	return { success : false , error : e }  
     }    
 }
+
+
+
+function run_cmd_async(cmd) { 
+    
+    //on linux and darwin (osx)  we use /bin/bash and 
+    let os = process.env.VCS_OS_PLATFORM ; 
+    var shell = ( os == 'darwin' || os == 'linux' ) ? "/bin/bash" : process.env.ComSpec //last one for windows see execSync DOCS
+    
+    var process_reference = null 
+    
+    //create a promise which will return the result upon command completion 
+    var promise = new Promise( (resolve,reject) => {
+	
+	//create callback (inside of promise definition) 
+	var callback = function(error, stdout, stderr) {
+	    if (error) {
+		//failure for some reason 
+		log.i(`exec error: ${error}`);
+		let result = stdout.toString() 
+		resolve( {success : false , error , result } ) //resolve
+		return;
+	    } else { 
+		let result = stdout.toString() 		    		    
+		log.i(`exec success: ${stdout}`);		    
+		resolve( {success : true ,  result  , stderr } ) //resolve	
+	    }
+	} 
+	
+	//now that the callback is defined we can launch the process at grab its ref 
+	process_reference = exec(cmd, {shell}, callback)	
+	
+    })
+
+    return {process_reference , promise } 
+}
+
+
 
 
 class generic_process { 
@@ -96,5 +135,7 @@ module.exports = {
     python_process, 
     python_version_check_string,
     run_cmd, 
+    run_cmd_async,     
     check_python_binary_version, 
+
 }
