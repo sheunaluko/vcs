@@ -104,7 +104,12 @@ exports.emit_to_clients = function(msg) {
 	exports.broadcast(msg) 
 	break 
     default : 
-	if (msg.type == 'output') { 
+	
+	
+	//let last_active = (msg.type == 'output') 
+	let last_active = true   
+	
+	if (last_active) { 
 	    exports.send_to_last_active(msg) 
 	} else { 
 	    exports.broadcast(msg) 
