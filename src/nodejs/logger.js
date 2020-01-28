@@ -33,7 +33,7 @@ function get_logger(name) {
 	}
 	else { 
 	    logger[t](header)       //if not prints header first 
-	    logger[t](m)
+	    logger[t](JSON.stringify(m))
 	}
     }
 
