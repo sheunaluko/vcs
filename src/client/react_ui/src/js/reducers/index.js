@@ -4,7 +4,7 @@ import produce from "immer"
 
 
 export const initialState = {
-    message : "hey sista" , 
+    message : "Development Version 2020" , 
     num : 20 , 
     active_ids : [] ,  //the currently active UI IDS 
     subscriptions : {} , //for ui 

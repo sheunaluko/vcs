@@ -317,7 +317,12 @@ class Server {
 	//main thing to do is to remove the websocket client from the list 
 	//so we dont try to send to it 
 	
-	this.clients_by_id[id] = this.clients_by_id[id].filter(c => c != ws )
+	try {
+	    this.clients_by_id[id] = this.clients_by_id[id].filter(c => c != ws )
+	} catch(e) {
+	    this.log.d("Error with client disconnect") 
+	    this.log.d(e) 
+	}
 	
 	//that should have done it 
 	//notify 

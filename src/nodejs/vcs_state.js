@@ -18,7 +18,13 @@ async function create_state(owner) { //owner is reference to the command that ow
     
     let url = "ws://localhost:" + params.sync_port 
 
-    var {client, state}  = await util.make_diff_sync_client(url, owner.instance_id) 
+    //define the client and state depending on whether sync is enabled
+    if (!params.diff_server_enabled) { 
+	//not enabled 
+	var {client, state} =  {client : null, state : {} } 
+    } else { 
+	var {client, state}  = await util.make_diff_sync_client(url, owner.instance_id) 	
+    }
 	
     // console.log("vcs_state") 
     // console.log(state) 
@@ -53,7 +59,16 @@ async function create_state(owner) { //owner is reference to the command that ow
 	    this.run_listener(path, new_val) 
 	    
 	    // and then notify 
-	    client.sync() 
+	    if (!params.diff_server_enabled) { 
+		//not enabled 
+		//pass
+	    } else { 
+		//is enabled 
+		client.sync() 		
+
+	    }
+	    
+
 	    
 	    this.log.i("updated path: " + path) 
 	}
@@ -89,6 +104,7 @@ async function create_state(owner) { //owner is reference to the command that ow
 	}
 	
     }
+    
     let new_state = new tmp() 
     command_states[owner.instance_id] = new_state 
     return new_state

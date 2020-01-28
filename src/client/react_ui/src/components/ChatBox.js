@@ -93,7 +93,7 @@ class ChatBox extends Component {
       <div>
         <Launcher
           agentProfile={{
-            teamName: "VCS Chat Interface"
+            teamName: "VCS Chat"
             //imageUrl: 'https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png'
           }}
           onMessageWasSent={this._onMessageWasSent.bind(this)}

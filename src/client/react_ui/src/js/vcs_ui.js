@@ -7,6 +7,7 @@
 */ 
 
 import {start_sync} from './diffsyncer.js'
+import './socksync.js' 
 import cmd_manifest from './command_manifest.js' 
 
 if (! window.vcs_ui ) { 
@@ -23,6 +24,7 @@ function init() {
 }
 
 init() 
+
 
 /* eslint-disable */
 
