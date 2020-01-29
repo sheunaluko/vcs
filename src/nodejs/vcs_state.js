@@ -1,8 +1,18 @@
 //Sat Jun 29 17:22:50 PDT 2019
+//updating on Tue Jan 28 13:35:51 PST 2020 to use socksync instead of diffsync 
+/* 
+   Key point, vcs commands use this.state.value to get the state, 
+   [-] So when the socksync client gets an update message it should set this value 
+   In addition,  all commands use this.state.update( [path], fn ) 
+   [ ] To update their state, so this will need to be transalted to a socksync update 
+   
+ */ 
+
 
 var util = require("@sheunaluko/node_utils") 
 var params = require("./vcs_params.js").params 
 var   log     = require("./logger.js")
+var socksync  = require("./socksync.js") 
 
 //Manages state for the vcs platform
 
@@ -16,20 +26,6 @@ var command_states = {}
 
 async function create_state(owner) { //owner is reference to the command that owns the state
     
-    let url = "ws://localhost:" + params.sync_port 
-
-    //define the client and state depending on whether sync is enabled
-    if (!params.diff_server_enabled) { 
-	//not enabled 
-	var {client, state} =  {client : null, state : {} } 
-    } else { 
-	var {client, state}  = await util.make_diff_sync_client(url, owner.instance_id) 	
-    }
-	
-    // console.log("vcs_state") 
-    // console.log(state) 
-    // console.log(client) 
-    
 
     /* 
        Should be a simply and nice API for modifying the state
@@ -41,39 +37,72 @@ async function create_state(owner) { //owner is reference to the command that ow
 	constructor() { 
 	    this.owner = owner 
 	    this.listeners = {} 
-	    this.value = state 
+	    this.value = {} //initialize with empty object 
 	    this.log   = log.get_logger(owner.instance_id+"_state")
-	    this.client = client 
+	}
+	
+	async init() { 
+	    //initialize the socksync client 
+	    this.instance_id = owner.instance_id  //get the id 
+	    this.subscribe_id = owner.instance_id  
+	    let subscribe_id = this.subscribe_id  
+	    let on_update = (function(data){
+		this.value = data  //set the state value 
+	    }).bind(this) 
+	    if (params.diff_server_enabled) { 
+		this.client = new socksync.Client({subscribe_id, on_update, port : params.sync_port}) 
+		//we want to 'block' until the client has been registered (before any updates are attempted) 
+		let t0 = new Date().getTime() 
+		let _  = await this.client.await_registration() 
+		let t1 = new Date().getTime() 		
+		this.log.d(`State ssync client registration took ${t1 - t0} ms`) 
+	    } else { this.client = null  } 
 	}
 	
 	update(path, fn) { 
-	    var tmp = state  ; 
+	    
+	    /* 
+	       note: this function simultaneously modifies the state object 
+	       AND builds the { a : { b : { c : 10 }}} nested update structure 
+	       that socksync uses for dispatching updates 
+	     */
+	    var tmp = this.value 
+	    var update = {} 
+	    var update_ref = update 
+	    
+	    //traverse the path 
 	    for (var i =0 ; i< path.length - 1 ; i ++ ) { 
-		tmp = tmp[path[i]]
+		tmp = tmp[path[i]] 
+		
+		//this part builds our update object 
+		update_ref[path[i]] = {} 
+		update_ref = udpate_ref[path[i]] 
 	    }
+	    
 	    // make the change here 
 	    let new_val = fn(tmp[util.last(path)]) 
 	    tmp[util.last(path)] = new_val 
+	    
+	    // and add the leaf to our update object 
+	    update_ref[util.last(path)] = new_val 
 	    
 	    // and run any appropriate listener 
 	    this.run_listener(path, new_val) 
 	    
 	    // and then notify 
-	    if (!params.diff_server_enabled) { 
-		//not enabled 
-		//pass
-	    } else { 
+	    if (params.diff_server_enabled) { 
 		//is enabled 
-		client.sync() 		
-
+		this.log.d("Sending update message:") ; this.log.d(update) 
+		this.client.update(update) 
+	    } else { 
+		//pass 
 	    }
-	    
-
 	    
 	    this.log.i("updated path: " + path) 
 	}
 	
 	set_initial_state(initial_state) { 
+	    
 	    var fields = Object.keys(initial_state)
 	    for (var i = 0 ; i < fields.length ; i ++ ) {
 		let path = [fields[i]]
@@ -82,7 +111,7 @@ async function create_state(owner) { //owner is reference to the command that ow
 	    }
 	    
 	    this.log.i("Set initial state:")
-	    this.log.i(state)
+	    this.log.i(this.value)
 	}
     
 	listener(path , f) { 
@@ -107,6 +136,7 @@ async function create_state(owner) { //owner is reference to the command that ow
     
     let new_state = new tmp() 
     command_states[owner.instance_id] = new_state 
+    let _  = await new_state.init() 
     return new_state
 } 
 

@@ -73,10 +73,21 @@ class Client {
 	this.state = {} 
 	this.on_update = ops.on_update  //and will trigger on_update after changes have been made 
 	
+	
 	this.connect() 
+	
+	 //registration promise will be set in connect and can be awaited for better async 
+	var fullfill_registration = null 
+	this.registration_promise = new Promise((resolve,reject) => { 
+	    fullfill_registration = resolve 
+	})
+	this.fullfill_registration = fullfill_registration //get copy so we can resolve later 
 	
     }
     
+    await_registration() { 
+	return this.registration_promise 
+    }
     
     connect() { 
 	
@@ -111,6 +122,14 @@ class Client {
 		this.on_update(this.state) 
 		this.log.d("Done") 
 		break 
+		
+	    case "registered" : 
+		//registration has been acknowledged 
+		//resolve the registration promise 
+		this.log.d("Received registration acknowledgement") 
+		this.fullfill_registration() 
+		break
+
 		
 	    default : 
 		this.log.d("Unrecognized message type:") 
@@ -212,7 +231,7 @@ class Server {
 	//create the callbacks now 
 	wss.on('connection',(function connection(ws) {
 	    //cannot really do anything until we know what the subscribe id is 
-	    this.log.d("A client connected") 
+	    this.log.d("A client connected from ip " + ws._socket.remoteAddress) 
 	    
 	    
 	    ws.on('message', (function incoming(message_string) {
@@ -230,6 +249,10 @@ class Server {
 		    this.log.d("Now its id is: " + ws.socksync_subscribe_id)
 		    this.log.d("Also adding to object") 
 		    this.add_client_with_id({client : ws, id}) //this call also handles updating the client if data exists
+		    
+		    //will send the client an acknowledgement 
+		    ws.send(JSON.stringify({ type : "registered" }) ) 
+		    this.log.d("Sent client registered message") 
 		    break 
 
 		case "update" : 
@@ -316,6 +339,15 @@ class Server {
 	
 	//main thing to do is to remove the websocket client from the list 
 	//so we dont try to send to it 
+	
+	
+	if (!this.clients_by_id[id]) {
+	    //interesting... if a client connects then disconnects before it registers, 
+	    //than ws.socksync_subscribe_id is undefined and problems ensue... 
+	    //this if clause prevents that 
+	    this.log.d(`Ignoring disconnect from client id: ${id}`) 
+	    return 
+	}
 	
 	try {
 	    this.clients_by_id[id] = this.clients_by_id[id].filter(c => c != ws )

@@ -105,11 +105,12 @@ export class Client {
 	this.log.d("Attempting connection to url: " + url)
 	var ws = new WebSocket(url) 
 	
+	//assign the ws instance 
+	this.ws = ws 
+	
 	//now we set the callbacks 
 	ws.onopen = (function open() { 
 	    this.log.d("Connection successful") 
-	    //assign the ws instance 
-	    this.ws = ws 
 	    //send a registration message now via the (my) protocol 
 	    this.register() 
 	}).bind(this) 

@@ -52,17 +52,28 @@ class base_command {
     /* methods ----------------------------------------  */
     
     async  init_state() { 
-	this.state = await vcs_state.create_state(this) 
 	
-	if(this.initial_state) { 
-	    this.log.i("+ init state"); 
-	    this.state.set_initial_state(this.initial_state) 
+	let info = this.constructor.get_info() //static method 
+	
+	if(true) { 
+	
+	    this.state = await vcs_state.create_state(this) 
+	    
+	    if(this.initial_state) { 
+		this.log.i("+ init state"); 
+		this.state.set_initial_state(this.initial_state) 
+	    }
+	    
+	    this.log.i("Created state") 
+	    
+	    //after we create the state we will notify the ui (if connected) that the command has launched 
+	    ui.command_launched(this.instance_id) 
+	    
+	} else { 
+	    
+	    //CAN CONSIDER MODIFICATIONS HERE IN FUTURE 
+	    //this.log.d("Detected minimal command and so will not initialize state ++sustainability :)") 
 	}
-	
-	this.log.i("Created state") 
-	
-	//after we create the state we will notify the ui (if connected) that the command has launched 
-	ui.command_launched(this.instance_id) 
     } 
     
     

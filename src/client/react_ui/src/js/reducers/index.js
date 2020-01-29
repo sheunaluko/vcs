@@ -18,7 +18,7 @@ export const  rootReducer = produce((state, action) => {
     switch(action.type) { 
 	    
     case "SET_MSG" : 
-	state.message = action.payload 
+	state.message = action.payload
 	return state
 	
     case "ADD_ACTIVE_ID" : 
@@ -47,8 +47,17 @@ export const  rootReducer = produce((state, action) => {
     case "REMOVE_SUBSCRIPTION" : 
 	//get the client ref and close it 
 	var client = state.subscription_data[action.payload.id].client 
+	
+	//it is very possible that the websocket client has not even connected yet, 
+	//as was happening with minimal commands. 
+	
+	//So... 
+	
 	//close 
-	client.socket.close() 
+	
+	
+	
+	client.ws.close() 
 	log("Closed websocket connection for id: " + action.payload.id) 
 	//now delete the info 
 	delete state.subscription_data[action.payload.id] 

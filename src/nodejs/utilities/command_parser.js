@@ -51,6 +51,7 @@ var walk = function(dir) {
  */ 
 function transform_minimal(min) { 
     var {id, rules, fn, vars , query, response  } = min 
+    let minimal = true  
     
     if (query && response ) { 
 	id = query 
@@ -73,7 +74,7 @@ function transform_minimal(min) {
 	
 	static get_info() { 
 	    return { 
-		id , rules , vars 
+		id , rules , vars , minimal 
 	    }
 	}
 	

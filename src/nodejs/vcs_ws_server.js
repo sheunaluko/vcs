@@ -57,7 +57,7 @@ exports.start = function() {
 		let text = message.text 
 		//will pass on the text 
 		vcs_core.input.push(text) 
-		log.d("Got text: " + text )
+		log.d("\n\n -- \\(^.^)/ Got text: " + text )
 		break 
 		
 	    default : 

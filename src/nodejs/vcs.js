@@ -31,7 +31,6 @@ var add_command_module = core.command_lib.add_command_module.bind(core.command_l
 var add_command_to_module = core.command_lib.add_command_to_module.bind(core.command_lib)
 var add_command_modules = function(ms) { Object.keys(ms).map( mk=> add_command_module(ms[mk])) } //called in main.js 
 
-
     
 
 /* main interface from parameters in main.js to actual program configuration */
@@ -42,7 +41,13 @@ var initialize  = function() {
     if (params.ui_server_enabled)   { uis.start()            }  // start ui server 
     
     //start the sync server (used for exposing command state to external actors like UI, etc )     
-    if (params.diff_server_enabled) { util.make_diff_server(params.sync_port) } 
+    if (params.diff_server_enabled) { 
+	var Sockserver = require("./socksync.js") 
+	let port  = params.sync_port 
+	exports.sockserver = new Sockserver.Server({port}) 
+	exports.sockserver.initialize() 
+	
+    } 
     
     //start the vcs web socket server (listens for incoming TEXT INPUT MESSAGES FOR PROCESSING) 
     wss.start();
@@ -69,14 +74,10 @@ var initialize  = function() {
     
 }
 
-
-
-
 module.exports = { info ,base_command , core, util, filters, state , wss, uis ,debug , db , R ,
 		   command_library, params, out , aliases, csi, add_command_module, add_command_modules, 
-		   initialize, ui_map, ui_maps } 
+		   initialize, ui_map, ui_maps  } 
 		 
-
 
 
 
