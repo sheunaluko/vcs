@@ -5,6 +5,7 @@
 let info = require("./vcs_info.js")
 let base_command = require("./base_command.js").base_command
 let core = require("./vcs_core.js")
+let logger = require("./logger.js")
 let util = require("@sheunaluko/node_utils")
 let filters = require("./filters.js") 
 let state  = require("./vcs_state.js")
@@ -74,7 +75,7 @@ var initialize  = function() {
     
 }
 
-module.exports = { info ,base_command , core, util, filters, state , wss, uis ,debug , db , R ,
+module.exports = { info ,base_command , core, util, filters, state , wss, uis ,debug , db , R , logger , 
 		   command_library, params, out , aliases, csi, add_command_module, add_command_modules, 
 		   initialize, ui_map, ui_maps  } 
 		 

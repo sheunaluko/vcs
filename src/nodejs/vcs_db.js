@@ -76,6 +76,18 @@ async function find(coll,query,cursor=false) {
 } 
 
 
+async function get_collection({coll,query,cursor}) { 
+    await ensure_connected() 
+    log.i("Querying collection: " + coll + " with: " + JSON.stringify(query) ) 
+    let result  = client.db().collection(coll).find(query)
+    if (cursor) { 
+	return result 
+    } else { 
+	return await result.toArray() 	
+    } 
+} 
+
+
 
 async function update_one(coll, match, update ) { 
     await ensure_connected() 
@@ -105,4 +117,5 @@ module.exports = {
     update_one , 
     delete_one , 
     get_collections , 
+    get_collection, 
 }
