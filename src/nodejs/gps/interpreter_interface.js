@@ -6,6 +6,39 @@ const {entity_base}      = require("./vcs_entities.js")
 const {res,ops,types}  = entity_base
 
 
+/* 
+   
+  RATIONALE: 
+  This file maps text into entities. An ENTITY instance is defined in 
+  nodejs/entities/index.js . Other functionality is responsible for combining 
+  entities (resources and operations) into computations , for running those 
+  computations  
+
+  
+  The rule set below consists of an array of objects with keys [rules, target]. 
+  These are described briefly here: 
+  
+  --- RULES --- 
+  Please see nodejs/rule_parser.js 
+  To understand the options better 
+ 
+  @or(x1|x2|..)
+  - will allow any of those (ATLEAST ONE) but not multiple  
+
+  
+  ?(x1|x2|x3) 
+  - will allow any of those (or none) but not multiple 
+  
+  [[Y]] 
+  - represents a wildcard and will be captured into an object as  { Y : __ } 
+
+  -- TARGET -- 
+  The provided target is EITHER 
+  1) a function which takes the captured arguments and produces an ENTITY instance  
+  2) an ENTITY instances itself 
+  
+ */
+
 let rule_set = [ 
     
     { target : res.get.numeric  , 
