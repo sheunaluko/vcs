@@ -76,7 +76,7 @@ function build_arguments(opts) {
 	    log.i("Running parser for k: " + k) 
 	    dic[k] = parsers[k](v) 
 	} else { 
-	    dic[k] = v 
+	    dic[k] = iu.variable_value_parser(v) //default to the var val parser 
 	}
     } 
     log.i("Done.")
@@ -116,14 +116,22 @@ function handle_text(txt) {
     
     let {args,target} = build_dispatch(opts) 
     
-    let target_fn = target 
-    if (!target_fn) { 
+    //make sure it exists 
+    if (!target) { 
 	log.i("Target fn not found: " + target) 
+	throw("Target fn not found")
 	return 
     } 
     
-    return target_fn(args)
-//    return {args,target} 
+    // now we see - if the target is a function or not 
+    if (target.constructor == Function ) { 
+	log.i("Target is a function, dispatching with args") 
+	return target(args) 
+    } else { 
+	log.i("Target is NOT a function, returning target")
+	return target 
+    } 
+    
 }
 
 

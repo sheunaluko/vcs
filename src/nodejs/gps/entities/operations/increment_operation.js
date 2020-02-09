@@ -6,7 +6,7 @@ class IncrementOperation extends NumericOperation {
 	
 	let id = "increment_operation"  
 	let fn = function(val) { 
-	    return val + float(value)
+	    return val + Number(value)
 	}
 	super({id,fn})
     }

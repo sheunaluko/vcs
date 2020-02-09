@@ -1,6 +1,5 @@
 
-
-const log = require("../logger.js").get_logger("ccgen") 
+const log = require("../logger.js").get_logger("comp") 
 const {res,types} = require("./entities/index.js") 
 
 /*
@@ -13,6 +12,8 @@ const {res,types} = require("./entities/index.js")
   
   
 */
+
+
 
 class Action { 
     constructor({operation,modifiers}) { 
@@ -79,6 +80,7 @@ class Computation {
 }
 
 
+var debug = null 
 
 function generate_computation(entity_array) { 
     
@@ -283,7 +285,11 @@ async function do_computations(computations) {
 	curr_comp = next_comp 
 	next_comp = computations.shift() 
 	
-	log.d("Running computation : " + i++)     
+	log.d("Running computation! : " + i++)     
+	debug = curr_comp 
+	
+	console.log(curr_comp) 
+	
 	curr_res  = await curr_comp.run() 
     
 	log.d("Got result: ") 
@@ -295,6 +301,10 @@ async function do_computations(computations) {
     return curr_res 
 }
 
+function get_debug() { 
+    return debug 
+}
+
 
 
 module.exports = { 
@@ -303,4 +313,5 @@ module.exports = {
     Computation, 
     generate_computation , 
     do_computations , 
+    get_debug , 
 }

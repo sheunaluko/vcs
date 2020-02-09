@@ -1,6 +1,6 @@
 
 
-const MongoCollectionResource = require("./mongo_collection_resource.js")
+const {MongoCollectionResource} = require("./mongo_collection_resource.js")
 const NumericResource = require("./numeric_resource.js")
 const {Result} = require("./result.js")
 const {Resource} = require("./resource.js")
@@ -9,15 +9,22 @@ const {Resource} = require("./resource.js")
 
 
 
-function make_numeric({value}) {
+function numeric({value}) {
     return new NumericResource({value}) 
 }
 
 
+function mongo_collection({id,query}) { 
+    return new MongoCollectionResource({id,query}) 
+}
 
 
+var get = {
 
-
+    numeric , 
+    mongo_collection,  
+    
+}
 
 
 
@@ -27,5 +34,5 @@ module.exports = {
     NumericResource, 
     Result, 
     Resource ,
-    make_numeric 
+    get , 
 }

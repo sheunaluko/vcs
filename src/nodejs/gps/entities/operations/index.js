@@ -1,7 +1,5 @@
 
 
-
-
 const ArrayOperation = require("./array_operation.js")
 const IncrementOperation = require("./increment_operation.js")
 const LastOperation      = require("./last_operation.js")
@@ -10,10 +8,41 @@ const {Operation}      = require("./operation.js")
 
 
 
+function _array({fn}) {
+    return new ArrayOperation({fn})
+}
 
-function make_incrementor({value}) { 
+var first_array = () => _array({fn : (x) => x[0]}) 
+var last_array  = () => _array({fn : (x) => x[x.length - 1]}) 
+
+
+
+
+
+
+function numeric({fn}) {
+    return new NumericOperation({fn})
+}
+
+
+function incrementor({value}) { 
     return new IncrementOperation({value}) 
 }
+
+
+
+var get = {
+    array : { 
+	first : first_array, 
+	last : last_array,
+	generic : _array , 
+    } , 
+    numeric, 
+    incrementor, 
+}
+
+
+
 
 module.exports = { 
     ArrayOperation, 
@@ -21,5 +50,5 @@ module.exports = {
     LastOperation, 
     NumericOperation,
     Operation,
-    make_incrementor , 
+    get , 
 }

@@ -7,17 +7,17 @@ class NumericResource extends Resource {
     constructor(ops){ 
 	if (!ops.value) { throw("Need value") } 
 
-	var entity_id     = `Numeric::${ops.value}` 
-	    
-	// - init object 
-	super({entity_id}) 
+	ops.value = Number(ops.value) //convert to number  !
 	
-	this.value = ops.value
-	
+	var entity_id     = `numeric_res::${ops.value}` 
+
 	//define the type handlers 
-	this.type_handlers = {} 
-	this.type_handlers[types.float] = function(){return ops.value} 
+	var type_handlers = {} 
+	type_handlers[types.float] = function(){return ops.value} 
 	
+	// - init object 
+	super({entity_id,type_handlers}) 
+	this.value = ops.value
 	//define default type 
 	this.default_type = types.float 
     }
