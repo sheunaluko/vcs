@@ -1,6 +1,11 @@
 import * as speech from "./speech.js" 
 import * as tts from "./tts.js" 
-import {sounds} from "./sounds.js" 
+
+
+/* 
+ Note the sound library is externally compiled by cljs_compile
+ (https://github.com/sheunaluko/cljs_compile) 
+ */
 
 
 speech.connect_ws() 
@@ -17,4 +22,4 @@ function send_text(t) {
 
 
 
-window.vcs = {speech,tts, sounds, init_speech ,  send_text}
+window.vcs = {speech,tts, init_speech ,  send_text}

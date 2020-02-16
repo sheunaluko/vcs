@@ -1,7 +1,13 @@
 import * as ad from "./audio_detector.js" 
 import {get_logger} from "./utils.js" 
 import * as tts from "./tts.js" 
-import {sounds} from "./sounds.js" 
+
+
+//the sound module is now imported in the INDEX.JS file 
+//(since it is a compiled lib from cljs) 
+var sounds = window.sounds.core.sounds 
+//alternatively, can use a local version here which is vanilla js but much less functional
+//import {sounds} from "./sounds.js" 
 
 
 let log = get_logger("speech") 
