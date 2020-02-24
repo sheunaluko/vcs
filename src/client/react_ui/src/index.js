@@ -9,6 +9,14 @@ import store from "./js/store/index";
 
 import { Provider } from "react-redux";
 
+//BLUEPRINT CSS 
+import 'normalize.css/normalize.css';
+import "@blueprintjs/core/lib/css/blueprint.css";
+
+//MOSAIC CSS 
+import "./react-mosaic-component.css"
+
+
 //set up react for use with redux 
 ReactDOM.render(
     <Provider store={store}>

@@ -172,7 +172,13 @@ async function speak(text) {
 
 /* trigger recognition when audio is detected */ 
 export function start_audio_trigger() { 
-    ad.start(start_recognition) 
+	ad.start(start_recognition) 
+	
+	//when audio is detected then recognition is started  
+}
+
+export function stop_audio_trigger() { 
+	ad.stop() 
 }
 
 

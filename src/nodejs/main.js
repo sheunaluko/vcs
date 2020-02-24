@@ -8,6 +8,9 @@ const commandLineArgs = require('command-line-args')
 const commandLineUsage = require('command-line-usage')
 var params = {} 
 
+
+
+
 const optionDefinitions = [
   {
     name: 'help',
@@ -25,6 +28,9 @@ const optionDefinitions = [
     type: Boolean,
     description: 'Run vcs without running client server interface for external commands.',
     },
+
+    
+
   {
     name: 'no-ui',
     type: Boolean,
@@ -109,7 +115,7 @@ if (options['no-diff-server'] ) {
 
 if (options['only-core'] ) { 
     log.i("Detected 'only-core' flag, the following will NOT be launched:\ndb, csi, ui, diff-server")
-    params.using_db = false     
+    params.db_enabled = false     
     params.csi_enabled = false     
     params.ui_server_enabled = false     
     params.diff_server_enabled = false 
@@ -134,6 +140,8 @@ if (options['autostart-all'] ) {
 
 // require vcs_cli here  
 var cli = require("./vcs_cli") 
+
+
 cli.init(params)
 
 

@@ -18,8 +18,8 @@ class cmd extends vcs.base_command {
 	    vars     : null 
 	}
     } 
-    
-    //all commands must implement the async run method
+
+	//all commands must implement the async run method
     async run() { 
 	let result = await aliases.load_aliases()
 	this.finish({result : "OK"}) 
@@ -30,3 +30,4 @@ class cmd extends vcs.base_command {
 
 module.exports = cmd 
   
+

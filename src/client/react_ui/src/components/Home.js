@@ -6,11 +6,11 @@ function Home() {
 
   return (
     <div>
-      <h1>VCS UI</h1>
-
-      <p>{msg}</p>
+      <h1>vcs</h1>
     </div>
   );
 }
 
 export default Home;
+
+

@@ -27,4 +27,4 @@ module.exports = {
     Entity , 
 }
 
-//CREATE SMALL DEV ENV FOR GPS, where configurator is loaded, etc.. so i can test it
+
