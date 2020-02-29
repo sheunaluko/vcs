@@ -22,8 +22,8 @@ export const initialState = {
   subscriptions: {}, //for ui
   subscription_data: {} ,//holds objects, 
   inspection_ports  : { 
-	  "foo"  : { a : [1,2,3,4,4] , b : { d : 20}} , 
-	  "bar"  : { x : [1,2,3,4, {hello: 30 }] , b : { d : 20}} , 	   
+	  "x1"  : { a : [1,2,3,4,4] , b : { d : 20}} , 
+	  "x2"  : { x : [1,2,3,4, {hello: 30 }] , b : { d : 20}} , 	   
   }, 
   ELEMENT_MAP , 
   TITLE_MAP ,

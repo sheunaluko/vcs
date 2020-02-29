@@ -6,9 +6,11 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 /* 
     Here we import the UIS , or define them too :) 
 */ 
- 
+
+
 import CmdsContainer from "./CmdsContainer.js" 
 import {Inspector} from "./Inspector.js" 
+import {TerminalWidget}  from "./TerminalWidget.js"
 
 
 export var widget_dictionary = { 
@@ -29,5 +31,12 @@ export var widget_dictionary = {
         title: "Display Widget"
     }, 
 
+    "terminal" : { 
+        element : <TerminalWidget /> , 
+        title: "Console Interface" 
+    }
+
 
 }
+
+

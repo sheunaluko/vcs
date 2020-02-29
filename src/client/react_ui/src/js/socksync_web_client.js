@@ -68,7 +68,7 @@ function get_logger(name) {
 
 
 
-/* First I will define the client (since the server actually uses it too)  */
+/* First I will define the client  */
 export class Client { 
     
     /* 

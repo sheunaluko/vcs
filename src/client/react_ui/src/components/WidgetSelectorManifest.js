@@ -6,21 +6,32 @@ import { Classes, Icon, Intent, ITreeNode, Position, Tooltip, Tree } from "@blue
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 
+import {widget_dictionary}  from "./WidgetDictionary.js"
+
 
 
 var widgets_info = { 
 
     "commands" :  { 
-        tootltip : "Interfaces for Command Inspection" , 
+        tooltip : "Interfaces for Command Inspection" , 
         text     : "Command Visualization" , 
         children : [ 
-            {id : "command_stack" , label : "Command Stack" } ,
+            {id : "command_stack" } ,
         ]
     }  , 
+    "user_interaction" : {
+        tooltip : "Various tools for user interaction" , 
+        text : "User Interaction" , 
+        children : [ 
+           {id : "terminal" } 
+        ]
+    },
     "debugging" : { 
+        tooltip : "Tools for debugging" , 
         text : "Debugger UI Tools"  , 
         children :[ 
-            {id :"inspector" , label : "Inspector"} 
+            {id :"inspector" } , 
+            {id : "log"}
         ]
 
     }
@@ -53,7 +64,7 @@ function build_widgets(widgets_info) {
                 return { 
                     id : gen_id() , 
                     icon : "cube-add" , 
-                    label : c.label , 
+                    label : widget_dictionary[c.id].title , 
                     widget_id : c.id , 
                 }
             }
