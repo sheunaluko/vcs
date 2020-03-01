@@ -9,13 +9,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const res = __importStar(require("./resource"));
 const types = __importStar(require("../types"));
+/* wrapper for result after a computation has been performed */
 class Result extends res.Resource {
     constructor(ops) {
-        let entity_id = "result_resource";
+        if (res.isResourceOp(ops)) {
+            super(ops);
+        }
+        else {
+            var entity_id = "result_resource";
+            super(Object.assign(ops, { entity_id }));
+        }
         if (!ops.entity_id) {
             ops.entity_id = entity_id;
         }
-        super(ops);
         this.value = ops.value;
         //now we determine what the type of the value is, and we set the type handler 
         let tp = types.js_type(ops.value);

@@ -12,6 +12,10 @@ export interface ResourceArgs {
 	resources:  Resource[]   
 }
 
+export function isResourceOp(object: any): object is ResourceOp {
+    return 'entity_id' in object; 
+}
+
 export class Resource extends entity.Entity {
   type_handlers: types.type_handlers;
   default_type : types.core   

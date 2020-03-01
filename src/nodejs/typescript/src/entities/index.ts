@@ -1,10 +1,11 @@
 
-const {Entity} = require("./entity")
-const res = require("./resources/index") 
-const ops = require("./operations/index") 
+import {Entity} from "./entity" 
+import * as res from "./resources/index" 
+import * as ops from "./operations/index" 
 
-module.exports = { 
-    res, 
-    ops, 
-    Entity,
+export  { 
+	Entity, 
+	res, 
+	ops 
 }
+

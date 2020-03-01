@@ -3,21 +3,21 @@ import * as types from "../types"
 
 /* wrapper for result after a computation has been performed */ 
 
-interface ResultOp extends res.ResourceOp { 
-    value : any 
-}
-
 export class Result extends res.Resource  { 
     
     value : any 
     
-    constructor(ops : ResultOp) { 
+    constructor(ops : {value : any , entity_id? : string}) {  
 
-	let entity_id = "result_resource" 
+	if (res.isResourceOp(ops)) { 
+		super(ops) 
+	} else { 
+		var entity_id = "result_resource"  		
+		super(Object.assign(ops, {entity_id}))
+	}
 	if (!ops.entity_id) { ops.entity_id = entity_id} 
 	
-	super(ops) 
-
+	
 	this.value = ops.value 
 	
 	//now we determine what the type of the value is, and we set the type handler 

@@ -18,6 +18,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const entity = __importStar(require("../entity"));
 const types = __importStar(require("../types"));
+function isResourceOp(object) {
+    return 'entity_id' in object;
+}
+exports.isResourceOp = isResourceOp;
 class Resource extends entity.Entity {
     constructor(ops) {
         super(ops);
