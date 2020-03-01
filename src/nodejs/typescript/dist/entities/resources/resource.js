@@ -25,6 +25,12 @@ exports.isResourceOp = isResourceOp;
 class Resource extends entity.Entity {
     constructor(ops) {
         super(ops);
+        if (!ops.type_handlers) {
+            this.type_handlers = {};
+        }
+    }
+    set_type_handler(type, handler) {
+        this.type_handlers[type] = handler;
     }
     as({ type }) {
         return __awaiter(this, void 0, void 0, function* () {

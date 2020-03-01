@@ -13,8 +13,10 @@ export enum core {
 
 
 export type type_handlers = {
-    [key in core]: () => any  
-}  
+    [id in core]: () => any  
+} 
+
+export type maybe_type_handlers = type_handlers | {} 
 
 
 export function js_type(x : any) {

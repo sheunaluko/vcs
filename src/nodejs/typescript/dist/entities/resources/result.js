@@ -23,9 +23,11 @@ class Result extends res.Resource {
             ops.entity_id = entity_id;
         }
         this.value = ops.value;
-        //now we determine what the type of the value is, and we set the type handler 
+        //now we determine what the type of the value is, and we set the type handler
         let tp = types.js_type(ops.value);
-        this.type_handlers[tp] = function () { return ops.value; };
+        this.set_type_handler(tp, function () {
+            return ops.value;
+        });
     }
 }
 exports.Result = Result;

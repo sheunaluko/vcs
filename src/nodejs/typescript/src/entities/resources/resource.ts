@@ -1,6 +1,6 @@
 import * as entity from "../entity";
 import * as types from "../types";
-import {type_handlers} from "../types" ; 
+import {type_handlers, maybe_type_handlers} from "../types" ; 
 
 export interface ResourceOp {
   entity_id: string;
@@ -17,17 +17,25 @@ export function isResourceOp(object: any): object is ResourceOp {
 }
 
 export class Resource extends entity.Entity {
-  type_handlers: types.type_handlers;
+  type_handlers: types.maybe_type_handlers;
   default_type : types.core   
 
   constructor(ops: ResourceOp) {
-    super(ops);
+	super(ops);  
+	
+	if (!ops.type_handlers) { 
+		this.type_handlers = {} 
+	}
+  }
+
+  set_type_handler( type : types.core , handler : () => any ) { 
+	  (this.type_handlers as type_handlers)[type] = handler 
   }
 
   async as({type} : {type : types.core})  {
     this.log.d("Request to resolve resource to type: " + type);
 
-    let fn = this.type_handlers[type];
+    let fn = (this.type_handlers as type_handlers)[type];
 
     this.log.d("Available type handler keys! ");
     this.log.d(Object.keys(this.type_handlers));

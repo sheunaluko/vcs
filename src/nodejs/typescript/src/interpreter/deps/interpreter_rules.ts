@@ -35,9 +35,9 @@ var log = util.get_logger("ir")
  /**
   * Defines the mapping between text received and ultimate resolution to an Entity 
   *
-  * @interface Mapping
+  * @interface TextEntityMapping
   */
- export interface Mapping { 
+ export interface TextEntityMapping { 
     target :   target_fn  , 
     rules : string[] 
     parsers?  : parsers 
@@ -47,7 +47,7 @@ export interface TargetOp {
     [key : string]  : any 
 }
 
-let example_rule_set : Mapping[] = [ 
+export let dev_rule_set : TextEntityMapping[] = [ 
     
     { target : ()=> new res.result.Result({value : "hey!"})  ,  
       rules : [ "test" ]  } , 
@@ -70,6 +70,15 @@ let example_rule_set : Mapping[] = [
     
 ]
 
+export function load_rule_set(arg : TextEntityMapping[]) : void  { 
+    arg.map(add_to_rule_set) 
+}
+
+
+export function load_dev_rules() : void { 
+    load_rule_set(dev_rule_set) 
+    log.i(`Total active: ${runtime_rule_set.length}`) 
+}
 
 export interface regex_info { 
     regex : string, 
@@ -90,9 +99,9 @@ export interface RuntimeRule {
 
 type RuntimeRuleSet  = RuntimeRule[]
       
-export var runtime_rule_set : RuntimeRuleSet 
+export var runtime_rule_set : RuntimeRuleSet  = [] 
 
-export function add_to_rule_set(obj : Mapping) : void {  
+export function add_to_rule_set(obj : TextEntityMapping) : void {  
     let {target, rules, parsers} = obj
     let regexes = rules.map(rp.parse_rule).flat() 	
     

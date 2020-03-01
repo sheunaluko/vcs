@@ -10,8 +10,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ir = __importStar(require("./deps/interpreter_rules"));
+exports.ir = ir;
 const it = __importStar(require("./deps/interpreter_targets"));
+exports.it = it;
 const iu = __importStar(require("./deps/interpreter_utils"));
+exports.iu = iu;
 /**
  * Parse a text string
  *
@@ -21,10 +24,24 @@ const iu = __importStar(require("./deps/interpreter_utils"));
 function parse(text) {
     return ir.handle_text(text);
 }
-module.exports = {
-    parse,
-    it,
-    ir,
-    iu,
-};
+exports.parse = parse;
+/**
+ * Loads an array of rules for the interpreter. These rules map text to entities
+ *
+ * @export
+ * @param {TextEntityMapping[]} arg
+ */
+function load_rules(arg) {
+    ir.load_rule_set(arg);
+}
+exports.load_rules = load_rules;
+/**
+ * Loads the dev set of rule definitions
+ *
+ * @export
+ */
+function dev_rules() {
+    ir.load_dev_rules();
+}
+exports.dev_rules = dev_rules;
 //# sourceMappingURL=index.js.map

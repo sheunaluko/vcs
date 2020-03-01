@@ -15,10 +15,10 @@ class NumericResource extends res.Resource {
         var entity_id = `numeric_res::${ops.value}`;
         // - init object 
         super({ entity_id });
-        //define the type handlers 
-        this.type_handlers[types.core.float] = function () {
+        //define the type handlers
+        this.set_type_handler(types.core.float, function () {
             return ops.value;
-        };
+        });
         this.value = ops.value;
         //define default type 
         this.default_type = types.core.float;

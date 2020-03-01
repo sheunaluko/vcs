@@ -15,7 +15,7 @@ const rp = __importStar(require("./rule_parser"));
 const it = __importStar(require("./interpreter_targets"));
 const index_1 = require("../../entities/index");
 var log = util.get_logger("ir");
-let example_rule_set = [
+exports.dev_rule_set = [
     { target: () => new index_1.res.result.Result({ value: "hey!" }),
         rules: ["test"] },
     { target: (x) => new index_1.res.result.Result({ value: "You said: " + x.target }),
@@ -32,6 +32,16 @@ let example_rule_set = [
             "output [[name]]"],
         parsers: { name: iu.nato_parser } }
 ];
+function load_rule_set(arg) {
+    arg.map(add_to_rule_set);
+}
+exports.load_rule_set = load_rule_set;
+function load_dev_rules() {
+    load_rule_set(exports.dev_rule_set);
+    log.i(`Total active: ${exports.runtime_rule_set.length}`);
+}
+exports.load_dev_rules = load_dev_rules;
+exports.runtime_rule_set = [];
 function add_to_rule_set(obj) {
     let { target, rules, parsers } = obj;
     let regexes = rules.map(rp.parse_rule).flat();

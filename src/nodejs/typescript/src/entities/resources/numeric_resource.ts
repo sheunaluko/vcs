@@ -14,10 +14,10 @@ export class NumericResource extends res.Resource {
 	// - init object 
 	super({entity_id}) 
 
-	//define the type handlers 
-	this.type_handlers[types.core.float] = function(){
+	//define the type handlers
+	this.set_type_handler(types.core.float , function(){
 		return (ops.value as types.core.float)
-	} 
+	} ) 
 	
 	this.value = ops.value
 	//define default type 
