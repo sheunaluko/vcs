@@ -1,6 +1,5 @@
 import * as res from "./resource"
-import * as t from "../types" 
-
+import * as types from "../types" 
 
 /* wrapper for result after a computation has been performed */ 
 
@@ -22,8 +21,9 @@ export class Result extends res.Resource  {
 	this.value = ops.value 
 	
 	//now we determine what the type of the value is, and we set the type handler 
-	let tp = t.js_type(ops.value) 
-	this.type_handlers[tp] = async function() { return ops.value }
+	let tp = types.js_type(ops.value)  
+	this.type_handlers[tp] =  function() { return ops.value }
+
     }
     
     

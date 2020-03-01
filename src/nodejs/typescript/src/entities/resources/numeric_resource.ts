@@ -1,25 +1,27 @@
 import * as res from "./resource"
-import * as t from "../types" 
-
-
+import * as types from "../types" 
 
 export class NumericResource extends res.Resource {
-    
-    constructor(ops : t.p.ValueOp){ 
+	
+	value : types.core.float 
+
+    constructor(ops : {value : string | number}){ 
 	
 	ops.value = Number(ops.value) //convert to number  !
 	
 	var entity_id     = `numeric_res::${ops.value}` 
 
-	//define the type handlers 
-	var type_handlers  : any  = {} 
-	type_handlers[t.c.float] = function(){return ops.value} 
-	
 	// - init object 
-	super({entity_id,type_handlers}) 
+	super({entity_id}) 
+
+	//define the type handlers 
+	this.type_handlers[types.core.float] = function(){
+		return (ops.value as types.core.float)
+	} 
+	
 	this.value = ops.value
 	//define default type 
-	this.default_type = t.c.float 
+	this.default_type = types.core.float  
     }
 }
 

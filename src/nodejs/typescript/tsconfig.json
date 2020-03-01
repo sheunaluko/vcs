@@ -8,13 +8,11 @@
         "sourceMap": true,
         "outDir": "dist",
         "baseUrl": ".",
-        "paths": {
-            "*": [
-                "src/types/*"
-            ]
-        }
-    },
+            
+        } , 
     "include": [
-        "src/**/*"
+        "src/entities/*" , 
+        "src/entities/resources/*" , 
+	"src/entities/operations/*" , 
     ]
 }
