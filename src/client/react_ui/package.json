@@ -11,13 +11,16 @@
     "react": "^16.12.0",
     "react-chat-window": "^1.2.1",
     "react-dom": "^16.12.0",
+    "react-globe": "^4.0.0",
     "react-inspector": "^4.0.0",
     "react-mosaic-component": "^3.2.0",
     "react-redux": "^7.1.3",
     "react-scripts": "3.3.0",
     "redux": "^4.0.5",
     "shadow-cljs": "^2.8.83",
-    "terminal-in-react": "^4.3.1"
+    "terminal-in-react": "^4.3.1",
+    "three": "^0.114.0",
+    "typescript": "^3.8.3"
   },
   "scripts": {
     "start": "react-scripts start",

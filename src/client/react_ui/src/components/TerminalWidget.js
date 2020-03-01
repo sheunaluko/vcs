@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Terminal from 'terminal-in-react';
+
 
 
 var log = function(x) {
@@ -7,7 +8,7 @@ var log = function(x) {
   };
 
   
-  
+ 
 export function TerminalWidget() { 
 
 
@@ -35,10 +36,11 @@ export function TerminalWidget() {
       console.log(msg);
 
       switch (msg.type) {
-        case "output":
-          log("Terminal rendering output: " + msg.text);
-          on_msg(msg.text);
+        case "text":
+          log("Terminal rendering output: " + msg.payload);
+          on_msg(msg.payload);
           break;
+
         case "unrecognized_input":
           on_msg("What?");
           break;
@@ -48,7 +50,7 @@ export function TerminalWidget() {
 
         case "command_result":
           log("Terminal got command result:");
-          console.log(msg.result);
+          console.log(msg);
           //on_msg(msg.result)
           break 
 

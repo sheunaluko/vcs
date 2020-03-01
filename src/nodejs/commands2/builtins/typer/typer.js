@@ -57,7 +57,7 @@ class typer extends vcs.base_command {
 
 	}
 	//input channel has been closed 
-	this.finish({result : "OK"}) 
+	this.finish({payload : {result : "OK"}}) 
     }
     
     get_command(text)  { 

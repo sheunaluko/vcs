@@ -30,7 +30,7 @@ class append2file extends vcs.base_command {
 	    
 	}
 	//input channel has been closed 
-	this.finish({result : "OK"}) 
+	this.finish({payload : {result : "OK"}}) 
     } 
     
     //convenice function for appending (used above) 

@@ -1,5 +1,3 @@
-
-
 import {make_logger,Logger} from "../utils/logger" 
 
 
@@ -28,8 +26,9 @@ export class Entity {
     }
     
     describe() {
-	this.log.i("This is an entity :)")
+	    this.log.i("This is an entity :)")
     }
+    
     
     
 }

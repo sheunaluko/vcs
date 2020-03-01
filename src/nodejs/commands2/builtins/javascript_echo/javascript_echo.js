@@ -42,7 +42,7 @@ class javascript_echo extends vcs.base_command {
 
 	}
 	//input channel has been closed 
-	this.finish({result : "OK" } )
+	this.finish({payload : {result : "OK" } } ) 
     } 
     
 

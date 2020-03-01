@@ -34,7 +34,15 @@ var widgets_info = {
             {id : "log"}
         ]
 
-    }
+    }, 
+    "exploratory" : { 
+        tooltip : "Exploratory Widgets" , 
+        text : "Exploratory"  , 
+        children :[ 
+            {id :"globe" } , 
+        ]
+
+    }    
 
 }
 

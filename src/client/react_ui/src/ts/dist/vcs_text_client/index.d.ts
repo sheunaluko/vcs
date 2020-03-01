@@ -8,6 +8,7 @@ interface c_ops {
     host: string;
     on_msg: (msg: ws_msg) => void;
     on_open?: () => void;
+    id?: string;
     reconnect?: number;
 }
 export declare class VCS_TEXT_CLIENT {
@@ -17,5 +18,6 @@ export declare class VCS_TEXT_CLIENT {
     log(...args: [any?, ...any[]]): void;
     connect(): void;
     send(msg: object): void;
+    close(): void;
 }
 export {};

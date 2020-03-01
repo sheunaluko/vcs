@@ -3,8 +3,8 @@
   web socket server for vcs  
   
   This file is sort of an adapter -- it creates a websocet server 
-  Upon a connection , it gives the connection to the OUTPUT file 
-  and whenever it receives a message it forwards the message to vcs_core
+  Upon a connection , it gives the connection to the OUTPUT file (which core uses to send output messages) 
+  and whenever it receives a message it forwards the message to vcs_core (input) 
   
  */ 
 
@@ -33,17 +33,16 @@ exports.start = function() {
 	
 	log.i(`Received ws connection (Number now connected = ${exports.clients.length})`)	
 	
-	output.emit_to_clients = exports.emit_to_clients
+	output.emit_to_clients = exports.emit_to_clients  // * this is the assignment to outputs 
 	tts.emit_to_clients    = exports.emit_to_clients
 	
 	//send the client the current params 
 	ws.send(JSON.stringify( { type : "params" , 
-				  data : params } ) ) 
+				  payload : params }  )) 
 	
 	//send ackowledgement of load 
-	ws.send(JSON.stringify( { type : "output" , 
-				  text : params.feedback_indicator + "continue" } ) ) 
-	
+	ws.send(JSON.stringify( { type : "feedback" , 
+							  payload : "continue" }  )) 
 	
 	ws.on('message', function incoming(message_string) {
 	    
@@ -56,8 +55,8 @@ exports.start = function() {
 	    case "vcs_text" : 
 		let text = message.text 
 		//will pass on the text 
+		log.d("\n\n -- \\(^.^)/ Got text: " + text )		
 		vcs_core.input.push(text) 
-		log.d("\n\n -- \\(^.^)/ Got text: " + text )
 		break 
 		
 	    default : 

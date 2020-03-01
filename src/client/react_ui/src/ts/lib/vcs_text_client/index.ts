@@ -1,6 +1,3 @@
-
-
-
 /* 
  Sat Feb 29 10:47:36 PST 2020 
  Typescript module for VCS_TEXT_CLIENT 
@@ -25,6 +22,7 @@ interface c_ops {
     host :  string ,  
     on_msg  : (msg : ws_msg) => void   , 
     on_open? : () => void , 
+    id?  : string 
     reconnect? : number , 
 }
 
@@ -38,7 +36,8 @@ interface c_ops {
     }
 
     log(...args : [any?, ...any[]]) {  
-        console.log.apply(null,args) 
+	
+        console.log.apply(null,[`[vtc(${this.ops.id || ""})]::` ,...args]) 
     }
 
     connect() { 
@@ -102,6 +101,12 @@ interface c_ops {
             this.conn.send(JSON.stringify(msg))    
         }  else { 
             this.log("Not yet connected! Please connect first by running {obj}.connect()") 
+        }
+    }
+
+    close() { 
+        if (this.conn)  {
+            this.conn.close() 
         }
     }
 

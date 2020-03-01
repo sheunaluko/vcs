@@ -62,7 +62,7 @@ function Windows() {
           direction: "row",
           first: "command_stack",
           second: {
-            direction: "column",
+	      direction : "column", 
             first: "terminal",
             second: "inspector" 
           }

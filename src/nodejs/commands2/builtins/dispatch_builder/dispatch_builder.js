@@ -87,10 +87,11 @@ class dispatch_builder extends vcs.base_command {
 	this.log.d("Calling:: " + JSON.stringify(call_info)) 
 	
 	/* call the command and wait for its result */ 
-	let result = await this.call_command(call_info) 
-	
-	/* pass the cmd result to the sink */
-	this.finish({result})
+	let return_data = await this.call_command(call_info) 
+		/* pass the cmd result to the sink */
+	this.log.d("Finishing with:") 
+	this.log.d(return_data) 
+	this.finish(return_data)  
     }    
     
    /* get call info */
@@ -125,7 +126,7 @@ module.exports = dispatch_builder
 	   GOALS 
 	   [x] implement the dispatch builder logic, using vcs.debug for help
 	   [x] implement: let result = await this.call_command({module,id,args}) (in base_cmd**) 
-	   [x] when the above result is returned, call this.finish({result}) to pass it on
+	   [x] when the above result is returned, call this.finish(results..) to pass it on
 	   [x] consider the possibility of calling dispatch builder -> command ->
 	         -> ANOTHER dispatch builder -> another command 
 		 => ** Perhaps the way this works is that in the base_cmd implementation 

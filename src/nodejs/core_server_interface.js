@@ -59,7 +59,8 @@ function make_external_command({command_info,client_id,ws}) {
 		    
 		    
 		case 'finish' : 
-		    this.finish(msg['data'])
+		    this.finish({payload : {result: msg['data']['result']},
+				 error   : msg['data']['error']})
 		    break 
 
 		case 'call_command' : 

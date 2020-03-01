@@ -36,7 +36,7 @@ class continuous_timer extends vcs.base_command {
 	//input channel has been closed
 	clearInterval(timer)
 	this.emit("Stopping timer") 
-	this.finish({result : "OK" } )
+	this.finish({payload : { result : "OK" } } ) 
     } 
     
 

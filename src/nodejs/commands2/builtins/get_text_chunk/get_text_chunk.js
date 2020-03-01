@@ -32,7 +32,7 @@ class get_text_chunk extends vcs.base_command {
 	    this.chunks.push(text) 
 	}
 	//input channel has been closed 
-	this.finish({result : this.chunks.join(this.args.joiner || "\n")})
+	this.finish({payload : { result : this.chunks.join(this.args.joiner || "\n")} }) 
     } 
     
 

@@ -1,8 +1,8 @@
 //Sun Mar  3 16:01:13 PST 2019
 import * as util from "./utils.js" 
-import * as speech from "./speech.js"
+import * as speech from "./speech2.js"
 
-let log = util.get_logger("tts") 
+var log = util.get_logger("tts") 
 
 export var tts = window.speechSynthesis;
 export var speech_que = []
@@ -17,7 +17,7 @@ export async function finished_speaking() {
 }
 
 export async function speak(text) { 
-    log.d("Request to speak: " + text) 
+    log.i("Request to speak  =:> " + text) 
     if (! tts.speaking) { 
 	speech.stop_recognition()
 	var utterance  = new SpeechSynthesisUtterance(text);
@@ -31,11 +31,7 @@ export async function speak(text) {
 	    speech.start_recognition()
 	}
     } else { 
-	log.d("Scheduling speech for later.")
+	log.i("Scheduling speech for later.")
 	speech_que.push(text)
     }
 }
-
-
-
-

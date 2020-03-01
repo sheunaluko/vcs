@@ -10,7 +10,9 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 
 import CmdsContainer from "./CmdsContainer.js" 
 import {Inspector} from "./Inspector.js" 
-import {TerminalWidget}  from "./TerminalWidget.js"
+import {TerminalWidget}  from "./TerminalWidget2.js"
+import {Globe} from "./Globe.js" 
+
 
 
 export var widget_dictionary = { 
@@ -34,6 +36,11 @@ export var widget_dictionary = {
     "terminal" : { 
         element : <TerminalWidget /> , 
         title: "Console Interface" 
+    } , 
+    
+    "globe" : { 
+	element : <Globe /> , 
+	title: "Earth" , 
     }
 
 

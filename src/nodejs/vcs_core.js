@@ -36,9 +36,10 @@ async function input_loop() {
 
 async function emissions_loop() {
   log.i("Starting emissions loop");
-  while ((emission = await emissions.shift())) {
-    let { id, data } = emission;
-    log.d("Emission:: " + id + " ::" + data);
+  while ((data = await emissions.shift())) {
+    let { id, type, payload } = data;
+    log.d("Emission:: " + id + " ::") 
+    log.d(data) 
     switch (params.emit_mode) {
       case "default":
         log.d("Sending emission via main output.");

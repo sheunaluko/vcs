@@ -80,8 +80,12 @@ function transform_minimal(min) {
 	
 	async run() { 
 	    this.log.i("Running minimal command") 
-	    this.emit( fn() ) 
-	    this.finish( { result : vcs.params.escape_indicator + "quiet" } ) 
+        this.emit( fn() ) 
+        var payload = { 
+            quiet : true , 
+            result : null 
+        }
+	    this.finish({ id, payload } )   
 	}
     }
     

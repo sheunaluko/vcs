@@ -101,7 +101,7 @@ export function connect_ws() {
 	    console.log(msg.result) 
 	    
 	    //check the result  
-	    if (msg.result == vcs_params.escape_indicator + "quiet") { 
+	    if (msg.result === vcs_params.escape_indicator + "quiet") { 
 		log.i("Command suppressed output") 
 	    } else { 
 		sounds.success() 

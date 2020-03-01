@@ -22,7 +22,7 @@ class cmd extends vcs.base_command {
 	//all commands must implement the async run method
     async run() { 
 	let result = await aliases.load_aliases()
-	this.finish({result : "OK"}) 
+	this.finish({payload : { result : "OK"}} ) 
     } 
     
     

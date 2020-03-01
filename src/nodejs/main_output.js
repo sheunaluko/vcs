@@ -7,30 +7,35 @@
 
 
 
-const log         = require("./logger.js").get_logger("main_output")
+const log  = require("./logger.js").get_logger("main_output")
 var params = require("./vcs_params.js").params 
 
 //note exports.broadcast is set by vcs_ws_server file (circular dep) 
 
-exports.send = function(text) { 
-    let type = 'output'
-    let msg  = {text, type }
-    log.d("Sending:: " + text + "\n\n")
-    exports.emit_to_clients(msg) 
+exports.send = function(msg) {  
+    let {type,payload,id} = msg 
+    log.d(`Sending message of type: ${type} from id ${id}`)
+    log.d("The payload looks like: " )
+    log.d(payload)
+    exports.emit_to_clients(msg)  
 }
 
 exports.unrecognized_input = function() { 
-
     let type = 'unrecognized_input'
     log.d("Sending:: " + type)
     exports.emit_to_clients({type}) 
-    //exports.emit_to_clients(params.feedback_indicator + "unrecognized")
 }
 
-exports.command_result = function(result) { 
-    let type = 'command_result'
-    let msg  = {type,result}
-    log.d("Sending result:: " + result + "\n\n")
-    exports.emit_to_clients(msg)
+exports.command_result = function(msg) {   
+    let {payload,id} = msg 
+    msg.type = "command_result" 
+    log.d("Got command result from id " + id ) 
+    log.d("Payload looks like: ") 
+    log.d(payload) 
+    log.d("Sending it") 
+    exports.emit_to_clients(msg) 
     
 }
+
+
+//fix python PARAM PAYLOAD instead of data 
