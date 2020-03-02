@@ -17,9 +17,11 @@
     "include": [
         "src/entities/*" , 
         "src/entities/resources/*" , 
-	"src/entities/operations/*" , 
-	"src/interpreter/*" , 
-	"src/interpreter/deps/*" ,  
+	    "src/entities/operations/*" , 
+	    "src/interpreter/*" , 
+        "src/interpreter/deps/*" ,  
+        "src/socksync/*", 
+	"src/ram/*", 
 	
     ]
 }

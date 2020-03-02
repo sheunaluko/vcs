@@ -9,6 +9,7 @@
   "author": "Sheun Aluko",
   "license": "MIT",
   "devDependencies": {
+    "@types/ws": "^7.2.2",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0"
   },

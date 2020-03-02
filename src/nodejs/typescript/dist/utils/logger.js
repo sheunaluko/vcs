@@ -3,14 +3,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class Logger {
     constructor(id) {
         this.id = id;
+        this.header = `[${id}]::`;
+    }
+    l(...args) {
+        //console.log(args)
+        var next_print;
+        var to_flush = this.header;
+        while (next_print = args.shift()) {
+            next_print = next_print[0];
+            //console.log(next_print) 
+            if (next_print.constructor == String) {
+                to_flush += (" " + next_print);
+            }
+            else {
+                console.log(to_flush);
+                console.log(JSON.stringify(next_print));
+                to_flush = this.header;
+            }
+        }
+        if (to_flush != this.header) {
+            console.log(to_flush);
+        }
     }
     i(...args) {
-        let tmp = `[${this.id}]:: ` + args.join(" ");
-        console.log(tmp);
+        this.l(args);
     }
     d(...args) {
-        let tmp = `[${this.id}]:: ` + args.join(" ");
-        console.log(tmp);
+        this.l(args);
     }
 }
 exports.Logger = Logger;
