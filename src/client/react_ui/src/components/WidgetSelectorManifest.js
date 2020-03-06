@@ -23,7 +23,8 @@ var widgets_info = {
         tooltip : "Various tools for user interaction" , 
         text : "User Interaction" , 
         children : [ 
-           {id : "terminal" } 
+           {id : "terminal" }, 
+           {id : "iframe"}
         ]
     },
     "debugging" : { 
@@ -31,7 +32,8 @@ var widgets_info = {
         text : "Debugger UI Tools"  , 
         children :[ 
             {id :"inspector" } , 
-            {id : "log"}
+            {id : "log"} , 
+            {id  : "ss_inspector"}  ,  
         ]
 
     }, 

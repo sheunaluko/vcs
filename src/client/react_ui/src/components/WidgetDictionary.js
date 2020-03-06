@@ -12,7 +12,8 @@ import CmdsContainer from "./CmdsContainer.js"
 import {Inspector} from "./Inspector.js" 
 import {TerminalWidget}  from "./TerminalWidget2.js"
 import {Globe} from "./Globe.js" 
-
+import { SSInspector } from "./SocksyncInspector.js";
+import {Iframe } from "./IframeWidget" 
 
 
 export var widget_dictionary = { 
@@ -41,7 +42,20 @@ export var widget_dictionary = {
     "globe" : { 
 	element : <Globe /> , 
 	title: "Earth" , 
+    } , 
+
+    "ss_inspector":{  
+        element : <SSInspector/> , 
+        title : "Socksync Inspector" 
+    } ,   
+
+    "iframe" : { 
+        element : <Iframe/> , 
+        title : "Iframe" 
     }
+
+    
+
 
 
 }

@@ -63,8 +63,8 @@ function Windows() {
           first: "command_stack",
           second: {
 	      direction : "column", 
-            first: "terminal",
-            second: "inspector" 
+            first: "iframe",
+            second: "ss_inspector" 
           }
         }}
       />

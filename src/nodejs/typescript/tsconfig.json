@@ -21,7 +21,8 @@
 	    "src/interpreter/*" , 
         "src/interpreter/deps/*" ,  
         "src/socksync/*", 
-	"src/ram/*", 
+    "src/ram/*", 
+    "src/knowledge_graph/*" , 
 	
     ]
 }

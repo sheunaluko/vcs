@@ -35,3 +35,5 @@ export async function speak(text) {
 	speech_que.push(text)
     }
 }
+
+
