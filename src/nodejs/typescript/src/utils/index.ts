@@ -199,6 +199,10 @@ export function object_update_to_array_update(obj : dictionary_object_update) : 
 }
 
 
+export function ms() { 
+  return new Date().getTime() 
+}
+
 
 
 export {Logger } 
