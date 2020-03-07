@@ -104,10 +104,16 @@ export class JobCoordinator {
 
   G: g.Graph; //reference to the parent graph
 
+  finished_promise : Promise<boolean> 
+  finished_resolver : (value?: boolean | PromiseLike<boolean>) => void
+
   constructor(ops: BFS_Search_Ops, G: g.Graph) {
     this.jobs = { active: [], completed: [], retired: [] };
     this.G = G;
     this.ops = ops;
+    this.finished_promise = new Promise( (resolve,reject) => { 
+        this.finished_resolver = resolve 
+    })
   }
 
   remove_job(j: Job, target: Job[]): void {
@@ -152,6 +158,12 @@ export class JobCoordinator {
       default:
         throw "Should not reach default case";
     }
+
+    /* Check to see if there are any active jobs */ 
+    if (this.jobs.active.length < 1 ) {
+        this.finished_resolver(true)  //RESOLVE THE FINISHED PROMISE 
+    }
+
   }
 
   unactivate(j: Job) {
@@ -168,6 +180,10 @@ export class JobCoordinator {
 
   retire(j: Job) {
     this.jobs.retired.push(j);
+  }
+
+  async done() { 
+    return this.finished_promise 
   }
 }
 
@@ -329,6 +345,15 @@ export class MBFS {
       this.coordinator = new JobCoordinator(this.ops,this.G) 
       let start_job = new Job({id : "0" , path: start_path}) 
       this.coordinator.submit(start_job) 
-      return this.coordinator
+      await this.coordinator.done() 
+
+      return this.coordinator.jobs 
   }
 }
+
+
+/* 
+PHEEEW -- that was a ton of work ! 
+I wonder if any of the code actually works lmao  
+:D 
+*/ 
