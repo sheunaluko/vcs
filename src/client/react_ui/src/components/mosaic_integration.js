@@ -47,6 +47,23 @@ export var get_dispatch = function(id,title) {
 
 */ 
 
+const specs = {
+  "a" : {
+    direction: "row",
+    first: "command_stack",
+    second: {
+  direction : "column", 
+      first: "iframe",
+      second: "ss_inspector" 
+    }
+  }, 
+  "b" : {
+    direction: "row",
+    first: "command_stack",
+    second: "ss_inspector" , 
+
+  }
+}
 
 function Windows() {
 
@@ -58,15 +75,7 @@ function Windows() {
         renderTile={function(id, path) {
             return <MosaicWindowWrapper id={id} path={path} /> 
         }}
-        initialValue={{
-          direction: "row",
-          first: "command_stack",
-          second: {
-	      direction : "column", 
-            first: "iframe",
-            second: "ss_inspector" 
-          }
-        }}
+        initialValue={specs.b}
       />
     </div>
   );

@@ -176,6 +176,17 @@ class Server {
             //no clients have registered yet with this id
             this.clients_by_id[id] = [];
             this.clients_by_id[id].push(client);
+            //still need to check if there is data with this ID because 
+            //the server could have been modifying it even if no other clients are connected 
+            let data = this.data_by_id[id];
+            if (data) {
+                let msg = {
+                    type: "update",
+                    data
+                };
+                client.send(JSON.stringify(msg));
+                this.log.d("Sent new client copy of current data from id: " + id);
+            }
         }
         this.log.d("Done adding client");
     }

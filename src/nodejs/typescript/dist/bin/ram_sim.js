@@ -7,17 +7,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const kg = __importStar(require("./index"));
-exports.main = {
-    "1": function () {
-        var G = new kg.Graph({});
-        let rel = {
-            source: "dog",
-            target: "animal",
-            edge: "is",
-        };
-        G.add_relation(rel);
-        return G;
-    }
-};
-//# sourceMappingURL=debug.js.map
+const RAM = __importStar(require("../ram/index"));
+//init the ram 
+RAM.init();
+//params 
+const rate = 2000;
+//and create a loop to update the RAM server 
+var counter = 0;
+//
+setInterval(function () {
+    //let p = "path_" + counter    
+    RAM.set({
+        path: ["counter"],
+        value: counter++,
+    });
+}, rate);
+//# sourceMappingURL=ram_sim.js.map

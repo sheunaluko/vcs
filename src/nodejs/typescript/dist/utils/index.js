@@ -163,4 +163,21 @@ function object_update_to_array_update(obj) {
     return { path, value: tmp };
 }
 exports.object_update_to_array_update = object_update_to_array_update;
+function ms() {
+    return new Date().getTime();
+}
+exports.ms = ms;
+function sets_equal(as, bs) {
+    if (as.size !== bs.size)
+        return false;
+    for (var a of as)
+        if (!bs.has(a))
+            return false;
+    return true;
+}
+exports.sets_equal = sets_equal;
+function set(...args) {
+    return new Set(args);
+}
+exports.set = set;
 //# sourceMappingURL=index.js.map

@@ -56,9 +56,9 @@ COORDINATOR:
 export class Path {
   vertices: g.Vertex[];
   edges: g.Edge[]; //there will be one less edge index
-  constructor() {
-    this.vertices = [];
-    this.edges = [];
+  constructor(ops: {vertices? : g.Vertex[], edges? : g.Edge[]}) {
+    this.vertices = ops.vertices || [];
+    this.edges = ops.edges || [];
   }
 
   add(e: g.Edge, v: g.Vertex) {
@@ -74,7 +74,7 @@ export class Path {
    * @memberof Path
    */
   clone(): Path {
-    let p = new Path();
+    let p = new Path({});
     this.vertices.map(v => p.vertices.push(v));
     this.edges.map(e => p.edges.push(e));
     return p;
@@ -196,6 +196,7 @@ export class Job {
   id: string;
   path: Path;
   status: JobStatus;
+  result : string |  null 
   data: { [key: string]: any }; //will allow arbitrary data about the job to be held (why it terminated, etc)
   start: number;
   end: number;
@@ -204,34 +205,37 @@ export class Job {
     this.id = ops.id;
     this.path = ops.path;
     this.data = {};
+    this.result = null
     //start and end are defined later
   }
 }
 /* -- */
 
 export type EdgeToVertex = { edge: g.Edge; vertex: g.Vertex }; // represents an OUTFLOW of a certain kind to a certain node
-
+export type Outflows = EdgeToVertex[] | null 
+export type CheckReturn = { result : boolean , data : { [k: string]: any } } 
 export interface BFS_Search_Ops {
   check_terminate: (
     p: Path,
     G: g.Graph
-  ) => Promise<{ result: boolean; data: { [k: string]: any } }>; //allows more nuanced reporting
+  ) => Promise<CheckReturn>; //allows more nuanced reporting
   check_succeed: (
     p: Path,
     G: g.Graph
-  ) => Promise<{ result: boolean; data: { [k: string]: any } }>; //allows more nuanced reporting
-  get_next_vertices: (p: Path, G: g.Graph) => Promise<EdgeToVertex[]>;
+  ) => Promise<CheckReturn>; //allows more nuanced reporting
+  get_next_vertices: (p: Path, G: g.Graph) => Promise<Outflows>;
 }
 
-export enum JobFinishResult {
-  "SUCCEEDED",
-  "TERMINATED",
-  "RETIRED",
-  "EOF"
+export var JobFinishResult =  {
+"SUCCEEDED" : "succeeded" , 
+  "TERMINATED" : "terminated", 
+  "RETIRED" : "retired" ,
+  "EOF" : "eof" 
 }
+
 export interface JobResult {
   job: Job;
-  result: JobFinishResult;
+  result: string;
   new_jobs?: Job[];
 }
 
@@ -260,9 +264,9 @@ export async function DoJob(
     //yes, we succeeded ...
     j.end = util.ms();
     j.data["completion_data"] = data;
-    j.data["succeeded"] = true;
+    j.result = JobFinishResult.SUCCEEDED
     j.status = JobStatus.COMPLETE;
-
+    
     return { job: j, result: JobFinishResult.SUCCEEDED };
   }
 
@@ -274,7 +278,7 @@ export async function DoJob(
     //yes, should terminate ... and the reason will be contained in the data object
     j.end = util.ms();
     j.data["completion_data"] = data;
-    j.data["terminated"] = true;
+    j.result = JobFinishResult.TERMINATED
     j.status = JobStatus.COMPLETE;
 
     return { job: j, result: JobFinishResult.TERMINATED };
@@ -291,18 +295,16 @@ export async function DoJob(
   if (next_vertices.length < 1) {
     //no future jobs, so we will terminate with EOF
     j.end = util.ms();
-    j.data["completion_data"] = { eof: true };
-    j.data["eof"] = true;
     j.status = JobStatus.COMPLETE;
+    j.result = JobFinishResult.EOF 
     return { job: j, result: JobFinishResult.EOF };
   } else {
     /*  Finally if we reach here then there are more jobs to return */
 
     let new_jobs = get_new_jobs(j, next_vertices);
     j.end = util.ms();
-    j.data["completion_data"] = { retired: true };
-    j.data["retired"] = true;
     j.status = JobStatus.COMPLETE;
+    j.result = JobFinishResult.RETIRED 
     return { job: j, result: JobFinishResult.RETIRED, new_jobs };
   }
 }
@@ -355,5 +357,11 @@ export class MBFS {
 /* 
 PHEEEW -- that was a ton of work ! 
 I wonder if any of the code actually works lmao  
-:D 
+:D  
+
+
+TODO: 
+Create a test graph with a couple edges and vertices then create a custom 
+MBFS and see wtf happens -- then enjoy the debugging opportunity :) 
+Say yes to life :) 
 */ 

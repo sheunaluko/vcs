@@ -202,7 +202,16 @@ export function object_update_to_array_update(obj : dictionary_object_update) : 
 export function ms() { 
   return new Date().getTime() 
 }
+ 
 
+export function sets_equal<T>(as : Set<T>,bs: Set<T>) {  
+      if (as.size !== bs.size) return false;
+      for (var a of as) if (!bs.has(a)) return false;
+      return true;
+}
 
+export function set<T>(...args : T[] ) : Set<T> { 
+    return new Set(args) 
+}
 
 export {Logger } 
