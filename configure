@@ -1,8 +1,0 @@
-
-echo "Decrypting"
-gpg --output config.sh --decrypt config.sh.gpg
-echo "Sourcing" 
-source config.sh
-echo "Removing" 
-rm config.sh
-echo "Done" 
