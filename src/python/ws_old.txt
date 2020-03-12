@@ -83,3 +83,110 @@ def ws_client(host="localhost",port=8000,on_connect=None,on_msg=None)  :
             relay(i,websocket) ,            
             listen(o,websocket), 
         ) 
+
+
+
+async def main() : 
+    url = "ws://localhost:5678"    
+    o = queue.Queue()
+    in_ch = queue.Queue() 
+    async with websockets.connect(url) as websocket:
+        while True : 
+            #print("listen")
+            #msg = await websocket.recv()
+            try : 
+                msg = await asyncio.wait_for(websocket.recv(), timeout=0.1)
+                print(msg)             
+            except asyncio.exceptions.TimeoutError : 
+                pass 
+            try : 
+                print("Trying read")
+                msg = in_ch.get(block=False) 
+                await ws.send(json.dumps(msg))
+            except queue.Empty : 
+                print("empty")
+                await asyncio.sleep(0)
+
+
+
+
+# working 
+
+# WS CLIENT  
+ws_logger = logging.getLogger('websockets')
+ws_logger.setLevel(logging.ERROR)
+ws_logger.addHandler(logging.StreamHandler())
+ws_latency = 0.05 
+
+async def listen(ou_ch,ws,on_msg) : 
+    while True : 
+        #print("listen")
+        msg = await ws.recv()
+        on_msg(msg)
+
+        
+async def relay(in_ch,ws) :         
+    while True : 
+        try : 
+            msg = in_ch.get(block=False) 
+            await ws.send(json.dumps(msg))
+        except queue.Empty : 
+            await asyncio.sleep(ws_latency)
+
+async def main(i,o,url,on_connect,on_msg) : 
+    
+    async with websockets.connect(url) as websocket:
+        log.i("WS client connected to: {}".format(url))
+        if on_connect != None : 
+            log.i("#running on_connect")
+            await on_connect(websocket)
+        # now we start the listening and the sending tasks 
+        await asyncio.gather( 
+            relay(i,websocket) ,            
+            listen(o,websocket,on_msg), 
+        ) 
+
+def start_server(i,o,url,on_connect,on_msg) : 
+    #asyncio.get_event_loop().run_until_complete(main(i,o,url,on_connect))
+    asyncio.run(main(i,o,url,on_connect,on_msg))
+
+
+    
+#define ws class 
+class ws : 
+    def __init__(self,i,o,client_thread) : 
+        self.i = i 
+        self.o = o 
+        self.client_thread = client_thread 
+        #self.output_thread = output_thread
+            
+    def send(self,x) : 
+        self.i.put(x) 
+
+            
+def ws_client(host="localhost",port=8000,on_connect=None,on_msg=None)  :  
+    # [edit] Thu Mar 12 08:15:00 2020
+    # I removed the output queue aspect and passed on_msg directly to listen loop 
+    # during a refactor to avoid 100% cpu usage in ws 
+    # has to do with asyncio and loop reading from the input queue, but i needed 
+    # a queue to pipe messages accross threads , and I needed threads to 
+    # enable functional interpreter with ws running in background. 
+    # Currently reduced to 0.5% cpu usage on mac, but future, will want to 
+    # consider threadsafe queues like aiomultiprocess or 
+
+
+    o = queue.Queue()
+    i = queue.Queue() 
+    url = "ws://{}:{}".format(host,port) 
+    #start the client thread 
+    client_thread = Thread(target=start_server, args=(i,o,url,on_connect,on_msg))
+    client_thread.start()
+    #will also start a thread that will check the output queue 
+    #output_thread = Thread(target=output_loop, args=(o,on_msg))
+    #output_thread.start() 
+    #and will prepare the return object now 
+    w = ws(i,o,client_thread)
+    return w
+
+
+# - 

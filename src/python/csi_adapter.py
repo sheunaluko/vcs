@@ -80,7 +80,7 @@ def handle_init(msg) :
         opts = { 'instance_id' : instance_id , 
                  'id'          : id , 
                  'input' : in_ch , 
-                 'output' : ws.i ,  # pass the ws input queue 
+                 'output' : ws.i.sync_q ,  # pass the ws input queue 
                  'args'   : args } 
         # - and now we start the command in new thread
         cmd_thread = Thread(target=cmd_fn, args=(command,opts))
