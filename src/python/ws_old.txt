@@ -1,0 +1,85 @@
+
+
+    
+# WS CLIENT  
+ws_logger = logging.getLogger('websockets')
+ws_logger.setLevel(logging.ERROR)
+ws_logger.addHandler(logging.StreamHandler())
+
+async def listen(ou_ch,ws) : 
+    while True : 
+        #print("listen")
+        msg = await ws.recv()
+        ou_ch.put(msg) 
+
+        
+async def relay(in_ch,ws) :         
+    while True : 
+        try : 
+            msg = in_ch.get(block=False) 
+            await ws.send(json.dumps(msg))
+        except queue.Empty : 
+            await asyncio.sleep(0)
+
+async def main(i,o,url,on_connect) : 
+    
+    async with websockets.connect(url) as websocket:
+        log.i("WS client connected to: {}".format(url))
+        if on_connect != None : 
+            log.i("#running on_connect")
+            await on_connect(websocket)
+        # now we start the listening and the sending tasks 
+        await asyncio.gather( 
+            relay(i,websocket) ,            
+            listen(o,websocket), 
+        ) 
+
+def start_server(i,o,url,on_connect) : 
+    asyncio.run(main(i,o,url,on_connect))
+
+    
+def output_loop(q,on_msg) : 
+    while True : 
+        msg = q.get() 
+        if on_msg != None :
+            on_msg(msg) 
+    
+    
+#define ws class 
+class ws : 
+    def __init__(self,i,o,client_thread, output_thread) : 
+        self.i = i 
+        self.o = o 
+        self.client_thread = client_thread 
+        self.output_thread = output_thread
+            
+    def send(self,x) : 
+        self.i.put(x) 
+
+            
+def ws_client(host="localhost",port=8000,on_connect=None,on_msg=None)  : 
+    o = queue.Queue()
+    i = queue.Queue() 
+    url = "ws://{}:{}".format(host,port) 
+    #start the client thread 
+    client_thread = Thread(target=start_server, args=(i,o,url,on_connect,))
+    client_thread.start()
+    #will also start a thread that will check the output queue 
+    output_thread = Thread(target=output_loop, args=(o,on_msg))
+    output_thread.start() 
+    #and will prepare the return object now 
+    w = ws(i,o,client_thread,output_thread)
+    return w
+
+
+
+
+
+
+    async with websockets.connect(url) as websocket:
+        print("WS client connected to: {}".format(url))
+        # now we start the listening and the sending tasks 
+        await asyncio.gather( 
+            relay(i,websocket) ,            
+            listen(o,websocket), 
+        ) 

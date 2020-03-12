@@ -15,6 +15,7 @@ import queue
 from threading import Thread 
 import websockets 
 import logging 
+import janus 
 
 #reloading stuff 
 reload_children = set(["utils"] ) 
@@ -143,7 +144,7 @@ def lines(s) :
     
 def read_and_split_file(fname, splitter) : 
     s = read_big_string(fname) 
-    lines = [ x for x in s.split(splitter) if x is not "" ] 
+    lines = [ x for x in s.split(splitter) if x != "" ] 
     return lines 
 
 def read_split_map_file(fname,splitter,mapper) : 
@@ -211,16 +212,16 @@ def sub_cmd(cmd,mode) :
     import sys
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     to_return = "" 
-    if mode is "q" : 
+    if mode == "q" : 
         #do nothing 
         pass 
     else : 
         for c in iter(lambda: process.stdout.read(1), b''): 
             ch = c.decode()
             to_return += ch 
-            if mode is "v" : 
+            if mode == "v" : 
                 sys.stdout.write(ch)
-    if mode is "s" : 
+    if mode == "s" : 
         return to_return 
 
 def sub_cmd_v(cmd) : 
@@ -430,22 +431,23 @@ def json_or_string(s) :
 ws_logger = logging.getLogger('websockets')
 ws_logger.setLevel(logging.ERROR)
 ws_logger.addHandler(logging.StreamHandler())
+ws_latency = 0.05 
 
-async def listen(ou_ch,ws) : 
+async def listen(ou_ch,ws,on_msg) : 
     while True : 
         #print("listen")
         msg = await ws.recv()
-        ou_ch.put(msg) 
+        on_msg(msg)
+
         
 async def relay(in_ch,ws) :         
     while True : 
-        try : 
-            msg = in_ch.get(block=False) 
-            await ws.send(json.dumps(msg))
-        except queue.Empty : 
-            await asyncio.sleep(0)
+        msg = await in_ch.get() 
+        #msg = in_ch.get(block=False)             
+        await ws.send(json.dumps(msg))
 
-async def main(i,o,url,on_connect) : 
+
+async def main(i,o,url,on_connect,on_msg) : 
     
     async with websockets.connect(url) as websocket:
         log.i("WS client connected to: {}".format(url))
@@ -455,43 +457,60 @@ async def main(i,o,url,on_connect) :
         # now we start the listening and the sending tasks 
         await asyncio.gather( 
             relay(i,websocket) ,            
-            listen(o,websocket), 
+            listen(o,websocket,on_msg), 
         ) 
 
-def start_server(i,o,url,on_connect) : 
-    asyncio.run(main(i,o,url,on_connect))
+def start_server(i,o,url,on_connect,on_msg,loop) : 
+    #asyncio.get_event_loop().run_until_complete(main(i,o,url,on_connect))
+    loop.run_until_complete(main(i,o,url,on_connect,on_msg))
 
-    
-def output_loop(q,on_msg) : 
-    while True : 
-        msg = q.get() 
-        if on_msg != None :
-            on_msg(msg) 
+
     
 #define ws class 
 class ws : 
-    def __init__(self,i,o,client_thread, output_thread) : 
+    def __init__(self,i,o,client_thread) : 
         self.i = i 
         self.o = o 
         self.client_thread = client_thread 
-        self.output_thread = output_thread
+        #self.output_thread = output_thread
             
     def send(self,x) : 
-        self.i.put(x) 
+        self.i.sync_q.put(x) 
 
             
-def ws_client(host="localhost",port=8000,on_connect=None,on_msg=None)  : 
-    o = queue.Queue()
-    i = queue.Queue() 
+def ws_client(host="localhost",port=8000,on_connect=None,on_msg=None)  :  
+    # [edit] Thu Mar 12 08:15:00 2020
+    # I removed the output queue aspect and passed on_msg directly to listen loop 
+    # during a refactor to avoid 100% cpu usage in ws 
+    # has to do with asyncio and loop reading from the input queue, but i needed 
+    # a queue to pipe messages accross threads , and I needed threads to 
+    # enable functional interpreter with ws running in background. 
+    # Currently reduced to 0.5% cpu usage on mac, but future, will want to 
+    # consider threadsafe queues like janus or aiomultiprocess
+
+    # [edit] Thu Mar 12 08:37:18 2020
+    # I went even further and used JANUS (thread safe async queues) 
+    # and now the CPU usage is down to 0% when no messages are passed :) 
+    # I would call that a success 
+    # the output que was originally used by the listener (would write to it)
+    # and then a separate thread would read from the output que and pass it to
+    # on_msg. But I refactored for on_msg to go straight to listener 
+    # and LEFT output que here for now in case I want to use it in future 
+    
+    loop = asyncio.get_event_loop() 
+    o = janus.Queue(loop=loop) 
+    i = janus.Queue(loop=loop) 
+    #o = queue.Queue()
+    #i = queue.Queue() 
     url = "ws://{}:{}".format(host,port) 
     #start the client thread 
-    client_thread = Thread(target=start_server, args=(i,o,url,on_connect,))
+    client_thread = Thread(target=start_server, args=(i.async_q,o.async_q,url,on_connect,on_msg,loop))
     client_thread.start()
     #will also start a thread that will check the output queue 
-    output_thread = Thread(target=output_loop, args=(o,on_msg))
-    output_thread.start() 
+    #output_thread = Thread(target=output_loop, args=(o,on_msg))
+    #output_thread.start() 
     #and will prepare the return object now 
-    w = ws(i,o,client_thread,output_thread)
+    w = ws(i,o,client_thread)
     return w
 
 
