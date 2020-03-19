@@ -61,6 +61,7 @@ class ConfigurationUI extends React.Component {
 
   componentWillUnmount() { 
       //close the client 
+      if (this.client && this.client.ws && this.client.ws.close)
       this.client.ws.close() 
   }
 

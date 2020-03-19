@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import * as dotenv from 'dotenv' 
+
+
 
 import "./js/index"
 import store from "./js/store/index";
@@ -16,6 +19,9 @@ import "@blueprintjs/core/lib/css/blueprint.css";
 //MOSAIC CSS 
 import "./react-mosaic-component.css"
 
+
+//ENV CONFIG 
+dotenv.config() 
 
 //set up react for use with redux 
 ReactDOM.render(

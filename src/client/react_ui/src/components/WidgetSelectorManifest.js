@@ -42,6 +42,8 @@ var widgets_info = {
         text : "Exploratory"  , 
         children :[ 
             {id :"globe" } , 
+            {id : "map_gl"}  , 
+            {id : "globe.gl"} 
         ]
 
     }    

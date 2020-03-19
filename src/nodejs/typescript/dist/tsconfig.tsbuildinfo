@@ -425,6 +425,14 @@
         "version": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       },
+      "../src/hyperloop/client.ts": {
+        "version": "90a1228b6bc55793d0deec8d5ed264f43a428bd18f151ae3d8672676ca7018ff",
+        "signature": "4b399aa252b2340e9d136606168800c20e74e129e8bc965c779b709033fc87ed"
+      },
+      "../src/hyperloop/hub.ts": {
+        "version": "701f649b8d8944cd97d7eff30638279eff8640c02187b98645ebc426d58196e8",
+        "signature": "4de490112ae53b90091fccca50c8a6eb6d792164a6e3742db7dbc201ce31ec97"
+      },
       "../src/bin/ram_sim.ts": {
         "version": "05cd8d74c06a553f92f202669bd307960b1cfa9440e6a542af001445cc245c65",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
@@ -1291,6 +1299,22 @@
         "../../../../node_modules/@types/node/util.d.ts",
         "../../../../node_modules/@types/node/ts3.5/util.d.ts"
       ],
+      "../src/hyperloop/client.ts": [
+        "../src/utils/index.ts",
+        "../../../../node_modules/@types/ws/index.d.ts",
+        "../../../../node_modules/@types/node/fs.d.ts",
+        "../../../../node_modules/@types/node/ts3.5/fs.d.ts",
+        "../../../../node_modules/@types/node/util.d.ts",
+        "../../../../node_modules/@types/node/ts3.5/util.d.ts"
+      ],
+      "../src/hyperloop/hub.ts": [
+        "../../../../node_modules/@types/ws/index.d.ts",
+        "../src/utils/index.ts",
+        "../../../../node_modules/@types/node/fs.d.ts",
+        "../../../../node_modules/@types/node/ts3.5/fs.d.ts",
+        "../../../../node_modules/@types/node/util.d.ts",
+        "../../../../node_modules/@types/node/ts3.5/util.d.ts"
+      ],
       "../src/bin/ram_sim.ts": [
         "../src/ram/index.ts",
         "../../../../node_modules/@types/node/fs.d.ts",
@@ -2044,6 +2068,14 @@
         "../src/generic_graph/graph.ts",
         "../src/generic_graph/utilities.ts"
       ],
+      "../src/hyperloop/client.ts": [
+        "../../../../node_modules/@types/ws/index.d.ts",
+        "../src/utils/index.ts"
+      ],
+      "../src/hyperloop/hub.ts": [
+        "../src/utils/index.ts",
+        "../../../../node_modules/@types/ws/index.d.ts"
+      ],
       "../../../../node_modules/@types/color-name/index.d.ts": [
         "../../../../node_modules/@types/node/fs.d.ts",
         "../../../../node_modules/@types/node/ts3.5/fs.d.ts",
@@ -2251,6 +2283,8 @@
       "../src/generic_graph/debug.ts",
       "../src/generic_graph/generic_graph.test.ts",
       "../src/generic_graph/index.ts",
+      "../src/hyperloop/hub.ts",
+      "../src/bin/ram_sim.ts",
       "../../../../node_modules/@types/color-name/index.d.ts",
       "../../../../node_modules/@types/istanbul-lib-coverage/index.d.ts",
       "../../../../node_modules/@types/istanbul-lib-report/index.d.ts",
@@ -2265,7 +2299,7 @@
       "../../../../node_modules/@types/jest/index.d.ts",
       "../../../../node_modules/@types/yargs-parser/index.d.ts",
       "../../../../node_modules/@types/yargs/index.d.ts",
-      "../src/bin/ram_sim.ts"
+      "../src/hyperloop/client.ts"
     ]
   },
   "version": "3.8.3"

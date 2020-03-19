@@ -62,7 +62,18 @@ const specs = {
     first: "command_stack",
     second: "ss_inspector" , 
 
-  }
+  } , 
+  "c" : {
+    direction: "row",
+    first: "map_gl",
+    second: "ss_inspector" , 
+
+  } , 
+  "d" : {
+    first : "map_gl"
+
+  } , 
+  
 }
 
 function Windows() {
@@ -75,7 +86,7 @@ function Windows() {
         renderTile={function(id, path) {
             return <MosaicWindowWrapper id={id} path={path} /> 
         }}
-        initialValue={specs.b}
+        initialValue={specs.d}
       />
     </div>
   );

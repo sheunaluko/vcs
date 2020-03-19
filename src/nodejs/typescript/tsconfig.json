@@ -23,6 +23,7 @@
         "src/socksync/*", 
         "src/ram/*", 
         "src/generic_graph/*" , 
+        "src/hyperloop/*", 
 	     "src/bin/*",
 	
     ]

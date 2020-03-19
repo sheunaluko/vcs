@@ -14,7 +14,8 @@ import {TerminalWidget}  from "./TerminalWidget2.js"
 import {Globe} from "./Globe.js" 
 import { SSInspector } from "./SocksyncInspector.js";
 import {Iframe } from "./IframeWidget" 
-
+import {MapGl} from "./MapGl"
+import {GlobeGl} from "./GlobeGl"
 
 export var widget_dictionary = { 
     "command_stack" : {
@@ -52,7 +53,19 @@ export var widget_dictionary = {
     "iframe" : { 
         element : <Iframe/> , 
         title : "Iframe" 
+    } , 
+
+    "map_gl" : { 
+        element : <MapGl/> , 
+        title :"MapGl" 
+    }, 
+
+    "globe.gl" : { 
+        element : <GlobeGl/>, 
+        title : "GlobeGl"
     }
+
+
 
     
 
