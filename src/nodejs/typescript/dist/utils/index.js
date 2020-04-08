@@ -10,6 +10,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const logger = __importStar(require("./logger"));
 const logger_1 = require("./logger");
 exports.Logger = logger_1.Logger;
+const uuid_1 = require("uuid");
 /**
  * Returns a logger instance
  *
@@ -180,4 +181,89 @@ function set(...args) {
     return new Set(args);
 }
 exports.set = set;
+/*
+
+Funcitonal style patterns (inspired by clojure)
+
+*/
+/**
+ * Parition a list of things into sub lists each of length 'num'
+ *
+ * @export
+ * @template T
+ * @param {T[]} thing
+ * @param {number} num
+ * @returns
+ */
+function partition(thing, num) {
+    var result = [];
+    var current_sub_array = [];
+    for (var i = 0; i < thing.length; i++) {
+        if ((i + 1) % num == 0 && i != 0) {
+            current_sub_array.push(thing[i]);
+            result.push(current_sub_array);
+            current_sub_array = [];
+        }
+        else {
+            current_sub_array.push(thing[i]);
+            if (i == thing.length - 1) { //end
+                result.push(current_sub_array);
+            }
+        }
+    }
+    return result;
+}
+exports.partition = partition;
+function uuid() {
+    return uuid_1.v4();
+}
+exports.uuid = uuid;
+/*
+ source from: https://gist.github.com/kethinov/6658166
+*/
+var path = require('path');
+var fs = require('fs');
+exports.walkSync = (dir, filelist = []) => {
+    fs.readdirSync(dir).forEach((file) => {
+        let name = path.join(dir, file);
+        let basename = path.basename(name);
+        let prefix = basename.substring(0, 2);
+        if (prefix == ".#") {
+            return;
+        } //ignore the emacs hidden files (threw errors)
+        filelist = fs.statSync(name).isDirectory()
+            ? exports.walkSync(path.join(dir, file), filelist)
+            : filelist.concat(path.join(dir, file));
+    });
+    return filelist;
+};
+function rec_find_dir_ext(dir, ext) {
+    return exports.walkSync(dir).filter((file) => (file.substr(-1 * (ext.length + 1)) == '.' + ext));
+}
+exports.rec_find_dir_ext = rec_find_dir_ext;
+/*
+STRINGS
+*/
+function str_empty(s) {
+    return s == '';
+}
+exports.str_empty = str_empty;
+function str_not_empty(s) {
+    return !str_empty(s);
+}
+exports.str_not_empty = str_not_empty;
+function trim(s) {
+    return s.trim();
+}
+exports.trim = trim;
+function char_replacer(c, rep) {
+    return function (s) {
+        return s.replace(new RegExp(c, 'g'), rep);
+    };
+}
+exports.char_replacer = char_replacer;
+function char_remover(c) {
+    return char_replacer(c, "");
+}
+exports.char_remover = char_remover;
 //# sourceMappingURL=index.js.map

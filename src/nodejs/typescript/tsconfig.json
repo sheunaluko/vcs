@@ -22,9 +22,14 @@
         "src/interpreter/deps/*" ,  
         "src/socksync/*", 
         "src/ram/*", 
-        "src/generic_graph/*" , 
+        "src/generic_graph/*" ,
+        "src/medik/main/*" ,
+        "src/medik/mk_parser/*", 
         "src/hyperloop/*", 
 	     "src/bin/*",
+	"src/node_utils/*", 
+	"src/utils/*",
 	
     ]
 }
+	

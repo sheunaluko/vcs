@@ -64,6 +64,8 @@ interface ClientOps {
   host: string;
 }
 
+
+
 export class Client {
   log: util.Logger;
   ops: ClientOps;

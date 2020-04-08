@@ -10,6 +10,7 @@
   "author": "Sheun Aluko",
   "license": "MIT",
   "devDependencies": {
+    "@types/babel-core": "^6.25.6",
     "@types/ws": "^7.2.2",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
@@ -20,6 +21,7 @@
     "@nodeguy/channel": "^0.6.4",
     "@sheunaluko/node_utils": "^1.0.1",
     "@types/jest": "^25.1.4",
+    "@types/uuid": "^7.0.2",
     "command-line-args": "^5.1.1",
     "command-line-usage": "^6.0.2",
     "diffsync": "^2.1.2",
@@ -33,6 +35,7 @@
     "setimmediate": "^1.0.5",
     "shadow-cljs": "^2.8.83",
     "socket.io": "^2.2.0",
+    "uuid": "^7.0.2",
     "wikijs": "^6.0.0",
     "winston": "^3.2.1",
     "ws": "^6.1.4"

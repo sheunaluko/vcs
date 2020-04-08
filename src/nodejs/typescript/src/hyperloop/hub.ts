@@ -108,7 +108,7 @@ export class Server {
                 Allows a client to request a function call from the hub 
                */
 
-              case "call_function":
+              case "call":
                 this.call_function(msg, ws);
                 break;
 
@@ -125,7 +125,7 @@ export class Server {
                 through it 
               */
               case "list_functions":
-                this.list_functions(ws);
+                this.list_functions(msg,ws);
                 break;
 
               default:
@@ -171,14 +171,14 @@ export class Server {
    */
   register_function(msg: RegisterFunctionOps, ws: any) {
     let id = msg.id;
-    this.log.d("Received register request from:" + ws.hyperloop_id);
-    this.log.d("Saving client");
+    this.log.d("Received register FUNCTION request from:" + ws.hyperloop_id);
     this.function_table[id] = {
       provider: ws,
       id,
       args_info: msg.args_info,
       provider_id : ws.hyperloop_id ,
     };
+    this.log.d("Updated function table with id: " + id );
     this.log.d("Args Info was: ");
     this.log.d(msg.args_info);
   }
@@ -260,8 +260,34 @@ export class Server {
     Requests from the hub a description of all functions available
     through it 
    */
-  list_functions(ws: any) {}
+  list_functions(ops : {call_identifier : string} , ws: any) {
 
+    let {call_identifier} = ops 
+
+      this.log.d("Got request to list_functions")  
+      this.log.d(ops) 
+      
+      //get the current list of all functions 
+      //as well as their associated args_info 
+      let fn_ids = Object.keys(this.function_table)   
+      let data = fn_ids.map(f_id=>{
+	  let {args_info} = this.function_table[f_id]
+	  return { 
+	      args_info , 
+	      id : f_id 
+	  }
+      }) 
+      
+      let msg = { 
+	  type : "return_value" , 
+      data , 
+      call_identifier, 
+      }
+      
+      this.log.d("Sending response: ") 
+      this.log.d(msg) 
+      this.send_msg(msg,ws) 
+  }
 
   /* 
   Send a message to a ws client 
@@ -273,8 +299,11 @@ export class Server {
 
  reply_no_function(ws : any,call_identifier : string) { 
      let msg = { 
+         data : { 
          error : true , 
          reason : "function_not_found", 
+         }, 
+         type : "return_value", 
          call_identifier , 
      }
      this.send_msg(msg,ws)
@@ -283,8 +312,8 @@ export class Server {
  }
 
  send_call_request(ws : any, msg : {id : string , args : any, call_identifier : string}) {
-     let {args,call_identifier}= msg 
-     let _msg = {args,call_identifier, type :"call"}
+     let {args,call_identifier,id}= msg 
+     let _msg = {args,call_identifier, id, type :"call"}
     this.send_msg(_msg,ws)
 
  }

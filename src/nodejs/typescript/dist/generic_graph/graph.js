@@ -9,9 +9,21 @@ Other files implement the Graph search algorithms
 
 
  */
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const util = __importStar(require("../utils/index"));
+const log = util.get_logger("graph");
+log.disable();
 //temporary debug 
-var debug = console.log;
+var debug = function (m) {
+    //    console.log(m)
+};
 class Vertex {
     constructor(ops) { this.data = ops; }
     add_outgoing(id) {
@@ -43,6 +55,7 @@ class Vertex {
 }
 exports.Vertex = Vertex;
 class Edge {
+    //gets added by the graph 
     constructor(ops) {
         this.data = ops;
     }
@@ -91,19 +104,33 @@ class Edges {
         this.edges = [];
     }
     /**
-     *Get an edge by its ID
+     *Get an edge by its TYPE ID
      *
      * @param {ID} id
-     * @returns {MaybeEdge}
+     * @returns {MaybeEdgeArray}
      * @memberof Edges
      */
-    get(id) {
+    get_type(id) {
         let int_id = this.translations.int_id(id);
         if (int_id === null) {
             return null;
         }
         //id exists in the translations... will search for it in the edge set 
-        return this.edges.filter((e) => e.data.id == int_id)[0];
+        return this.edges.filter((e) => e.data.id == int_id);
+    }
+    /**
+     *Get an edge by its UNIQUE ID
+     *Accounts for all metadata in being unique
+     * @param {Number} id
+     * @returns {MaybeEdge}
+     * @memberof Edges
+     */
+    get_unique(id) {
+        /*
+        Optimize later -> can have SET structure which tracks which edges exist,
+        and check that FIRST prior to performing the filtering below
+        */
+        return this.edges.filter((e) => e.unique_id == id)[0];
     }
     /**
      *Check if an instance of edge already exists in the set
@@ -113,7 +140,7 @@ class Edges {
      * @memberof Edges
      */
     exists(edge) {
-        let matches = this.edges.filter((e) => e === edge);
+        let matches = this.edges.filter((e) => e.data === edge.data);
         switch (matches.length) {
             case 0:
                 return false;
@@ -131,9 +158,7 @@ class Edges {
     }
     conform(e) {
         /*  will wrangle the edge ids to match the translation schema if one of them exists */
-        if (!this.edge_id_exists(e)) {
-            throw ("Attempting to conform non existent edge id!");
-        }
+        // removed as was causing bug --> if (!this.edge_id_exists(e)) { throw ("Attempting to conform non existent edge id!")} 
         /* there are two possibilities */
         if (this.id_exists(e.data.id)) { //1) id matches 
             e.data.id_readable = this.translations.translate(e.data.id);
@@ -142,11 +167,12 @@ class Edges {
             e.data.id = this.translations.translate(e.data.id_readable);
         }
         else {
-            throw ("Unhandled case!");
+            //do nothing if neither ID exists, as the edge is already 'conformed'
+            debug("passing through already conformed edge");
         }
         return e;
     }
-    add(e) {
+    add(e, unique_id) {
         if (this.exists(e)) {
             throw ("Cannot add duplicate!");
         }
@@ -161,10 +187,37 @@ class Edges {
             //update the edge so its ids match with the ids here 
             e = this.conform(e);
         }
+        /*
+            Now we need to add a unique identifier to this edge which distinguishes it
+            from all others, taking to account its metadata , etc (not just id)
+        */
+        e.unique_id = unique_id;
         this.edges.push(e);
+        log.i(`Added edge: [${e.data.id_readable},${e.unique_id}]`);
+        return e;
     }
     ids_equal(a, b) {
         return (a === b) || (this.translations.translate(a) === b);
+    }
+    edge_is_type(e, t) {
+        //first get the edge 
+        let edge = this.get_unique(e);
+        if (!edge) {
+            return false;
+        }
+        let e_type_id = edge.data.id_readable;
+        return this.ids_equal(e_type_id, t);
+    }
+    get_id_set(id) {
+        if (this.id_exists(id)) {
+            return {
+                id: this.translations.int_id(id),
+                id_readable: this.translations.string_id(id)
+            };
+        }
+        else {
+            return null;
+        }
     }
 }
 exports.Edges = Edges;
@@ -191,28 +244,48 @@ class Vertices {
         }
         this.vertices.push(v);
         this.translations.add({ number: v.data.id, string: v.data.id_readable });
+        log.i("Added vertex: " + v.data.id_readable);
+        log.i(`Translation= ${v.data.id}<->${v.data.id_readable}`);
     }
     ids_equal(a, b) {
         return (a === b) || (this.translations.translate(a) === b);
     }
+    get_id_set(id) {
+        if (this.exists(id)) {
+            return {
+                id: this.translations.int_id(id),
+                id_readable: this.translations.string_id(id)
+            };
+        }
+        else {
+            return null;
+        }
+    }
 }
 exports.Vertices = Vertices;
-/* helper fns */
-var nonce = 0;
-function gen_id() { return nonce++; }
-exports.gen_id = gen_id;
-function new_ids(id) {
-    let num_id = (id.constructor == String) ? gen_id() : id;
-    let str_id = (id.constructor == String) ? id : String(id);
-    return { id: Number(num_id), id_readable: str_id };
-}
-exports.new_ids = new_ids;
 /* graph class definition */
 class Graph {
     constructor(ops) {
+        this.aliases = {};
+        this.nonce = 0;
         this.ops = ops;
         this.vertices = new Vertices();
         this.edges = new Edges();
+    }
+    add_alias(op) {
+        this.aliases[op.alias] = op.key;
+    }
+    gen_id() { return this.nonce++; }
+    new_ids(id) {
+        //debug("new id: " + id) 
+        //first check if there is an alias 
+        if (this.aliases[id]) {
+            id = this.aliases[id];
+            debug("hit alias and using: " + id);
+        }
+        let num_id = (id.constructor == String) ? this.gen_id() : id;
+        let str_id = (id.constructor == String) ? id : String(id);
+        return { id: Number(num_id), id_readable: str_id };
     }
     /**
      * Add new relationship to the graph. Nodes and edges that do not exist
@@ -222,10 +295,12 @@ class Graph {
      * @memberof Graph
      */
     add_relation(r) {
-        let { source, target, edge, data } = r; //destructure the relation 
-        let new_edge_ids = new_ids(edge);
-        let new_source_ids = new_ids(source);
-        let new_target_ids = new_ids(target);
+        debug("Processing relation:");
+        debug(r);
+        let { source, target, edge, metadata } = r; //destructure the relation 
+        let new_edge_ids = this.edges.get_id_set(edge) || this.new_ids(edge);
+        let new_source_ids = this.vertices.get_id_set(source) || this.new_ids(source);
+        let new_target_ids = this.vertices.get_id_set(target) || this.new_ids(target);
         /*
         check if the edge exists or not
         because edges can have nested data , the easiest way to do this is
@@ -236,69 +311,96 @@ class Graph {
             id_readable: new_edge_ids.id_readable,
             source: new_source_ids.id,
             target: new_target_ids.id,
-            data: data,
+            metadata: metadata,
         });
-        if (!this.has_edge(_edge)) {
-            this.edges.add(_edge);
-        }
-        else {
+        /*
+        Couple things to note here
+        1) the edge id value will be bogus if the id_readable already exists
+        Therefore if we want has_edge to appropriate return true we have to get the correct
+        machine id for the newly created graph
+        */
+        var new_edge = this.edges.conform(_edge); //makes sure id,id_readable are consistent with Graph 
+        debug("edge prior: ");
+        debug(new_edge);
+        if (this.has_edge(new_edge)) {
             //the edge already exists ... 
             //which must mean that the source and target already exist... 
             //so we will just return 
             debug("Edge already exists, so assuming source and target do as well and returning");
             return;
         }
-        /* now we check to see if the edge_ID is present */
-        if (this.edges.edge_id_exists(_edge)) {
-            //yes one of the ids is present , so we will modify the edge instance 
-            //so that the other id matches the translatin 
-            //example: when new edge with id "is a" is created, a new int Id will also 
-            //be assinged. However, if "is a" already exists and has a pre-existing int id,
-            //we should use the pre-existing one 
-            _edge = this.edges.conform(_edge);
+        else {
+            log.i(`Creating: ${new_source_ids.id_readable} -> ${new_edge_ids.id_readable} -> ${new_target_ids.id_readable}`);
+            new_edge = this.edges.add(new_edge, this.gen_id());
         }
+        debug("edge after:");
+        debug(new_edge);
         /*
         At this point, the desired edge did not exist and was created ,
         BUt we still have to create/modify the source and target:
         */
         /* we deal with the source vertex first */
-        if (!this.has_vertex(source)) {
+        debug("checking source vertex: " + new_source_ids.id_readable);
+        if (!this.has_vertex(new_source_ids.id_readable)) {
+            debug("not exists!\n\n");
             let { id, id_readable } = new_source_ids;
             let vertex = new Vertex({
                 id,
                 id_readable,
                 incoming: [],
-                outgoing: [_edge.data.id]
+                outgoing: [new_edge.unique_id]
             });
             this.vertices.add(vertex); //add the vertex to the graph 
         }
         else {
+            debug("exists");
             //vertex already exists... so we will get it and then update it 
-            let v = this.vertices.get(source);
+            let v = this.vertices.get(new_source_ids.id_readable);
             // BEWARE OF BUG !! -> v.add_outgoing(new_target_ids.id) 
             // (leaving there for future incredulousness)  
             // added the target vertex as outging rather than edge 
-            v.add_outgoing(_edge.data.id);
+            v.add_outgoing(new_edge.unique_id);
         }
         /* then the target vertex */
-        if (!this.has_vertex(target)) {
+        debug("checking target vertex: " + new_target_ids.id_readable);
+        if (!this.has_vertex(new_target_ids.id_readable)) {
+            debug("not exist!\n\n");
             //target does not exist -- so create it 
             let { id, id_readable } = new_target_ids;
             let vertex = new Vertex({
                 id,
                 id_readable,
-                incoming: [_edge.data.id],
+                incoming: [new_edge.unique_id],
                 outgoing: []
             });
             this.vertices.add(vertex);
         }
         else {
-            let v = this.vertices.get(target);
-            v.add_incoming(_edge.data.id);
+            debug("exist");
+            let v = this.vertices.get(new_target_ids.id_readable);
+            v.add_incoming(new_edge.unique_id);
         }
+        log.i("Done\n");
     }
-    has_vertex(id) { return this.vertices.exists(id); }
+    has_vertex(id) {
+        return this.vertices.exists(id);
+    }
     has_edge(e) { return this.edges.exists(e); }
+    edge_type_filter(t) {
+        let edge_is_type = this.edges.edge_is_type.bind(this.edges);
+        return function (uid) {
+            return edge_is_type(uid, t);
+        };
+    }
+    filter_edge_uids_by_type(uids, t) {
+        return uids.filter(this.edge_type_filter(t));
+    }
+    get_edge(uid) {
+        return this.edges.get_unique(uid);
+    }
+    get_edge_set(uids) {
+        return uids.map((u) => this.edges.get_unique(u));
+    }
 }
 exports.Graph = Graph;
 //# sourceMappingURL=graph.js.map

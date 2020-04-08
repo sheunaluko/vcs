@@ -2,11 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class Logger {
     constructor(id) {
+        this.enabled = true;
         this.id = id;
         this.header = `[${id}]::`;
     }
     l(...args) {
         //console.log(args)
+        if (!this.enabled) {
+            return;
+        }
         var next_print;
         var to_flush = this.header;
         while (next_print = args.shift()) {
@@ -30,6 +34,12 @@ class Logger {
     }
     d(...args) {
         this.l(args);
+    }
+    disable() {
+        this.enabled = false;
+    }
+    enable() {
+        this.enabled = true;
     }
 }
 exports.Logger = Logger;

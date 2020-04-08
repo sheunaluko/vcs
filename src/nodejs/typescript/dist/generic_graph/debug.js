@@ -75,10 +75,11 @@ exports.main = {
                 //look at the outgoing edges
                 let outgoing_numeric_ids = util.last(p.vertices).data.outgoing;
                 //filter the IDs based on "is a" 
-                let filtered_ids = outgoing_numeric_ids.filter((id) => G.edges.ids_equal(id, "is a"));
+                let filtered_ids = outgoing_numeric_ids.filter((uid) => G.edges.edge_is_type(uid, "is a") //uid is 'unique' id 
+                );
                 //retrieve the requested ids from the graph 
                 return filtered_ids.map((id) => {
-                    let edge = G.edges.get(id);
+                    let edge = G.edges.get_unique(id);
                     let vertex_id = edge.data.target;
                     let vertex = G.vertices.get(vertex_id);
                     let e2v = { edge, vertex };

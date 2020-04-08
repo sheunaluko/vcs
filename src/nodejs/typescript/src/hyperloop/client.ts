@@ -10,7 +10,9 @@ written in typescript
 */
 
 import * as util from "../utils/index";
-import WebSocket from "ws";
+//import WebSocket from "ws";
+declare var window : any  
+
 
 
 /* 
@@ -59,7 +61,7 @@ interface RegisterFunctionOps {
 export class Client { 
 
     ops : ClientOps 
-    conn  : WebSocket 
+    conn  : any 
     log: util.Logger;
     connection_url: string;
 
@@ -74,9 +76,13 @@ export class Client {
 
     constructor(ops : ClientOps ) { 
         this.ops = ops  
-        this.log = util.get_logger("hlc");
-        
+        this.log = util.get_logger("hlc_" + ops.id);
+        //initialize objects 
+        this.lobby = {} 
+        this.function_table = {} 
+        this.conn = null 
 
+        
         //registration promise will be set in connect and can be awaited for better async
         var fullfill_registration = null;
         this.registration_promise = new Promise((resolve, reject) => {
@@ -88,24 +94,26 @@ export class Client {
 
 
 
-    connect() { 
+    async connect() { 
         let url = `ws://${this.ops.host}:${this.ops.port}`;
 
         /* 
         Perform the websocket connection 
         */ 
+        var WebSocket : any = null 
+        let WS_IMPORT = await import("ws")
+        WebSocket = WS_IMPORT.default
+
 
        this.log.d("Attempting connection to url: " + url);
        var ws = new WebSocket(url);
-   
+        this.conn = ws 
        //now we set the callbacks
        ws.on(
          "open",
          function open() {
            this.log.d("Connection successful");
-           //assign the ws instance
-           this.conn = ws;
-           //send a registration message now via the (my) protocol
+           //send a registration message now via the protocol
            this.register();
          }.bind(this)
        );
@@ -124,7 +132,9 @@ export class Client {
 
              case "registered" : 
                 this.log.d("Received registered ack")
-                this.fullfill_registration() 
+                this.fullfill_registration("REG COMPLETE") 
+                
+                break 
 
             case "return_value" : 
                 this.handle_return_value(msg) 
@@ -143,60 +153,73 @@ export class Client {
            this.log.d("The ws connection was closed");
          }.bind(this)
        );
+
+       return this.registration_promise 
      
     }
 
-    async handle_call(msg : {args : any[], call_identifier : string, id : string}) {  
-        this.log.d("Received call request"); 
-        /* 
+
+  async handle_call(msg: { args: any; call_identifier: string; id: string }) {
+    this.log.d("Received call request");
+    /* 
          Lookup the function in the function table 
          and run it with the given args  asyncrhonously, 
          and after the return value is retrieved then 
          we send a message back with the type "return_value" 
          and fields call_identifier, data 
-        */ 
-       let {args,call_identifier,id} =  msg
-       let fn = this.function_table[id]
+        */
 
-       var _msg = null 
+    let { args, call_identifier, id } = msg;
+    let fn_info = this.function_table[id];
 
-       if (!fn) { 
-           //for some reason the function does not exist 
-           _msg = { 
-               data : { 
-            error : true, 
-            reason : "endpoint_reported_no_exist" ,  
-               }, 
-            call_identifier, 
-            type : "return_value" 
-           }
-
-           this.send(_msg)
-           this.log.d("Could not find so sent error")
-           return 
-       }
-
-       //the function does exist... in this case we async it 
-       //then 
-       this.log.d("Running handler") 
-       let result = await fn(args)
-       this.log.d("Got result: ")  
-       this.log.d(result) 
-       _msg = { 
-           data : { 
-               error : false, 
-               result  , 
-           }, 
-           call_identifier, 
-           type : "return_value"
-       }
-
-       this.log.d("Sending result to hub:") 
-       this.log.d(_msg) 
-       this.send(_msg)
-
+    //check if args has a logger
+    if (!args) { args = {} } 
+    if (!args.log) {
+      this.log.d("Setting logger of async handler");
+      args.log = this.log;
     }
-    
+
+    this.log.d("Args is:")
+    this.log.d(args)
+
+    var _msg = null;
+
+    if (!fn_info) {
+      //for some reason the function does not exist
+      _msg = {
+        data: {
+          error: true,
+          reason: "endpoint_reported_no_exist"
+        },
+        call_identifier,
+        type: "return_value"
+      };
+      this.send(_msg);
+      this.log.d("Could not find so sent error");
+      return;
+    }
+
+    //the function does exist... in this case we async it
+    //then
+    this.log.d("Running handler");
+    let result = await fn_info.handler(args);
+    this.log.d("Got result: ");
+    this.log.d(result);
+    _msg = {
+      data: {
+        error: false,
+        result
+      },
+      call_identifier,
+      type: "return_value"
+    };
+
+    this.log.d("Sending result to hub:");
+    this.log.d(_msg);
+    this.send(_msg);
+  }
+
+
     handle_return_value(msg : {call_identifier : string,data :any}) { 
         /* 
         We have in the past called await call(...) 
@@ -205,6 +228,10 @@ export class Client {
         1st we check the LOBBY for the call_identifier,
         then we RESOLVE the associated promise 
         */
+
+        this.log.d("Got return value: ") 
+        this.log.d(msg) 
+
        
         let {call_identifier,data} = msg 
         let  {promise,promise_resolver}  = this.lobby[call_identifier]  
@@ -218,7 +245,7 @@ export class Client {
 
   send(msg: object) {
     if (!this.conn) {
-      throw "ws is undefined";
+      throw "Ws connection has not been initialized";
     }
     this.conn.send(JSON.stringify(msg));
   }
@@ -249,7 +276,39 @@ export class Client {
       //update the function table 
       this.function_table[id] = {args_info,handler}
       this.log.d("Added function to local function table") 
-  }
+      this.log.d(this.function_table)
+  } 
+
+  async get_available_functions() { 
+    
+    //generate a call_id 
+    let call_identifier = this.gen_call_id()   
+    //generate the message 
+    let msg = { 
+        type : "list_functions"  , 
+        call_identifier, 
+    }
+
+    this.send(msg) 
+    this.log.d("Sent list_functions request") 
+    this.log.d(msg) 
+
+    //create the promise we will return
+    //and get out a reference to its resolver 
+    var promise_resolver = null 
+    let promise = new Promise((resolve,reject) => { 
+        promise_resolver = resolve      
+    }) 
+
+    //update the lobby since we will be waiting for a response 
+    this.lobby[call_identifier] =  { promise, promise_resolver} 
+    this.log.d("Updated lobby to await async response") 
+
+    //return the promise 
+    return promise 
+} 
+
+
 
   /* 
     Allows this client to asynchronously query the hyperloop for some function call 
@@ -260,10 +319,18 @@ export class Client {
 
       //build the appropriate message to call a funciton on the server side  
       let {id,args} = ops 
+
+      //check if args has a logger 
+      if (!args.log) { 
+        this.log.d("Setting logger of async handler")
+        args.log = this.log 
+      }
+
       let msg = { 
           id, 
           args, 
           type :"call",
+          call_identifier, 
       }
 
       //create a promise and promise resolver
@@ -287,9 +354,8 @@ export class Client {
   }
 
   gen_call_id() {
-      return String(new Date().getTime())
+    return util.uuid();
   }
-  
-
 }
+
 

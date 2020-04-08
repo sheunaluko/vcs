@@ -3,9 +3,9 @@ export class Logger {
     
     id : string  
     header : string 
-     
+    enabled : boolean  
     constructor(id : string) { 
-	
+	this.enabled = true 
     this.id = id 
     this.header = `[${id}]::` 
     }
@@ -13,6 +13,7 @@ export class Logger {
     l(...args : any []) { 
 
         //console.log(args)
+        if (!this.enabled) { return } 
 
         var next_print : any  
         var to_flush = this.header
@@ -44,6 +45,14 @@ export class Logger {
 
     d(...args : any[]) { 
         this.l(args) 
+    }
+
+    disable() {
+        this.enabled = false 
+    }
+
+    enable() { 
+        this.enabled = true 
     }
     
 }

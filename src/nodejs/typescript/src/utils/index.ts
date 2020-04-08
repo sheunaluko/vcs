@@ -1,7 +1,8 @@
-
-
 import * as logger from "./logger" 
 import {Logger} from "./logger" 
+
+import { v4 as uuidv4 } from 'uuid';
+import { transformFile } from "babel-core";
 
 
 
@@ -215,3 +216,109 @@ export function set<T>(...args : T[] ) : Set<T> {
 }
 
 export {Logger } 
+
+
+
+
+
+
+/* 
+
+Funcitonal style patterns (inspired by clojure)
+
+*/ 
+
+
+
+/**
+ * Parition a list of things into sub lists each of length 'num' 
+ *
+ * @export
+ * @template T
+ * @param {T[]} thing
+ * @param {number} num
+ * @returns
+ */
+export function partition<T>(thing : T[],num : number) {  
+  var result = [] 
+  var current_sub_array = [] 
+  for (var i = 0 ; i < thing.length ; i ++ ) { 
+
+    if ( (i+1) % num == 0 && i !=0  ) { 
+      current_sub_array.push(thing[i]) 
+      result.push(current_sub_array)  
+      current_sub_array = [] 
+    }  else { 
+      current_sub_array.push(thing[i]) 
+      if (i == thing.length - 1) {//end
+        result.push(current_sub_array)
+      }
+    }
+
+  }
+
+  return result 
+    
+}
+
+
+export function uuid() {
+  return uuidv4()
+}
+
+
+/* 
+ source from: https://gist.github.com/kethinov/6658166 
+*/ 
+var path = require('path')
+var fs = require('fs')
+
+export var walkSync = (dir :string, filelist :any  = []) => {
+  fs.readdirSync(dir).forEach((file :string) => { 
+
+    let name = path.join(dir, file) 
+    let basename = path.basename(name) 
+    let prefix = basename.substring(0,2)
+    
+    if(prefix == ".#") { return }  //ignore the emacs hidden files (threw errors)
+
+    filelist = fs.statSync(name).isDirectory()
+      ? walkSync(path.join(dir, file), filelist)
+      : filelist.concat(path.join(dir, file));
+
+  });
+return filelist;
+}
+
+
+export function rec_find_dir_ext(dir :string, ext: string) { 
+  return  walkSync(dir).filter( (file:string) => ( file.substr(-1*(ext.length+1)) == '.' + ext ) )
+
+}
+
+
+/* 
+STRINGS
+*/ 
+
+export function str_empty(s : string) {  
+  return s == '' 
+}
+
+export function str_not_empty(s : string) { 
+  return !str_empty(s) 
+}
+
+export function trim(s: string) { 
+  return s.trim()
+}
+
+export function char_replacer(c : string,rep :string) { 
+  return function(s : string) { 
+      return s.replace(new RegExp(c,'g'),rep) 
+  }
+}
+
+export function char_remover(c : string) { 
+  return char_replacer(c,"") 
+}

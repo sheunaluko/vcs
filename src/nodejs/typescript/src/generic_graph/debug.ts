@@ -2,7 +2,6 @@ import * as gg from "./graph"
 import * as gu from "./utilities"
 import * as util from "../utils/index"
 
-
 declare var global : any; 
 
 export var main = { 
@@ -72,12 +71,12 @@ export var main = {
             let outgoing_numeric_ids = util.last(p.vertices).data.outgoing 
             //filter the IDs based on "is a" 
             let filtered_ids = outgoing_numeric_ids.filter( 
-                (id:number) => G.edges.ids_equal(id,"is a")
+                (uid:number) => G.edges.edge_is_type(uid,"is a") //uid is 'unique' id 
             ) 
             //retrieve the requested ids from the graph 
             return filtered_ids.map(
                 (id :number) => { 
-                    let edge = G.edges.get(id) 
+                    let edge = G.edges.get_unique(id) 
                     let vertex_id = edge.data.target 
                     let vertex = G.vertices.get(vertex_id)
                     let e2v : gu.EdgeToVertex = { edge , vertex }
@@ -85,6 +84,7 @@ export var main = {
                 }
             )
         }
+
 
 
         //create the options 
@@ -100,6 +100,7 @@ export var main = {
         return MBFS
 
     } , 
+    
     "4" : async function() {
         let mbfs = main["3"]() //get the mbfs object 
         //build start state - the dog node 

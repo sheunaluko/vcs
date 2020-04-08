@@ -15,7 +15,7 @@
             "type": "node",
             "request": "launch",
             "runtimeExecutable": "nodemon",
-            "program": "${workspaceFolder}/typescript/dist/generic_graph/debug.js",
+            "program": "${workspaceFolder}/typescript/dist/hyperloop/debug.js",
             "restart": true,
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen"

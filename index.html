@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html>
+	<head>
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159990365-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159990365-1');
+</script>
+
+
+    <title>CoronavirusAPI</title>
+    <meta name="csrf-param" content="authenticity_token" />
+<meta name="csrf-token" content="XmYGGkVVRZe/tanuG0NB+ujPQdUsuQniq9ka3pqhVlU0cK6awjEH0x0iL3DUqQKZHjo8D11Bk89NDrBUs6Osrg==" />
+    
+
+    <link rel="stylesheet" media="all" href="/assets/application-c378bc2e6adc0f7daa22024971265c16508de392c79c62396d9da7f97e6b27c3.css" data-turbolinks-track="reload" />
+    <script src="/packs/js/application-2fbdbb6f02a96635cd1c.js" data-turbolinks-track="reload"></script>
+  </head>
+
+  <body>
+    <p id="notice"></p>
+
+<h2>Coronavirus (COVID-19) US State Data Tracking Project</h2>
+
+<h3>Record of official data from US government websites for the 50 states and DC.
+	All data provided here are direct crawls of state government websites. These
+	are the officially reported numbers. Unlike other coronavirus data sites, we do not rely on
+	news or human crowd-sourced data. These are automatic captures of official state websites.
+	Todo is to certify this data on the blockchain.
+	(All websites last crawled: 2020-03-20 18:40:42 UTC)</h3>
+
+<h4><a href="mailto:coronavirusapi@googlegroups.com">Contact</a> for more info, or if you want to contribute to the project. 
+</h4>
+
+<h4>To donate crypto, see the donation addresses at the bottom of the page. Thanks!
+</h4>
+
+<table class="pretty" border="1">
+  <thead>
+    <tr>
+      <th>Tested</th>
+      <th>Positive</th>
+      <th>Deaths</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>103363</td>
+        <td>13358</td>
+        <td>172</td>
+      </tr>
+  </tbody>
+</table>
+
+<div class="container">
+	<h5>Total number tested over time (note the spike was due to previous test numbers
+		being available):</h5>
+  <div id="chart-1" style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">Loading...</div><script type="text/javascript">
+  new Chartkick["LineChart"]("chart-1", [[0.3,2259],[0.9,2421],[1.0,3779],[1.2,3830],[1.7,3897],[1.9,4228],[2.1,4338],[2.3,4388],[2.7,4532],[2.9,6085],[3.1,6152],[3.2,6184],[3.3,6738],[3.6,6828],[3.8,7391],[4.1,8779],[4.6,8847],[4.7,9045],[5.0,10094],[5.1,11608],[5.2,11634],[5.6,11660],[5.9,15452],[6.1,15699],[6.2,15869],[6.7,16652],[6.8,17280],[6.9,19596],[7.2,20005],[7.3,20077],[7.7,20912],[7.8,21278],[7.9,23034],[8.2,26115],[8.9,31604],[9.1,34788],[9.2,48747],[9.8,53480],[10.1,58427],[10.3,58448],[10.9,68460],[11.3,74839],[11.6,79286],[11.8,82230],[12.0,94114],[12.2,94976],[12.8,103363]], {"curve":false,"xtitle":"Days","points":false,"thousands":","});
+</script>
+
+</div>
+<div class="container">
+  <h5>Total positive cases over time:</h5>
+  <div id="chart-2" style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">Loading...</div><script type="text/javascript">
+  new Chartkick["LineChart"]("chart-2", [[0.3,371],[0.9,415],[1.0,494],[1.2,497],[1.7,510],[1.9,607],[2.1,630],[2.3,666],[2.7,675],[2.9,901],[3.1,941],[3.2,954],[3.3,954],[3.6,970],[3.8,1005],[4.1,1220],[4.6,1232],[4.7,1264],[5.0,1493],[5.1,1597],[5.2,1623],[5.6,1640],[5.9,2106],[6.1,2132],[6.2,2184],[6.7,2350],[6.8,2440],[6.9,2598],[7.2,2718],[7.3,2790],[7.7,2858],[7.8,2901],[7.9,3267],[8.2,3490],[8.9,4047],[9.1,4275],[9.2,4363],[9.8,5251],[10.1,5595],[10.3,5612],[10.9,7534],[11.3,8021],[11.6,10340],[11.8,10750],[12.0,11826],[12.2,11885],[12.8,13358]], {"curve":false,"xtitle":"Days","points":false,"thousands":","});
+</script>
+
+</div>
+<div class="container">
+  <h5>Total deaths over time:</h5>
+  <div id="chart-3" style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">Loading...</div><script type="text/javascript">
+  new Chartkick["LineChart"]("chart-3", [[0.3,19],[0.9,19],[1.0,21],[1.2,21],[1.7,21],[1.9,24],[2.1,25],[2.3,25],[2.7,25],[2.9,27],[3.1,28],[3.2,28],[3.3,28],[3.6,28],[3.8,28],[4.1,35],[4.6,35],[4.7,35],[5.0,36],[5.1,39],[5.2,40],[5.6,40],[5.9,47],[6.1,48],[6.2,49],[6.7,49],[6.8,49],[6.9,54],[7.2,56],[7.3,56],[7.7,57],[7.8,57],[7.9,61],[8.2,63],[8.9,69],[9.1,78],[9.2,79],[9.8,89],[10.1,96],[10.3,96],[10.9,104],[11.3,125],[11.6,127],[11.8,145],[12.0,161],[12.2,161],[12.8,172]], {"curve":false,"xtitle":"Days","points":false,"thousands":","});
+</script>
+
+</div>
+
+<div class="container">
+  <h5>Cases in top states over time:</h5>
+  <div id="chart-4" style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">Loading...</div><script type="text/javascript">
+  new Chartkick["LineChart"]("chart-4", [{"name":"NY","data":{"0.3":89,"0.9":105,"1.0":105,"1.2":105,"1.7":105,"1.9":142,"2.1":142,"2.3":142,"2.7":142,"2.9":173,"3.1":173,"3.2":173,"3.3":173,"3.6":173,"3.8":173,"4.1":216,"4.6":216,"4.7":216,"5.0":325,"5.1":325,"5.2":325,"5.6":325,"5.9":421,"6.1":421,"6.2":421,"6.7":524,"6.8":524,"6.9":524,"7.2":613,"7.3":613,"7.7":613,"7.8":613,"7.9":729,"8.2":729,"8.9":950,"9.1":950,"9.2":950,"9.8":1374,"10.1":1374,"10.3":1374,"10.9":2382,"11.3":2382,"11.6":4152,"11.8":4152,"12.0":4152,"12.2":4152,"12.8":4152}},{"name":"WA","data":{"0.3":102,"0.9":102,"1.0":136,"1.2":136,"1.7":136,"1.9":162,"2.1":162,"2.3":162,"2.7":162,"2.9":267,"3.1":267,"3.2":267,"3.3":267,"3.6":267,"3.8":267,"4.1":366,"4.6":366,"4.7":366,"5.0":366,"5.1":457,"5.2":457,"5.6":457,"5.9":568,"6.1":568,"6.2":568,"6.7":568,"6.8":568,"6.9":642,"7.2":642,"7.3":642,"7.7":642,"7.8":642,"7.9":642,"8.2":769,"8.9":769,"9.1":904,"9.2":904,"9.8":904,"10.1":1012,"10.3":1012,"10.9":1012,"11.3":1187,"11.6":1187,"11.8":1187,"12.0":1376,"12.2":1376,"12.8":1376}},{"name":"CA","data":{"0.3":88,"0.9":88,"1.0":114,"1.2":114,"1.7":114,"1.9":114,"2.1":114,"2.3":133,"2.7":133,"2.9":133,"3.1":157,"3.2":157,"3.3":157,"3.6":157,"3.8":157,"4.1":177,"4.6":177,"4.7":177,"5.0":198,"5.1":198,"5.2":198,"5.6":198,"5.9":247,"6.1":247,"6.2":247,"6.7":247,"6.8":247,"6.9":247,"7.2":247,"7.3":247,"7.7":247,"7.8":247,"7.9":335,"8.2":335,"8.9":335,"9.1":335,"9.2":392,"9.8":472,"10.1":472,"10.3":472,"10.9":598,"11.3":598,"11.6":598,"11.8":675,"12.0":675,"12.2":675,"12.8":1006}},{"name":"NJ","data":{"0.3":4,"0.9":6,"1.0":6,"1.2":6,"1.7":6,"1.9":10,"2.1":11,"2.3":11,"2.7":11,"2.9":15,"3.1":15,"3.2":15,"3.3":15,"3.6":15,"3.8":23,"4.1":23,"4.6":23,"4.7":23,"5.0":29,"5.1":29,"5.2":29,"5.6":29,"5.9":50,"6.1":50,"6.2":50,"6.7":50,"6.8":69,"6.9":69,"7.2":69,"7.3":69,"7.7":69,"7.8":69,"7.9":98,"8.2":98,"8.9":178,"9.1":178,"9.2":178,"9.8":267,"10.1":267,"10.3":267,"10.9":427,"11.3":427,"11.6":742,"11.8":742,"12.0":742,"12.2":742,"12.8":890}},{"name":"MI","data":{"0.3":0,"0.9":0,"1.0":0,"1.2":0,"1.7":0,"1.9":0,"2.1":0,"2.3":0,"2.7":0,"2.9":0,"3.1":0,"3.2":2,"3.3":2,"3.6":2,"3.8":2,"4.1":2,"4.6":2,"4.7":2,"5.0":3,"5.1":12,"5.2":12,"5.6":12,"5.9":16,"6.1":25,"6.2":25,"6.7":25,"6.8":25,"6.9":25,"7.2":33,"7.3":33,"7.7":33,"7.8":33,"7.9":33,"8.2":53,"8.9":53,"9.1":54,"9.2":54,"9.8":65,"10.1":65,"10.3":65,"10.9":80,"11.3":80,"11.6":80,"11.8":80,"12.0":334,"12.2":334,"12.8":549}},{"name":"FL","data":{"0.3":17,"0.9":17,"1.0":18,"1.2":18,"1.7":18,"1.9":18,"2.1":19,"2.3":19,"2.7":20,"2.9":20,"3.1":20,"3.2":28,"3.3":28,"3.6":28,"3.8":28,"4.1":31,"4.6":34,"4.7":34,"5.0":35,"5.1":35,"5.2":49,"5.6":50,"5.9":56,"6.1":56,"6.2":77,"6.7":77,"6.8":77,"6.9":77,"7.2":77,"7.3":115,"7.7":115,"7.8":115,"7.9":115,"8.2":149,"8.9":155,"9.1":160,"9.2":160,"9.8":192,"10.1":216,"10.3":216,"10.9":314,"11.3":328,"11.6":390,"11.8":390,"12.0":432,"12.2":432,"12.8":520}},{"name":"LA","data":{"0.3":0,"0.9":0,"1.0":0,"1.2":0,"1.7":0,"1.9":1,"2.1":1,"2.3":1,"2.7":1,"2.9":3,"3.1":3,"3.2":6,"3.3":6,"3.6":6,"3.8":6,"4.1":13,"4.6":13,"4.7":14,"5.0":19,"5.1":19,"5.2":19,"5.6":33,"5.9":36,"6.1":36,"6.2":36,"6.7":53,"6.8":69,"6.9":77,"7.2":77,"7.3":77,"7.7":91,"7.8":91,"7.9":91,"8.2":103,"8.9":114,"9.1":136,"9.2":136,"9.8":171,"10.1":196,"10.3":196,"10.9":196,"11.3":280,"11.6":347,"11.8":347,"12.0":392,"12.2":392,"12.8":479}},{"name":"IL","data":{"0.3":6,"0.9":6,"1.0":6,"1.2":6,"1.7":7,"1.9":11,"2.1":11,"2.3":11,"2.7":11,"2.9":19,"3.1":19,"3.2":19,"3.3":19,"3.6":19,"3.8":19,"4.1":25,"4.6":25,"4.7":25,"5.0":32,"5.1":32,"5.2":32,"5.6":32,"5.9":46,"6.1":46,"6.2":46,"6.7":46,"6.8":46,"6.9":64,"7.2":64,"7.3":64,"7.7":64,"7.8":64,"7.9":93,"8.2":93,"8.9":105,"9.1":105,"9.2":105,"9.8":105,"10.1":160,"10.3":160,"10.9":288,"11.3":288,"11.6":288,"11.8":288,"12.0":422,"12.2":422,"12.8":422}},{"name":"GA","data":{"0.3":null,"0.9":null,"1.0":5,"1.2":5,"1.7":11,"1.9":12,"2.1":12,"2.3":17,"2.7":17,"2.9":17,"3.1":22,"3.2":22,"3.3":22,"3.6":22,"3.8":22,"4.1":22,"4.6":22,"4.7":31,"5.0":31,"5.1":31,"5.2":42,"5.6":42,"5.9":42,"6.1":42,"6.2":64,"6.7":66,"6.8":66,"6.9":66,"7.2":66,"7.3":91,"7.7":91,"7.8":99,"7.9":99,"8.2":99,"8.9":121,"9.1":121,"9.2":143,"9.8":146,"10.1":146,"10.3":146,"10.9":197,"11.3":197,"11.6":197,"11.8":287,"12.0":287,"12.2":287,"12.8":420}},{"name":"MA","data":{"0.3":13,"0.9":28,"1.0":28,"1.2":28,"1.7":28,"1.9":41,"2.1":41,"2.3":41,"2.7":41,"2.9":92,"3.1":92,"3.2":92,"3.3":92,"3.6":92,"3.8":92,"4.1":95,"4.6":95,"4.7":95,"5.0":108,"5.1":108,"5.2":108,"5.6":108,"5.9":123,"6.1":123,"6.2":123,"6.7":123,"6.8":123,"6.9":138,"7.2":138,"7.3":138,"7.7":138,"7.8":138,"7.9":164,"8.2":164,"8.9":197,"9.1":197,"9.2":197,"9.8":197,"10.1":218,"10.3":218,"10.9":218,"11.3":256,"11.6":256,"11.8":256,"12.0":328,"12.2":328,"12.8":328}}], {"curve":false,"xtitle":"Days","points":false,"legend":"right","thousands":","});
+</script>
+
+</div>
+
+<div class="container">
+  <h5>Cases in top states normalized by population (1 million) over time:</h5>
+  <div id="chart-5" style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">Loading...</div><script type="text/javascript">
+  new Chartkick["LineChart"]("chart-5", [{"name":"NY","data":{"0.3":4.6,"0.9":5.4,"1.0":5.4,"1.2":5.4,"1.7":5.4,"1.9":7.3,"2.1":7.3,"2.3":7.3,"2.7":7.3,"2.9":8.9,"3.1":8.9,"3.2":8.9,"3.3":8.9,"3.6":8.9,"3.8":8.9,"4.1":11.1,"4.6":11.1,"4.7":11.1,"5.0":16.8,"5.1":16.8,"5.2":16.8,"5.6":16.8,"5.9":21.7,"6.1":21.7,"6.2":21.7,"6.7":27.0,"6.8":27.0,"6.9":27.0,"7.2":31.6,"7.3":31.6,"7.7":31.6,"7.8":31.6,"7.9":37.6,"8.2":37.6,"8.9":49.0,"9.1":49.0,"9.2":49.0,"9.8":70.9,"10.1":70.9,"10.3":70.9,"10.9":122.9,"11.3":122.9,"11.6":214.3,"11.8":214.3,"12.0":214.3,"12.2":214.3,"12.8":214.3}},{"name":"WA","data":{"0.3":15.2,"0.9":15.2,"1.0":20.2,"1.2":20.2,"1.7":20.2,"1.9":24.1,"2.1":24.1,"2.3":24.1,"2.7":24.1,"2.9":39.7,"3.1":39.7,"3.2":39.7,"3.3":39.7,"3.6":39.7,"3.8":39.7,"4.1":54.4,"4.6":54.4,"4.7":54.4,"5.0":54.4,"5.1":68.0,"5.2":68.0,"5.6":68.0,"5.9":84.5,"6.1":84.5,"6.2":84.5,"6.7":84.5,"6.8":84.5,"6.9":95.5,"7.2":95.5,"7.3":95.5,"7.7":95.5,"7.8":95.5,"7.9":95.5,"8.2":114.4,"8.9":114.4,"9.1":134.4,"9.2":134.4,"9.8":134.4,"10.1":150.5,"10.3":150.5,"10.9":150.5,"11.3":176.5,"11.6":176.5,"11.8":176.5,"12.0":204.6,"12.2":204.6,"12.8":204.6}},{"name":"DC","data":{"0.3":1.7,"0.9":1.7,"1.0":1.7,"1.2":1.7,"1.7":1.7,"1.9":1.7,"2.1":3.3,"2.3":8.3,"2.7":8.3,"2.9":6.6,"3.1":8.3,"3.2":8.3,"3.3":8.3,"3.6":8.3,"3.8":8.3,"4.1":16.6,"4.6":16.6,"4.7":16.6,"5.0":16.6,"5.1":16.6,"5.2":16.6,"5.6":16.6,"5.9":16.6,"6.1":16.6,"6.2":16.6,"6.7":16.6,"6.8":16.6,"6.9":16.6,"7.2":26.6,"7.3":26.6,"7.7":26.6,"7.8":26.6,"7.9":26.6,"8.2":28.3,"8.9":28.3,"9.1":36.6,"9.2":36.6,"9.8":36.6,"10.1":51.5,"10.3":51.5,"10.9":51.5,"11.3":64.8,"11.6":64.8,"11.8":64.8,"12.0":64.8,"12.2":118.0,"12.8":118.0}},{"name":"LA","data":{"0.3":0.0,"0.9":0.0,"1.0":0.0,"1.2":0.0,"1.7":0.0,"1.9":0.2,"2.1":0.2,"2.3":0.2,"2.7":0.2,"2.9":0.7,"3.1":0.7,"3.2":1.3,"3.3":1.3,"3.6":1.3,"3.8":1.3,"4.1":2.9,"4.6":2.9,"4.7":3.1,"5.0":4.2,"5.1":4.2,"5.2":4.2,"5.6":7.3,"5.9":7.9,"6.1":7.9,"6.2":7.9,"6.7":11.7,"6.8":15.2,"6.9":17.0,"7.2":17.0,"7.3":17.0,"7.7":20.1,"7.8":20.1,"7.9":20.1,"8.2":22.7,"8.9":25.1,"9.1":30.0,"9.2":30.0,"9.8":37.7,"10.1":43.2,"10.3":43.2,"10.9":43.2,"11.3":61.8,"11.6":76.5,"11.8":76.5,"12.0":86.5,"12.2":86.5,"12.8":105.7}},{"name":"NJ","data":{"0.3":0.5,"0.9":0.7,"1.0":0.7,"1.2":0.7,"1.7":0.7,"1.9":1.1,"2.1":1.3,"2.3":1.3,"2.7":1.3,"2.9":1.7,"3.1":1.7,"3.2":1.7,"3.3":1.7,"3.6":1.7,"3.8":2.6,"4.1":2.6,"4.6":2.6,"4.7":2.6,"5.0":3.3,"5.1":3.3,"5.2":3.3,"5.6":3.3,"5.9":5.7,"6.1":5.7,"6.2":5.7,"6.7":5.7,"6.8":7.8,"6.9":7.8,"7.2":7.8,"7.3":7.8,"7.7":7.8,"7.8":7.8,"7.9":11.1,"8.2":11.1,"8.9":20.2,"9.1":20.2,"9.2":20.2,"9.8":30.4,"10.1":30.4,"10.3":30.4,"10.9":48.6,"11.3":48.6,"11.6":84.4,"11.8":84.4,"12.0":84.4,"12.2":84.4,"12.8":101.2}},{"name":"MI","data":{"0.3":0.0,"0.9":0.0,"1.0":0.0,"1.2":0.0,"1.7":0.0,"1.9":0.0,"2.1":0.0,"2.3":0.0,"2.7":0.0,"2.9":0.0,"3.1":0.0,"3.2":0.2,"3.3":0.2,"3.6":0.2,"3.8":0.2,"4.1":0.2,"4.6":0.2,"4.7":0.2,"5.0":0.3,"5.1":1.2,"5.2":1.2,"5.6":1.2,"5.9":1.6,"6.1":2.5,"6.2":2.5,"6.7":2.5,"6.8":2.5,"6.9":2.5,"7.2":3.3,"7.3":3.3,"7.7":3.3,"7.8":3.3,"7.9":3.3,"8.2":5.4,"8.9":5.4,"9.1":5.5,"9.2":5.5,"9.8":6.6,"10.1":6.6,"10.3":6.6,"10.9":8.1,"11.3":8.1,"11.6":8.1,"11.8":8.1,"12.0":33.8,"12.2":33.8,"12.8":55.5}},{"name":"CO","data":{"0.3":1.6,"0.9":1.6,"1.0":1.6,"1.2":1.6,"1.7":1.6,"1.9":1.8,"2.1":2.4,"2.3":2.6,"2.7":2.6,"2.9":3.2,"3.1":3.6,"3.2":3.6,"3.3":3.6,"3.6":3.6,"3.8":5.6,"4.1":6.8,"4.6":6.8,"4.7":6.8,"5.0":9.7,"5.1":9.7,"5.2":9.7,"5.6":9.7,"5.9":14.3,"6.1":15.3,"6.2":15.3,"6.7":15.3,"6.8":20.1,"6.9":20.1,"7.2":20.1,"7.3":20.1,"7.7":20.1,"7.8":20.1,"7.9":26.0,"8.2":26.0,"8.9":26.0,"9.1":31.8,"9.2":31.8,"9.8":31.8,"10.1":31.8,"10.3":31.8,"10.9":31.8,"11.3":42.9,"11.6":42.9,"11.8":42.9,"12.0":55.1,"12.2":55.1,"12.8":55.1}},{"name":"MA","data":{"0.3":2.0,"0.9":4.3,"1.0":4.3,"1.2":4.3,"1.7":4.3,"1.9":6.3,"2.1":6.3,"2.3":6.3,"2.7":6.3,"2.9":14.1,"3.1":14.1,"3.2":14.1,"3.3":14.1,"3.6":14.1,"3.8":14.1,"4.1":14.5,"4.6":14.5,"4.7":14.5,"5.0":16.5,"5.1":16.5,"5.2":16.5,"5.6":16.5,"5.9":18.8,"6.1":18.8,"6.2":18.8,"6.7":18.8,"6.8":18.8,"6.9":21.1,"7.2":21.1,"7.3":21.1,"7.7":21.1,"7.8":21.1,"7.9":25.0,"8.2":25.0,"8.9":30.1,"9.1":30.1,"9.2":30.1,"9.8":30.1,"10.1":33.3,"10.3":33.3,"10.9":33.3,"11.3":39.1,"11.6":39.1,"11.8":39.1,"12.0":50.1,"12.2":50.1,"12.8":50.1}},{"name":"VT","data":{"0.3":1.6,"0.9":1.6,"1.0":1.6,"1.2":1.6,"1.7":1.6,"1.9":1.6,"2.1":1.6,"2.3":1.6,"2.7":1.6,"2.9":1.6,"3.1":1.6,"3.2":1.6,"3.3":1.6,"3.6":1.6,"3.8":1.6,"4.1":1.6,"4.6":1.6,"4.7":1.6,"5.0":3.2,"5.1":3.2,"5.2":3.2,"5.6":3.2,"5.9":3.2,"6.1":3.2,"6.2":3.2,"6.7":6.4,"6.8":6.4,"6.9":6.4,"7.2":6.4,"7.3":6.4,"7.7":6.4,"7.8":6.4,"7.9":6.4,"8.2":6.4,"8.9":19.2,"9.1":19.2,"9.2":19.2,"9.8":16.0,"10.1":16.0,"10.3":27.2,"10.9":30.4,"11.3":30.4,"11.6":30.4,"11.8":35.2,"12.0":35.2,"12.2":35.2,"12.8":46.3}},{"name":"CT","data":{"0.3":0.0,"0.9":0.3,"1.0":0.3,"1.2":0.3,"1.7":0.3,"1.9":0.3,"2.1":0.6,"2.3":0.6,"2.7":0.6,"2.9":0.6,"3.1":0.6,"3.2":0.6,"3.3":0.6,"3.6":0.6,"3.8":0.6,"4.1":0.8,"4.6":0.8,"4.7":0.8,"5.0":1.7,"5.1":1.7,"5.2":1.7,"5.6":1.7,"5.9":3.1,"6.1":3.1,"6.2":3.1,"6.7":3.1,"6.8":3.1,"6.9":5.6,"7.2":5.6,"7.3":5.6,"7.7":5.6,"7.8":5.6,"7.9":5.6,"8.2":7.3,"8.9":7.3,"9.1":11.5,"9.2":11.5,"9.8":11.5,"10.1":19.0,"10.3":19.0,"10.9":19.0,"11.3":26.9,"11.6":26.9,"11.8":26.9,"12.0":44.5,"12.2":44.5,"12.8":44.5}}], {"curve":false,"xtitle":"Days","points":false,"legend":"right","thousands":","});
+</script>
+
+</div>
+
+<h4>Latest data crawled for each state:</h4>
+
+<table class="pretty" border="1">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Tested</th>
+      <th>Positive</th>
+      <th>Deaths</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+      <tr>
+	      <td><a href="http://dhss.alaska.gov/dph/Epi/id/Pages/COVID-19/monitoring.aspx">AK</a></td>
+        <td>513</td>
+        <td>9</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="http://alabamapublichealth.gov/infectiousdiseases/2019-coronavirus.html">AL</a></td>
+        <td>91</td>
+        <td>81</td>
+        <td>0</td>
+      </tr>
+      <tr>
+	      <td><a href="https://www.healthy.arkansas.gov/programs-services/topics/novel-coronavirus">AR</a></td>
+        <td>650</td>
+        <td>96</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="https://tableau.azdhs.gov/views/COVID-19Dashboard/COVID-19table?:isGuestRedirectFromVizportal=y&amp;:embed=y">AZ</a></td>
+        <td>349</td>
+        <td>44</td>
+        <td>0</td>
+      </tr>
+      <tr>
+	      <td><a href="https://www.cdph.ca.gov/Programs/CID/DCDC/Pages/Immunization/nCOV2019.aspx">CA</a></td>
+        <td>8316</td>
+        <td>1006</td>
+        <td>19</td>
+      </tr>
+      <tr>
+	      <td><a href="https://covid19.colorado.gov/data">CO</a></td>
+        <td>2952</td>
+        <td>277</td>
+        <td>2</td>
+      </tr>
+      <tr>
+	      <td><a href="https://portal.ct.gov/Coronavirus">CT</a></td>
+        <td>284</td>
+        <td>159</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="https://coronavirus.dc.gov/page/coronavirus-surveillance-data">DC</a></td>
+        <td>573</td>
+        <td>71</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="https://dhss.delaware.gov/dhss/dph/epi/2019novelcoronavirus.html">DE</a></td>
+        <td>74</td>
+        <td>38</td>
+        <td>0</td>
+      </tr>
+      <tr>
+	      <td><a href="http://floridahealthcovid19.gov">FL</a></td>
+        <td>3416</td>
+        <td>520</td>
+        <td>10</td>
+      </tr>
+      <tr>
+	      <td><a href="https://dph.georgia.gov/covid-19-daily-status-report">GA</a></td>
+        <td>2386</td>
+        <td>420</td>
+        <td>13</td>
+      </tr>
+      <tr>
+	      <td><a href="https://health.hawaii.gov/docd/advisories/novel-coronavirus-2019/">HI</a></td>
+        <td>22</td>
+        <td>22</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="https://idph.iowa.gov/Emerging-Health-Issues/Novel-Coronavirus">IA</a></td>
+        <td>128</td>
+        <td>44</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="https://healthandwelfare.idaho.gov/COVID19/tabid/4664/Default.aspx">ID</a></td>
+        <td>613</td>
+        <td>23</td>
+        <td>0</td>
+      </tr>
+      <tr>
+	      <td><a href="http://www.dph.illinois.gov/topics-services/diseases-and-conditions/diseases-a-z-list/coronavirus">IL</a></td>
+        <td>3151</td>
+        <td>422</td>
+        <td>4</td>
+      </tr>
+      <tr>
+	      <td><a href="https://isdh.maps.arcgis.com/apps/opsdashboard/index.html#/255e4039e3dd4d8780d8da7b9b599d70">IN</a></td>
+        <td>554</td>
+        <td>79</td>
+        <td>2</td>
+      </tr>
+      <tr>
+	      <td><a href="http://www.kdheks.gov/coronavirus/index.htm">KS</a></td>
+        <td>461</td>
+        <td>44</td>
+        <td>1</td>
+      </tr>
+      <tr>
+	      <td><a href="https://chfs.ky.gov/agencies/dph/Pages/covid19.aspx">KY</a></td>
+        <td>639</td>
+        <td>47</td>
+        <td>1</td>
+      </tr>
+      <tr>
+	      <td><a href="http://ldh.la.gov/coronavirus/">LA</a></td>
+        <td>1047</td>
+        <td>479</td>
+        <td>10</td>
+      </tr>
+      <tr>
+	      <td><a href="https://www.mass.gov/info-details/covid-19-quarantine-and-monitoring">MA</a></td>
+        <td>3132</td>
+        <td>328</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="https://phpa.health.maryland.gov/Pages/Novel-coronavirus.aspx">MD</a></td>
+        <td>243</td>
+        <td>149</td>
+        <td>1</td>
+      </tr>
+      <tr>
+	      <td><a href="https://www.maine.gov/dhhs/mecdc/infectious-disease/epi/airborne/coronavirus.shtml">ME</a></td>
+        <td>2320</td>
+        <td>56</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="https://www.michigan.gov/coronavirus">MI</a></td>
+        <td>2449</td>
+        <td>549</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="https://www.health.state.mn.us/diseases/coronavirus/situation.html">MN</a></td>
+        <td>3856</td>
+        <td>115</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="https://health.mo.gov/living/healthcondiseases/communicable/novel-coronavirus/">MO</a></td>
+        <td>397</td>
+        <td>28</td>
+        <td>1</td>
+      </tr>
+      <tr>
+	      <td><a href="https://msdh.ms.gov/msdhsite/_static/14,0,420.html">MS</a></td>
+        <td>775</td>
+        <td>80</td>
+        <td>1</td>
+      </tr>
+      <tr>
+	      <td><a href="https://dphhs.mt.gov/publichealth/cdepi/diseases/coronavirusmt">MT</a></td>
+        <td>947</td>
+        <td>15</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="https://www.ncdhhs.gov/covid-19-case-count-north-carolina">NC</a></td>
+        <td>3233</td>
+        <td>137</td>
+        <td>0</td>
+      </tr>
+      <tr>
+	      <td><a href="https://www.health.nd.gov/diseases-conditions/coronavirus/north-dakota-coronavirus-cases">ND</a></td>
+        <td>362</td>
+        <td>7</td>
+        <td>0</td>
+      </tr>
+      <tr>
+	      <td><a href="http://dhhs.ne.gov/Pages/Coronavirus.aspx">NE</a></td>
+        <td>272</td>
+        <td>32</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="https://www.nh.gov/covid19/">NH</a></td>
+        <td>1420</td>
+        <td>44</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="https://www.nj.gov/health/">NJ</a></td>
+        <td>1154</td>
+        <td>890</td>
+        <td>11</td>
+      </tr>
+      <tr>
+	      <td><a href="https://nmhealth.org/about/erd/ideb/ncov/">NM</a></td>
+        <td>2797</td>
+        <td>35</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="http://dpbh.nv.gov/Programs/OPHIE/dta/Hot_Topics/Coronavirus/">NV</a></td>
+        <td>173</td>
+        <td>5</td>
+        <td>1</td>
+      </tr>
+      <tr>
+	      <td><a href="https://coronavirus.health.ny.gov/county-county-breakdown-positive-cases">NY</a></td>
+        <td>10228</td>
+        <td>4152</td>
+        <td>7</td>
+      </tr>
+      <tr>
+	      <td><a href="https://odh.ohio.gov/wps/portal/gov/odh/know-our-programs/Novel-Coronavirus/2019-nCoV">OH</a></td>
+        <td>538</td>
+        <td>169</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="https://coronavirus.health.ok.gov/">OK</a></td>
+        <td>963</td>
+        <td>51</td>
+        <td>1</td>
+      </tr>
+      <tr>
+	      <td><a href="https://www.oregon.gov/oha/PH/DISEASESCONDITIONS/DISEASESAZ/Pages/emerging-respiratory-infections.aspx">OR</a></td>
+        <td>1854</td>
+        <td>88</td>
+        <td>3</td>
+      </tr>
+      <tr>
+	      <td><a href="https://www.health.pa.gov/topics/disease/coronavirus/Pages/Cases.aspx">PA</a></td>
+        <td>2842</td>
+        <td>268</td>
+        <td>1</td>
+      </tr>
+      <tr>
+	      <td><a href="https://health.ri.gov/data/covid-19/">RI</a></td>
+        <td>907</td>
+        <td>44</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="https://www.scdhec.gov/monitoring-testing-covid-19">SC</a></td>
+        <td>914</td>
+        <td>81</td>
+        <td>1</td>
+      </tr>
+      <tr>
+	      <td><a href="https://doh.sd.gov/news/Coronavirus.aspx">SD</a></td>
+        <td>947</td>
+        <td>14</td>
+        <td>1</td>
+      </tr>
+      <tr>
+	      <td><a href="https://www.tn.gov/health/cedep/ncov.html">TN</a></td>
+        <td>618</td>
+        <td>154</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="https://www.dshs.state.tx.us/news/updates.shtm#coronavirus">TX</a></td>
+        <td>5277</td>
+        <td>194</td>
+        <td>5</td>
+      </tr>
+      <tr>
+	      <td><a href="https://coronavirus-dashboard.utah.gov">UT</a></td>
+        <td>2147</td>
+        <td>112</td>
+        <td>0</td>
+      </tr>
+      <tr>
+	      <td><a href="http://www.vdh.virginia.gov/surveillance-and-investigation/novel-coronavirus/">VA</a></td>
+        <td>1923</td>
+        <td>94</td>
+        <td>2</td>
+      </tr>
+      <tr>
+	      <td><a href="https://www.healthvermont.gov/response/infectious-disease/2019-novel-coronavirus">VT</a></td>
+        <td>808</td>
+        <td>29</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="https://www.doh.wa.gov/emergencies/coronavirus">WA</a></td>
+        <td>20712</td>
+        <td>1376</td>
+        <td>74</td>
+      </tr>
+      <tr>
+	      <td><a href="https://www.dhs.wisconsin.gov/outbreaks/index.htm">WI</a></td>
+        <td>2347</td>
+        <td>155</td>
+        <td></td>
+      </tr>
+      <tr>
+	      <td><a href="https://dhhr.wv.gov/Coronavirus%20Disease-COVID-19/Pages/default.aspx">WV</a></td>
+        <td>239</td>
+        <td>7</td>
+        <td>0</td>
+      </tr>
+      <tr>
+	      <td><a href="https://health.wyo.gov/publichealth/infectious-disease-epidemiology-unit/disease/novel-coronavirus/">WY</a></td>
+        <td>350</td>
+        <td>19</td>
+        <td></td>
+      </tr>
+  </tbody>
+</table>
+
+<h4>Download:</h4>
+<a href="/states.csv">State data in csv format</a>
+<br>
+<a href="/time_series.csv">Time series in csv format</a>
+
+<h4>Sources:</h4>
+<table>
+	<tbody>
+			<tr>
+				<td>http://alabamapublichealth.gov/infectiousdiseases/2019-coronavirus.html</td>
+			</tr>
+			<tr>
+				<td>http://dhhs.ne.gov/Pages/Coronavirus.aspx</td>
+			</tr>
+			<tr>
+				<td>http://dhss.alaska.gov/dph/Epi/id/Pages/COVID-19/monitoring.aspx</td>
+			</tr>
+			<tr>
+				<td>http://dpbh.nv.gov/Programs/OPHIE/dta/Hot_Topics/Coronavirus/</td>
+			</tr>
+			<tr>
+				<td>http://floridahealthcovid19.gov</td>
+			</tr>
+			<tr>
+				<td>http://ldh.la.gov/coronavirus/</td>
+			</tr>
+			<tr>
+				<td>http://www.dph.illinois.gov/topics-services/diseases-and-conditions/diseases-a-z-list/coronavirus</td>
+			</tr>
+			<tr>
+				<td>http://www.kdheks.gov/coronavirus/index.htm</td>
+			</tr>
+			<tr>
+				<td>http://www.vdh.virginia.gov/surveillance-and-investigation/novel-coronavirus/</td>
+			</tr>
+			<tr>
+				<td>https://chfs.ky.gov/agencies/dph/Pages/covid19.aspx</td>
+			</tr>
+			<tr>
+				<td>https://coronavirus-dashboard.utah.gov</td>
+			</tr>
+			<tr>
+				<td>https://coronavirus.dc.gov/page/coronavirus-surveillance-data</td>
+			</tr>
+			<tr>
+				<td>https://coronavirus.health.ny.gov/county-county-breakdown-positive-cases</td>
+			</tr>
+			<tr>
+				<td>https://coronavirus.health.ok.gov/</td>
+			</tr>
+			<tr>
+				<td>https://covid19.colorado.gov/data</td>
+			</tr>
+			<tr>
+				<td>https://dhhr.wv.gov/Coronavirus%20Disease-COVID-19/Pages/default.aspx</td>
+			</tr>
+			<tr>
+				<td>https://dhss.delaware.gov/dhss/dph/epi/2019novelcoronavirus.html</td>
+			</tr>
+			<tr>
+				<td>https://doh.sd.gov/news/Coronavirus.aspx</td>
+			</tr>
+			<tr>
+				<td>https://dph.georgia.gov/covid-19-daily-status-report</td>
+			</tr>
+			<tr>
+				<td>https://dphhs.mt.gov/publichealth/cdepi/diseases/coronavirusmt</td>
+			</tr>
+			<tr>
+				<td>https://health.hawaii.gov/docd/advisories/novel-coronavirus-2019/</td>
+			</tr>
+			<tr>
+				<td>https://health.mo.gov/living/healthcondiseases/communicable/novel-coronavirus/</td>
+			</tr>
+			<tr>
+				<td>https://health.ri.gov/data/covid-19/</td>
+			</tr>
+			<tr>
+				<td>https://health.wyo.gov/publichealth/infectious-disease-epidemiology-unit/disease/novel-coronavirus/</td>
+			</tr>
+			<tr>
+				<td>https://healthandwelfare.idaho.gov/COVID19/tabid/4664/Default.aspx</td>
+			</tr>
+			<tr>
+				<td>https://idph.iowa.gov/Emerging-Health-Issues/Novel-Coronavirus</td>
+			</tr>
+			<tr>
+				<td>https://isdh.maps.arcgis.com/apps/opsdashboard/index.html#/255e4039e3dd4d8780d8da7b9b599d70</td>
+			</tr>
+			<tr>
+				<td>https://msdh.ms.gov/msdhsite/_static/14,0,420.html</td>
+			</tr>
+			<tr>
+				<td>https://nmhealth.org/about/erd/ideb/ncov/</td>
+			</tr>
+			<tr>
+				<td>https://odh.ohio.gov/wps/portal/gov/odh/know-our-programs/Novel-Coronavirus/2019-nCoV</td>
+			</tr>
+			<tr>
+				<td>https://phpa.health.maryland.gov/Pages/Novel-coronavirus.aspx</td>
+			</tr>
+			<tr>
+				<td>https://portal.ct.gov/Coronavirus</td>
+			</tr>
+			<tr>
+				<td>https://tableau.azdhs.gov/views/COVID-19Dashboard/COVID-19table?:isGuestRedirectFromVizportal=y&amp;:embed=y</td>
+			</tr>
+			<tr>
+				<td>https://www.cdph.ca.gov/Programs/CID/DCDC/Pages/Immunization/nCOV2019.aspx</td>
+			</tr>
+			<tr>
+				<td>https://www.dhs.wisconsin.gov/outbreaks/index.htm</td>
+			</tr>
+			<tr>
+				<td>https://www.doh.wa.gov/emergencies/coronavirus</td>
+			</tr>
+			<tr>
+				<td>https://www.dshs.state.tx.us/news/updates.shtm#coronavirus</td>
+			</tr>
+			<tr>
+				<td>https://www.health.nd.gov/diseases-conditions/coronavirus/north-dakota-coronavirus-cases</td>
+			</tr>
+			<tr>
+				<td>https://www.health.ny.gov/diseases/communicable/coronavirus/</td>
+			</tr>
+			<tr>
+				<td>https://www.health.pa.gov/topics/disease/Pages/Coronavirus.aspx</td>
+			</tr>
+			<tr>
+				<td>https://www.health.pa.gov/topics/disease/coronavirus/Pages/Cases.aspx</td>
+			</tr>
+			<tr>
+				<td>https://www.health.state.mn.us/diseases/coronavirus/situation.html</td>
+			</tr>
+			<tr>
+				<td>https://www.healthvermont.gov/response/infectious-disease/2019-novel-coronavirus</td>
+			</tr>
+			<tr>
+				<td>https://www.healthy.arkansas.gov/programs-services/topics/novel-coronavirus</td>
+			</tr>
+			<tr>
+				<td>https://www.maine.gov/dhhs/mecdc/infectious-disease/epi/airborne/coronavirus.shtml</td>
+			</tr>
+			<tr>
+				<td>https://www.mass.gov/info-details/covid-19-quarantine-and-monitoring</td>
+			</tr>
+			<tr>
+				<td>https://www.michigan.gov/coronavirus</td>
+			</tr>
+			<tr>
+				<td>https://www.ncdhhs.gov/covid-19-case-count-north-carolina</td>
+			</tr>
+			<tr>
+				<td>https://www.nh.gov/covid19/</td>
+			</tr>
+			<tr>
+				<td>https://www.nj.gov/health/</td>
+			</tr>
+			<tr>
+				<td>https://www.oregon.gov/oha/PH/DISEASESCONDITIONS/DISEASESAZ/Pages/emerging-respiratory-infections.aspx</td>
+			</tr>
+			<tr>
+				<td>https://www.scdhec.gov/monitoring-testing-covid-19</td>
+			</tr>
+			<tr>
+				<td>https://www.tn.gov/health/cedep/ncov.html</td>
+			</tr>
+	</tbody>
+</table>
+
+<h4>Donate:</h4>
+<p>
+BTC: 1LG9dUf39dCKAEFcKm6guNhadTJwNqj44J
+</p><p>
+BCH: qrf504gk8n6sujjegwastxqdz2lv5vlv65pxs03s7k
+</p><p>
+ETH: 0x549ffFB83ac67Ca1Ae47668ac3cAAE3e0c77a9bd
+</p><p>
+XLM: GCVRV67LBHTMVXKDAJSW3S3ASASI6EJWQU2LYEOGKPSJEY42PYRAUDME
+</p><p>
+VET: 0xa81cd7a8272E053A18a13459425FFd260105EDd9
+</p>
+
+  </body>
+</html>

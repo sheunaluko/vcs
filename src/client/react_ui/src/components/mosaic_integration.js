@@ -69,10 +69,7 @@ const specs = {
     second: "ss_inspector" , 
 
   } , 
-  "d" : {
-    first : "map_gl"
-
-  } , 
+  "d" : "globe.gl" , 
   
 }
 
