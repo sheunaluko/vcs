@@ -15,8 +15,7 @@ causative_organism: <staph aureus>
     @frequency: "2-10%"  
 
 symptom: [<fever  | onset="acute"> ,
-          <chills | onset="acute"> ]  
-    
+             <chills | onset="acute"> ]
 
 symptom: <cough | productive="true" color="green" >  
 

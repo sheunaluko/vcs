@@ -1,0 +1,42 @@
+
+
+echo "Starting vcs!" 
+
+# launch main process 
+node src/nodejs/main.js --autostart-python & 
+main_pid=$!
+
+
+# launch the react web server 
+cd src/client/react_ui ; 
+yarn serve build/ & 
+cd ../../../ 
+serve_pid=$!
+
+# start hyperloop 
+node src/nodejs/typescript/dist/bin/hyperloop_provide.js & 
+hl_pid=$!
+
+# read user input to pause 
+echo ; echo; echo;
+echo "PRESS ENTER TO EXIT::" 
+echo ; echo; echo;
+
+# launch web browser 
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome "http://127.0.0.1:5000" & 
+
+
+read dummy_var 
+
+echo "Cleaning up.." 
+echo "Killing main_pid=$main_pid" 
+kill $main_pid
+echo "Killing serve_pid=$serve_pid" 
+kill $serve_pid
+echo "Killing hl_pid=$hl_pid"  
+kill $hl_pid
+
+echo "Finished :)" 
+
+
+
