@@ -22,9 +22,25 @@ echo ; echo; echo;
 echo "PRESS ENTER TO EXIT::" 
 echo ; echo; echo;
 
-# launch web browser 
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome "http://127.0.0.1:5000" & 
-
+# launch web browser (PLATFORM dependent) 
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    # ...
+    /usr/bin/google-chrome "http://127.0.0.1:5000" &     
+    
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # Mac OSX
+    /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome "http://127.0.0.1:5000" &     
+elif [[ "$OSTYPE" == "cygwin" ]]; then
+        # POSIX compatibility layer and Linux environment emulation for Windows
+elif [[ "$OSTYPE" == "msys" ]]; then
+        # Lightweight shell and GNU utilities compiled for Windows (part of MinGW)
+elif [[ "$OSTYPE" == "win32" ]]; then
+        # I'm not sure this can happen.
+elif [[ "$OSTYPE" == "freebsd"* ]]; then
+        # ...
+else
+        # Unknown.
+fi
 
 read dummy_var 
 
