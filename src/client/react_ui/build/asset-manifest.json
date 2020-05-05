@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/static/css/main.8674a81b.chunk.css",
+    "main.js": "/static/js/main.a4944719.chunk.js",
+    "main.js.map": "/static/js/main.a4944719.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.84ed393b.js",
+    "runtime-main.js.map": "/static/js/runtime-main.84ed393b.js.map",
+    "static/css/2.d09f21be.chunk.css": "/static/css/2.d09f21be.chunk.css",
+    "static/js/2.1f942056.chunk.js": "/static/js/2.1f942056.chunk.js",
+    "static/js/2.1f942056.chunk.js.map": "/static/js/2.1f942056.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.6340202eebd23d18bacf4ee017a1994f.js": "/precache-manifest.6340202eebd23d18bacf4ee017a1994f.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.d09f21be.chunk.css.map": "/static/css/2.d09f21be.chunk.css.map",
+    "static/css/main.8674a81b.chunk.css.map": "/static/css/main.8674a81b.chunk.css.map",
+    "static/js/2.1f942056.chunk.js.LICENSE.txt": "/static/js/2.1f942056.chunk.js.LICENSE.txt",
+    "static/media/chat-icon.svg": "/static/media/chat-icon.e0d2b748.svg",
+    "static/media/blueprint-icons.css": "/static/media/icons-20.cef8cdbb.woff",
+    "static/media/logo-no-bg.svg": "/static/media/logo-no-bg.7718b3e3.svg",
+    "static/media/notification.mp3": "/static/media/notification.0d062b33.mp3"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.84ed393b.js",
+    "static/css/2.d09f21be.chunk.css",
+    "static/js/2.1f942056.chunk.js",
+    "static/css/main.8674a81b.chunk.css",
+    "static/js/main.a4944719.chunk.js"
+  ]
+}
