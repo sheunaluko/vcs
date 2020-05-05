@@ -25,7 +25,7 @@ echo ; echo; echo;
 # launch web browser (PLATFORM dependent) 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     # ...
-    /usr/bin/google-chrome "http://127.0.0.1:5000" &     
+    /usr/bin/google-chrome --url "http://127.0.0.1:5000" &     
     
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     # Mac OSX
